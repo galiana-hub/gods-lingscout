@@ -401,3 +401,28 @@ body {
   display: block;
   margin-top: 6px;
 }
+
+.player-link {
+  color: var(--color-black);
+  text-decoration: underline;
+}
+.player-link:hover { opacity: 0.7; }
+
+.ficha-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 18px 0 28px;
+}
+@media (max-width: 500px) {
+  .ficha-stats { grid-template-columns: repeat(2, 1fr); }
+}
+.stat-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 16px 10px;
+  text-align: center;
+}
+.stat-number { font-size: 1.5rem; font-weight: 700; }
+.stat-label { font-size: 0.75rem; color: var(--color-text-soft); margin-top: 2px; }

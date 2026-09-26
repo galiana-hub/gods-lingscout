@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de jugador — God's LingScout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="topbar">
+    <h1 class="logo">God's <span>LingScout</span></h1>
+    <div class="topbar-actions">
+      <a href="jugadores.html" class="btn-secondary">← Volver</a>
+      <button class="btn-secondary" id="logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <main class="list-page">
+    <h2 id="ficha-nombre">Cargando...</h2>
+    <p class="result-subtitle" id="ficha-equipo-actual"></p>
+
+    <div class="ficha-stats">
+      <div class="stat-box">
+        <p class="stat-number" id="stat-analisis">0</p>
+        <p class="stat-label">Análisis</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-number" id="stat-goles">0</p>
+        <p class="stat-label">Goles</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-number" id="stat-asistencias">0</p>
+        <p class="stat-label">Asistencias</p>
+      </div>
+      <div class="stat-box">
+        <p class="stat-number" id="stat-nota-media">—</p>
+        <p class="stat-label">Nota media</p>
+      </div>
+    </div>
+
+    <section class="form-section">
+      <h3>Evolución de notas</h3>
+      <canvas id="chart-notas" height="180"></canvas>
+    </section>
+
+    <section class="form-section">
+      <h3>Historial de análisis</h3>
+      <div id="historial-list" class="cards-list"></div>
+    </section>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/[email protected]/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/fichaJugador.js"></script>
+</body>
+</html>

@@ -100,7 +100,7 @@ function renderizarLista(analisis) {
     header.className = 'result-card-header';
     header.innerHTML = `
       <div>
-        <p class="result-title">${a.jugador_nombre} — ${a.equipo}</p>
+        <p class="result-title"><a href="ficha.html?jugador=${encodeURIComponent(a.jugador_nombre)}" class="player-link" onclick="event.stopPropagation()">${a.jugador_nombre}</a> — ${a.equipo}</p>
         <p class="result-subtitle">${a.competicion} · ${a.temporada} · Nota: ${a.nota ?? '—'}/10</p>
       </div>
       <span class="expand-arrow">▾</span>
