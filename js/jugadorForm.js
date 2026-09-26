@@ -1,5 +1,8 @@
-// ---------- Protección de la página ----------
+// ---------- Protección de la página + detectar modo edición ----------
 let currentUserId = null;
+const params = new URLSearchParams(window.location.search);
+const editId = params.get('id');
+
 (async () => {
   const { data } = await supabaseClient.auth.getSession();
   if (!data.session) {
@@ -7,7 +10,13 @@ let currentUserId = null;
     return;
   }
   currentUserId = data.session.user.id;
-  cargarSugerenciasJugadores();
+  await cargarSugerenciasJugadores();
+
+  if (editId) {
+    document.querySelector('.form-page h2').textContent = 'Editar análisis de jugador';
+    document.querySelector('.btn-submit').textContent = 'Guardar cambios';
+    await cargarDatosExistentes(editId);
+  }
 })();
 
 document.getElementById('logout-btn').addEventListener('click', async () => {
@@ -27,11 +36,11 @@ async function cargarSugerenciasJugadores() {
   });
 }
 
-// ---------- Modal de posición media (una sola, no por fila) ----------
+// ---------- Modal de posición media ----------
 const modal = document.getElementById('position-modal');
 const pitchSvg = document.getElementById('pitch-svg');
 const pitchMarker = document.getElementById('pitch-marker');
-let posGuardada = null; // { x, y } o null
+let posGuardada = null;
 let posTemporal = null;
 
 document.getElementById('btn-posicion-media').addEventListener('click', () => {
@@ -126,6 +135,43 @@ function canvasEstaVacio() {
   return canvas.toDataURL() === blank.toDataURL();
 }
 
+// ---------- Cargar datos existentes (modo edición) ----------
+async function cargarDatosExistentes(id) {
+  const { data: a, error } = await supabaseClient
+    .from('analisis_jugador')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error || !a) {
+    document.getElementById('form-message').textContent = 'No se pudo cargar el análisis a editar.';
+    document.getElementById('form-message').classList.add('error');
+    return;
+  }
+
+  document.getElementById('jugador-nombre').value = a.jugador_nombre || '';
+  document.getElementById('equipo').value = a.equipo || '';
+  document.getElementById('competicion').value = a.competicion || '';
+  document.getElementById('temporada').value = a.temporada || '';
+  document.getElementById('goles').value = a.goles;
+  document.getElementById('asistencias').value = a.asistencias;
+  document.getElementById('nota').value = a.nota || '';
+  document.getElementById('impresiones').value = a.impresiones || '';
+  document.getElementById('minuto').value = a.minuto || '';
+  document.getElementById('etiquetas').value = (a.etiquetas || []).join(', ');
+
+  if (a.dibujo) {
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0);
+    img.src = a.dibujo;
+  }
+
+  if (a.posicion_x !== null && a.posicion_x !== undefined) {
+    posGuardada = { x: parseFloat(a.posicion_x), y: parseFloat(a.posicion_y) };
+    document.getElementById('posicion-badge').hidden = false;
+  }
+}
+
 // ---------- Guardar en Supabase ----------
 document.getElementById('jugador-form').addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -141,7 +187,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
 
   const dibujo = canvasEstaVacio() ? null : canvas.toDataURL('image/png');
 
-  const nuevoAnalisis = {
+  const datosAnalisis = {
     usuario_id: currentUserId,
     jugador_nombre: nombre,
     equipo: equipo,
@@ -158,7 +204,12 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     posicion_y: posGuardada ? posGuardada.y.toFixed(1) : null
   };
 
-  const { error } = await supabaseClient.from('analisis_jugador').insert(nuevoAnalisis);
+  let error;
+  if (editId) {
+    ({ error } = await supabaseClient.from('analisis_jugador').update(datosAnalisis).eq('id', editId));
+  } else {
+    ({ error } = await supabaseClient.from('analisis_jugador').insert(datosAnalisis));
+  }
 
   if (error) {
     msg.textContent = 'Error al guardar: ' + error.message;
@@ -166,12 +217,11 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     return;
   }
 
-  // Guardar/actualizar en la tabla de jugadores para el autocompletado
   await supabaseClient.from('jugadores')
     .upsert({ usuario_id: currentUserId, nombre, equipo_actual: equipo }, { onConflict: 'usuario_id,nombre' });
 
-  msg.textContent = '¡Análisis guardado correctamente!';
+  msg.textContent = editId ? '¡Cambios guardados correctamente!' : '¡Análisis guardado correctamente!';
   msg.classList.add('success');
 
-  setTimeout(() => { window.location.href = 'app.html'; }, 1200);
+  setTimeout(() => { window.location.href = 'jugadores.html'; }, 1200);
 });

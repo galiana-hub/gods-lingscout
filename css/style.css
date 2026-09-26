@@ -426,3 +426,19 @@ body {
 }
 .stat-number { font-size: 1.5rem; font-weight: 700; }
 .stat-label { font-size: 0.75rem; color: var(--color-text-soft); margin-top: 2px; }
+
+.detail-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.detail-actions .btn-secondary {
+  text-decoration: none;
+  font-size: 0.82rem;
+  padding: 7px 14px;
+}
+.btn-delete {
+  color: #B3261E;
+  border-color: #f0c9c5;
+}
+.btn-delete:hover { border-color: #B3261E; }

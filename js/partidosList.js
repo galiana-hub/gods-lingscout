@@ -120,6 +120,21 @@ function renderizarLista(partidos) {
     card.appendChild(header);
     card.appendChild(detail);
     contenedor.appendChild(card);
+
+    const btnBorrar = detail.querySelector('.btn-delete');
+    btnBorrar.addEventListener('click', async (ev) => {
+      ev.stopPropagation();
+      if (!confirm('¿Seguro que quieres borrar este análisis? No se puede deshacer.')) return;
+      const { error } = await supabaseClient.from('analisis_partido').delete().eq('id', p.id);
+      if (error) {
+        alert('Error al borrar: ' + error.message);
+        return;
+      }
+      todosLosPartidos = todosLosPartidos.filter(x => x.id !== p.id);
+      aplicarFiltros();
+    });
+
+    detail.querySelector('.detail-actions').addEventListener('click', (ev) => ev.stopPropagation());
   });
 }
 
@@ -128,6 +143,12 @@ function construirDetallePartido(p) {
   const alineacionVisitante = (p.alineacion_partido || []).filter(a => a.equipo === 'visitante');
 
   let html = `
+    <div class="detail-actions">
+      <a href="partido.html?id=${p.id}" class="btn-secondary">Editar</a>
+      <button type="button" class="btn-secondary btn-delete" data-id="${p.id}">Borrar</button>
+    </div>
+  `;
+  html += `
     <div class="detail-grid">
       <div>
         <p class="detail-label">Marcador por partes</p>

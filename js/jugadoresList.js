@@ -119,11 +119,32 @@ function renderizarLista(analisis) {
     card.appendChild(header);
     card.appendChild(detail);
     contenedor.appendChild(card);
+
+    const btnBorrar = detail.querySelector('.btn-delete');
+    btnBorrar.addEventListener('click', async (ev) => {
+      ev.stopPropagation();
+      if (!confirm('¿Seguro que quieres borrar este análisis? No se puede deshacer.')) return;
+      const { error } = await supabaseClient.from('analisis_jugador').delete().eq('id', a.id);
+      if (error) {
+        alert('Error al borrar: ' + error.message);
+        return;
+      }
+      todosLosAnalisis = todosLosAnalisis.filter(x => x.id !== a.id);
+      aplicarFiltros();
+    });
+
+    detail.querySelector('.detail-actions').addEventListener('click', (ev) => ev.stopPropagation());
   });
 }
 
 function construirDetalleJugador(a) {
   let html = `
+    <div class="detail-actions">
+      <a href="jugador.html?id=${a.id}" class="btn-secondary">Editar</a>
+      <button type="button" class="btn-secondary btn-delete" data-id="${a.id}">Borrar</button>
+    </div>
+  `;
+  html += `
     <div class="detail-grid">
       <div>
         <p class="detail-label">Goles</p>
