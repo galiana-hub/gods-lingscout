@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuevo análisis de jugador — God's LingScout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="topbar">
+    <h1 class="logo">God's <span>LingScout</span></h1>
+    <div class="topbar-actions">
+      <a href="app.html" class="btn-secondary">← Volver</a>
+      <button class="btn-secondary" id="logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <main class="form-page">
+    <h2>Nuevo análisis de jugador</h2>
+    <form id="jugador-form">
+
+      <section class="form-section">
+        <h3>Datos generales</h3>
+        <label>Jugador</label>
+        <input type="text" id="jugador-nombre" list="jugadores-list" required placeholder="Pedri">
+
+        <div class="grid-2">
+          <div>
+            <label>Equipo</label>
+            <input type="text" id="equipo" required placeholder="Barcelona">
+          </div>
+          <div>
+            <label>Competición</label>
+            <input type="text" id="competicion" list="competiciones-list" required placeholder="La Liga">
+            <datalist id="competiciones-list">
+              <option value="La Liga">
+              <option value="Champions League">
+              <option value="Europa League">
+              <option value="Premier League">
+              <option value="Serie A">
+              <option value="Bundesliga">
+              <option value="Copa del Rey">
+            </datalist>
+          </div>
+        </div>
+        <label>Temporada</label>
+        <input type="text" id="temporada" required placeholder="2025/2026">
+      </section>
+
+      <section class="form-section">
+        <h3>Rendimiento</h3>
+        <div class="grid-2">
+          <div>
+            <label>Goles</label>
+            <input type="number" id="goles" min="0" value="0" required>
+          </div>
+          <div>
+            <label>Asistencias</label>
+            <input type="number" id="asistencias" min="0" value="0" required>
+          </div>
+        </div>
+        <label>Nota (1-10)</label>
+        <input type="number" id="nota" min="1" max="10" required placeholder="8">
+        <label>Impresiones</label>
+        <textarea id="impresiones" rows="4" placeholder="Cómo ha jugado, qué ha destacado..."></textarea>
+      </section>
+
+      <section class="form-section">
+        <h3>Posición media <span class="opcional-tag">(opcional)</span></h3>
+        <div class="lineup-row">
+          <button type="button" class="btn-position" id="btn-posicion-media">📍 Marcar posición</button>
+          <span class="position-badge" id="posicion-badge" hidden>✓ Guardada</span>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <h3>Otros detalles <span class="opcional-tag">(opcional)</span></h3>
+        <div class="grid-2">
+          <div>
+            <label>Minuto</label>
+            <input type="number" id="minuto" min="0" max="130" placeholder="60">
+          </div>
+          <div>
+            <label>Etiquetas (separadas por coma)</label>
+            <input type="text" id="etiquetas" placeholder="lesión, sustitución">
+          </div>
+        </div>
+        <label>Dibujo de una jugada</label>
+        <div class="canvas-wrap">
+          <canvas id="drawing-canvas" width="300" height="200"></canvas>
+          <button type="button" class="btn-secondary" id="clear-canvas">Borrar dibujo</button>
+        </div>
+      </section>
+
+      <button type="submit" class="btn-primary btn-submit">Guardar análisis</button>
+      <p class="form-message" id="form-message"></p>
+    </form>
+  </main>
+</div>
+
+<datalist id="jugadores-list"></datalist>
+
+<!-- Modal de posición media -->
+<div class="modal-overlay" id="position-modal" hidden>
+  <div class="modal-card">
+    <h3>Posición media</h3>
+    <p class="modal-player-name" id="modal-player-name"></p>
+    <svg id="pitch-svg" viewBox="0 0 300 450" class="pitch">
+      <rect x="2" y="2" width="296" height="446" fill="#F5F1EB" stroke="#111111" stroke-width="2"/>
+      <line x1="2" y1="225" x2="298" y2="225" stroke="#111111" stroke-width="2"/>
+      <circle cx="150" cy="225" r="45" fill="none" stroke="#111111" stroke-width="2"/>
+      <rect x="70" y="2" width="160" height="60" fill="none" stroke="#111111" stroke-width="2"/>
+      <rect x="70" y="388" width="160" height="60" fill="none" stroke="#111111" stroke-width="2"/>
+      <circle id="pitch-marker" cx="-10" cy="-10" r="7" fill="#111111"/>
+    </svg>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" id="modal-cancel">Cancelar</button>
+      <button type="button" class="btn-primary" id="modal-save">Guardar posición</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/jugadorForm.js"></script>
+</body>
+</html>
