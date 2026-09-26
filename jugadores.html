@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis análisis de jugador — God's LingScout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="topbar">
+    <h1 class="logo">God's <span>LingScout</span></h1>
+    <div class="topbar-actions">
+      <a href="app.html" class="btn-secondary">← Volver</a>
+      <button class="btn-secondary" id="logout-btn">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <main class="list-page">
+    <h2>Mis análisis de jugador</h2>
+
+    <div class="filters-bar">
+      <select id="filtro-competicion"><option value="">Competición (todas)</option></select>
+      <select id="filtro-temporada"><option value="">Temporada (todas)</option></select>
+      <select id="filtro-equipo"><option value="">Equipo (todos)</option></select>
+      <button type="button" class="btn-secondary" id="limpiar-filtros">Limpiar</button>
+    </div>
+
+    <div id="lista-jugadores" class="cards-list">
+      <p class="empty-message" id="empty-message">Cargando...</p>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/jugadoresList.js"></script>
+</body>
+</html>
