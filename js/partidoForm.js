@@ -20,9 +20,11 @@ const editId = params.get('id');
   }
 })();
 
-document.getElementById('logout-btn').addEventListener('click', async () => {
-  await supabaseClient.auth.signOut();
-  window.location.href = 'index.html';
+document.querySelectorAll('.logout-trigger').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'index.html';
+  });
 });
 
 // ---------- Cargar sugerencias de jugadores ya usados ----------

@@ -6,9 +6,11 @@ let todosLosAnalisis = [];
   cargarAnalisis();
 })();
 
-document.getElementById('logout-btn').addEventListener('click', async () => {
-  await supabaseClient.auth.signOut();
-  window.location.href = 'index.html';
+document.querySelectorAll('.logout-trigger').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    await supabaseClient.auth.signOut();
+    window.location.href = 'index.html';
+  });
 });
 
 async function cargarAnalisis() {
