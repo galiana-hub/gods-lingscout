@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>God's LingScout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <div class="topbar">
+    <h1 class="logo">God's <span>LingScout</span></h1>
+    <button class="btn-secondary" id="logout-btn">Cerrar sesión</button>
+  </div>
+  <main class="dashboard-main">
+    <div>
+      <h2>¡Bienvenido de nuevo!</h2>
+      <p id="user-email" style="color:#6B6B6B;"></p>
+      <p style="margin-top:20px; color:#6B6B6B;">Aquí irán los módulos de Análisis de Partido y Análisis de Jugador (próximas fases).</p>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseConfig.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

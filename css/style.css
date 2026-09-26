@@ -1,0 +1,161 @@
+:root {
+  --color-bg: #F5F1EB;
+  --color-surface: #FFFFFF;
+  --color-text: #1A1A1A;
+  --color-text-soft: #6B6B6B;
+  --color-black: #111111;
+  --color-border: #E3DDD3;
+  --radius: 14px;
+  --font: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+}
+
+/* ---------- Login / Registro ---------- */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 40px 32px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+}
+
+.logo {
+  font-size: 1.6rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--color-black);
+}
+.logo span { font-weight: 400; color: var(--color-text-soft); }
+
+.tagline {
+  text-align: center;
+  color: var(--color-text-soft);
+  font-size: 0.85rem;
+  margin-top: 6px;
+  margin-bottom: 28px;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 24px;
+}
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-soft);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all .2s;
+}
+.tab-btn.active {
+  color: var(--color-black);
+  border-bottom-color: var(--color-black);
+}
+
+.auth-form { display: none; flex-direction: column; gap: 6px; }
+.auth-form.active { display: flex; }
+
+.auth-form label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 12px;
+  color: var(--color-text);
+}
+.auth-form input {
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  background: var(--color-bg);
+}
+.auth-form input:focus {
+  outline: none;
+  border-color: var(--color-black);
+}
+
+.btn-primary {
+  margin-top: 22px;
+  padding: 13px;
+  background: var(--color-black);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+.form-message {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  text-align: center;
+  min-height: 1em;
+}
+.form-message.error { color: #B3261E; }
+.form-message.success { color: #2E7D32; }
+
+/* ---------- Dashboard ---------- */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 28px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+.topbar .logo { font-size: 1.1rem; text-align: left; }
+
+.btn-secondary {
+  padding: 9px 16px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--color-text);
+}
+.btn-secondary:hover { border-color: var(--color-black); }
+
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+.dashboard-main h2 { font-size: 1.4rem; margin-bottom: 8px; }
