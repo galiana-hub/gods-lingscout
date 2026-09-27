@@ -64,6 +64,12 @@
     <h2 id="ficha-nombre">Cargando...</h2>
     <p class="result-subtitle" id="ficha-equipo-actual"></p>
 
+    <div class="filters-bar" style="margin-top:16px;">
+      <select id="filtro-competicion"><option value="">Competición (todas)</option></select>
+      <select id="filtro-temporada"><option value="">Temporada (todas)</option></select>
+      <button type="button" class="btn-secondary" id="limpiar-filtros-ficha">Limpiar</button>
+    </div>
+
     <div class="ficha-stats">
       <div class="stat-box">
         <p class="stat-number" id="stat-analisis">0</p>
@@ -86,6 +92,24 @@
     <section class="form-section">
       <h3>Evolución de notas</h3>
       <canvas id="chart-notas" height="180"></canvas>
+    </section>
+
+    <section class="form-section">
+      <h3>Goles y asistencias acumulados</h3>
+      <canvas id="chart-goles-asis" height="180"></canvas>
+    </section>
+
+    <section class="form-section">
+      <h3>Mapa de posiciones medias</h3>
+      <p id="heatmap-empty" class="empty-message">Todavía no hay posiciones medias guardadas para este jugador.</p>
+      <svg id="heatmap-pitch" viewBox="0 0 300 450" class="mini-pitch" style="max-width:260px;" hidden>
+        <rect x="2" y="2" width="296" height="446" fill="#F5F1EB" stroke="#111111" stroke-width="2"/>
+        <line x1="2" y1="225" x2="298" y2="225" stroke="#111111" stroke-width="2"/>
+        <circle cx="150" cy="225" r="45" fill="none" stroke="#111111" stroke-width="2"/>
+        <rect x="70" y="2" width="160" height="60" fill="none" stroke="#111111" stroke-width="2"/>
+        <rect x="70" y="388" width="160" height="60" fill="none" stroke="#111111" stroke-width="2"/>
+        <g id="heatmap-points"></g>
+      </svg>
     </section>
 
     <section class="form-section">

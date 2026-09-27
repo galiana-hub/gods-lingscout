@@ -64,16 +64,28 @@ function aplicarFiltros() {
   const competicion = document.getElementById('filtro-competicion').value;
   const temporada = document.getElementById('filtro-temporada').value;
   const equipo = document.getElementById('filtro-equipo').value;
+  const busqueda = document.getElementById('filtro-busqueda').value.trim().toLowerCase();
 
   const filtrados = todosLosAnalisis.filter(a => {
     if (competicion && a.competicion !== competicion) return false;
     if (temporada && a.temporada !== temporada) return false;
     if (equipo && a.equipo !== equipo) return false;
+
+    if (busqueda) {
+      const textoCompleto = [
+        a.jugador_nombre, a.equipo, a.competicion, a.impresiones,
+        (a.etiquetas || []).join(' ')
+      ].join(' ').toLowerCase();
+      if (!textoCompleto.includes(busqueda)) return false;
+    }
+
     return true;
   });
 
   renderizarLista(filtrados);
 }
+
+document.getElementById('filtro-busqueda').addEventListener('input', aplicarFiltros);
 
 document.getElementById('filtro-competicion').addEventListener('change', aplicarFiltros);
 document.getElementById('filtro-temporada').addEventListener('change', aplicarFiltros);
@@ -82,6 +94,7 @@ document.getElementById('limpiar-filtros').addEventListener('click', () => {
   document.getElementById('filtro-competicion').value = '';
   document.getElementById('filtro-temporada').value = '';
   document.getElementById('filtro-equipo').value = '';
+  document.getElementById('filtro-busqueda').value = '';
   renderizarLista(todosLosAnalisis);
 });
 

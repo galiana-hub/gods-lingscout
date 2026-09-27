@@ -46,6 +46,7 @@ function poblarFiltros(partidos) {
   rellenarSelect('filtro-competicion', competiciones);
   rellenarSelect('filtro-temporada', temporadas);
   rellenarSelect('filtro-equipo', equipos);
+  rellenarSelect('filtro-equipo-b', equipos);
 }
 
 function rellenarSelect(id, valores) {
@@ -61,20 +62,50 @@ function rellenarSelect(id, valores) {
   select.value = actual;
 }
 
+let modoH2H = false;
+
 function aplicarFiltros() {
   const competicion = document.getElementById('filtro-competicion').value;
   const temporada = document.getElementById('filtro-temporada').value;
   const equipo = document.getElementById('filtro-equipo').value;
+  const equipoB = document.getElementById('filtro-equipo-b').value;
+  const busqueda = document.getElementById('filtro-busqueda').value.trim().toLowerCase();
 
   const filtrados = todosLosPartidos.filter(p => {
     if (competicion && p.competicion !== competicion) return false;
     if (temporada && p.temporada !== temporada) return false;
-    if (equipo && p.equipo_local !== equipo && p.equipo_visitante !== equipo) return false;
+
+    if (modoH2H && equipo && equipoB) {
+      const equipos = [p.equipo_local, p.equipo_visitante];
+      if (!equipos.includes(equipo) || !equipos.includes(equipoB)) return false;
+    } else if (equipo && p.equipo_local !== equipo && p.equipo_visitante !== equipo) {
+      return false;
+    }
+
+    if (busqueda) {
+      const textoCompleto = [
+        p.competicion, p.equipo_local, p.equipo_visitante,
+        p.cambio_tactico, p.jugador_clave_local, p.jugador_clave_visitante,
+        (p.etiquetas || []).join(' ')
+      ].join(' ').toLowerCase();
+      if (!textoCompleto.includes(busqueda)) return false;
+    }
+
     return true;
   });
 
   renderizarLista(filtrados);
 }
+
+document.getElementById('toggle-h2h').addEventListener('click', () => {
+  modoH2H = !modoH2H;
+  document.getElementById('toggle-h2h').classList.toggle('active', modoH2H);
+  document.getElementById('filtro-equipo-b').hidden = !modoH2H;
+  aplicarFiltros();
+});
+
+document.getElementById('filtro-busqueda').addEventListener('input', aplicarFiltros);
+document.getElementById('filtro-equipo-b').addEventListener('change', aplicarFiltros);
 
 document.getElementById('filtro-competicion').addEventListener('change', aplicarFiltros);
 document.getElementById('filtro-temporada').addEventListener('change', aplicarFiltros);
@@ -83,6 +114,11 @@ document.getElementById('limpiar-filtros').addEventListener('click', () => {
   document.getElementById('filtro-competicion').value = '';
   document.getElementById('filtro-temporada').value = '';
   document.getElementById('filtro-equipo').value = '';
+  document.getElementById('filtro-equipo-b').value = '';
+  document.getElementById('filtro-busqueda').value = '';
+  modoH2H = false;
+  document.getElementById('toggle-h2h').classList.remove('active');
+  document.getElementById('filtro-equipo-b').hidden = true;
   renderizarLista(todosLosPartidos);
 });
 
