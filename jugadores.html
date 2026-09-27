@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>try{if(localStorage.getItem("lingscout-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mis análisis de jugador — LingScout</title>
@@ -39,6 +40,10 @@
       <span class="sidebar-icon accent-jugadores-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3.5 19c1-3.2 3-5 5.5-5s4.5 1.8 5.5 5"/><path d="M14 14.3c2 .2 3.6 1.8 4.5 4.7"/></svg></span>
       <span>Mis Jugadores</span>
     </a>
+    <button type="button" class="sidebar-link theme-toggle-btn">
+      <span class="sidebar-icon"><span class="theme-toggle-icon">🌙</span></span>
+      <span>Modo oscuro</span>
+    </button>
     <button type="button" class="sidebar-link logout-trigger sidebar-logout">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H6a2 2 0 00-2 2v12a2 2 0 002 2h3"/><path d="M15 8l4 4-4 4"/><line x1="19" y1="12" x2="9" y2="12"/></svg></span>
       <span>Cerrar sesión</span>
@@ -75,6 +80,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabaseConfig.js"></script>
 <script src="js/jugadoresList.js"></script>
+<script src="js/theme.js"></script>
 <script src="js/pwa.js"></script>
 </body>
 </html>

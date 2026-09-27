@@ -197,6 +197,7 @@ body {
 }
 .form-page input[type="text"],
 .form-page input[type="number"],
+.form-page select,
 .form-page textarea {
   width: 100%;
   padding: 11px 13px;
@@ -207,6 +208,7 @@ body {
   background: var(--color-bg);
 }
 .form-page input:focus,
+.form-page select:focus,
 .form-page textarea:focus {
   outline: none;
   border-color: var(--color-black);
@@ -582,4 +584,45 @@ body {
 #drawing-canvas {
   max-width: 100%;
   height: auto;
+}
+
+/* ---------- Modo oscuro ---------- */
+:root[data-theme="dark"] {
+  --color-bg: #171715;
+  --color-surface: #232320;
+  --color-text: #F0EDE6;
+  --color-text-soft: #A6A199;
+  --color-border: #38372F;
+}
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-submit {
+  border: 1px solid #45443c;
+}
+[data-theme="dark"] .form-page input,
+[data-theme="dark"] .form-page select,
+[data-theme="dark"] .form-page textarea,
+[data-theme="dark"] .auth-form input,
+[data-theme="dark"] .lineup-input {
+  color: var(--color-text);
+}
+[data-theme="dark"] .tool-btn.active {
+  background: #F0EDE6;
+  color: #111111;
+  border-color: #F0EDE6;
+}
+
+.theme-toggle-icon { display: inline-block; }
+
+.theme-toggle-floating {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+  font-size: 1.1rem;
+  z-index: 10;
 }

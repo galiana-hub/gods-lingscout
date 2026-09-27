@@ -194,6 +194,7 @@ async function cargarDatosExistentes(id) {
 
   document.getElementById('competicion').value = p.competicion || '';
   document.getElementById('temporada').value = p.temporada || '';
+  document.getElementById('tipo-eliminatoria').value = p.tipo_eliminatoria || '';
   equipoLocalInput.value = p.equipo_local || '';
   equipoVisitanteInput.value = p.equipo_visitante || '';
   actualizarNombresEquipos();
@@ -270,6 +271,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
     usuario_id: currentUserId,
     competicion: document.getElementById('competicion').value.trim(),
     temporada: document.getElementById('temporada').value.trim(),
+    tipo_eliminatoria: document.getElementById('tipo-eliminatoria').value || null,
     equipo_local: equipoLocal,
     equipo_visitante: equipoVisitante,
     goles_local: parseInt(document.getElementById('goles-local').value, 10),

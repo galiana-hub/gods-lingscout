@@ -15,3 +15,43 @@ document.querySelectorAll('.logout-trigger').forEach(btn => {
     window.location.href = 'index.html';
   });
 });
+
+// Exportar datos
+document.getElementById('export-data-btn').addEventListener('click', exportarDatos);
+
+async function exportarDatos() {
+  const btn = document.getElementById('export-data-btn');
+  const textoOriginal = btn.textContent;
+  btn.textContent = 'Preparando...';
+  btn.disabled = true;
+
+  try {
+    const [partidos, jugadoresAnalisis, jugadores] = await Promise.all([
+      supabaseClient.from('analisis_partido').select('*, alineacion_partido(*)'),
+      supabaseClient.from('analisis_jugador').select('*'),
+      supabaseClient.from('jugadores').select('*')
+    ]);
+
+    const exportacion = {
+      exportado_en: new Date().toISOString(),
+      analisis_partido: partidos.data || [],
+      analisis_jugador: jugadoresAnalisis.data || [],
+      jugadores: jugadores.data || []
+    };
+
+    const blob = new Blob([JSON.stringify(exportacion, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lingscout-datos-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    alert('Error al exportar: ' + err.message);
+  } finally {
+    btn.textContent = textoOriginal;
+    btn.disabled = false;
+  }
+}

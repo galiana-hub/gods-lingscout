@@ -104,7 +104,7 @@ function renderizarLista(partidos) {
     header.innerHTML = `
       <div>
         <p class="result-title">${p.equipo_local} ${p.goles_local}-${p.goles_visitante} ${p.equipo_visitante}</p>
-        <p class="result-subtitle">${p.competicion} · ${p.temporada}</p>
+        <p class="result-subtitle">${p.competicion} · ${p.temporada}${p.tipo_eliminatoria ? ' · ' + (p.tipo_eliminatoria === 'ida' ? 'Ida' : 'Vuelta') : ''}</p>
       </div>
       <span class="expand-arrow">▾</span>
     `;
