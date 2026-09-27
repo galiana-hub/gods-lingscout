@@ -199,9 +199,23 @@
         </div>
 
         <label>Dibujo de una jugada</label>
+        <div class="drawing-toolbar">
+          <div class="toolbar-row">
+            <button type="button" class="tool-btn perspective-btn active" data-perspective="vertical">Campo completo</button>
+            <button type="button" class="tool-btn perspective-btn" data-perspective="half">Medio campo</button>
+            <button type="button" class="tool-btn perspective-btn" data-perspective="horizontal">Horizontal</button>
+          </div>
+          <div class="toolbar-row">
+            <button type="button" class="tool-btn mode-btn active" data-mode="draw">✏️ Lápiz</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="own">⬤ Propio</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="rival">◯ Rival</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="ball">⚽ Balón</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="erase">🗑️ Quitar</button>
+          </div>
+        </div>
         <div class="canvas-wrap">
-          <canvas id="drawing-canvas" width="300" height="200"></canvas>
-          <button type="button" class="btn-secondary" id="clear-canvas">Borrar dibujo</button>
+          <canvas id="drawing-canvas"></canvas>
+          <button type="button" class="btn-secondary" id="clear-canvas">Borrar todo</button>
         </div>
       </section>
 
@@ -236,6 +250,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabaseConfig.js"></script>
+<script src="js/drawingTool.js"></script>
 <script src="js/partidoForm.js"></script>
 <script src="js/pwa.js"></script>
 </body>

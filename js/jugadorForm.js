@@ -90,52 +90,9 @@ document.getElementById('modal-save').addEventListener('click', () => {
   modal.hidden = true;
 });
 
-// ---------- Dibujo (canvas) ----------
-const canvas = document.getElementById('drawing-canvas');
-const ctx = canvas.getContext('2d');
-let dibujando = false;
-
-function getPos(e) {
-  const rect = canvas.getBoundingClientRect();
-  const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-  const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-  return { x: clientX - rect.left, y: clientY - rect.top };
-}
-function empezarDibujo(e) {
-  dibujando = true;
-  const pos = getPos(e);
-  ctx.beginPath();
-  ctx.moveTo(pos.x, pos.y);
-}
-function dibujar(e) {
-  if (!dibujando) return;
-  const pos = getPos(e);
-  ctx.lineTo(pos.x, pos.y);
-  ctx.strokeStyle = '#111111';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  e.preventDefault();
-}
-function terminarDibujo() { dibujando = false; }
-
-canvas.addEventListener('mousedown', empezarDibujo);
-canvas.addEventListener('mousemove', dibujar);
-canvas.addEventListener('mouseup', terminarDibujo);
-canvas.addEventListener('mouseleave', terminarDibujo);
-canvas.addEventListener('touchstart', empezarDibujo);
-canvas.addEventListener('touchmove', dibujar);
-canvas.addEventListener('touchend', terminarDibujo);
-
-document.getElementById('clear-canvas').addEventListener('click', () => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-});
-
-function canvasEstaVacio() {
-  const blank = document.createElement('canvas');
-  blank.width = canvas.width;
-  blank.height = canvas.height;
-  return canvas.toDataURL() === blank.toDataURL();
-}
+// ---------- Herramienta de dibujo táctico ----------
+const drawingTool = DrawingTool.init('drawing-canvas', '.drawing-toolbar');
+document.getElementById('clear-canvas').addEventListener('click', () => drawingTool.clear());
 
 // ---------- Cargar datos existentes (modo edición) ----------
 async function cargarDatosExistentes(id) {
@@ -163,9 +120,7 @@ async function cargarDatosExistentes(id) {
   document.getElementById('etiquetas').value = (a.etiquetas || []).join(', ');
 
   if (a.dibujo) {
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.src = a.dibujo;
+    drawingTool.loadImage(a.dibujo);
   }
 
   if (a.posicion_x !== null && a.posicion_x !== undefined) {
@@ -187,7 +142,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
   const etiquetasRaw = document.getElementById('etiquetas').value.trim();
   const etiquetas = etiquetasRaw ? etiquetasRaw.split(',').map(t => t.trim()).filter(Boolean) : null;
 
-  const dibujo = canvasEstaVacio() ? null : canvas.toDataURL('image/png');
+  const dibujo = drawingTool.getDataURL();
 
   const datosAnalisis = {
     usuario_id: currentUserId,
