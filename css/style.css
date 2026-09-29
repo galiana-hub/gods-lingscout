@@ -642,3 +642,49 @@ body {
   font-size: 1.1rem;
   z-index: 10;
 }
+
+/* ---------- Calendario ---------- */
+.calendar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 18px 0;
+}
+.calendar-month-label { font-weight: 700; font-size: 1rem; min-width: 160px; text-align: center; text-transform: capitalize; }
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.calendar-day-header {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-soft);
+  padding-bottom: 4px;
+}
+.calendar-cell {
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 0.78rem;
+}
+.calendar-cell-empty { border: none; background: none; }
+.calendar-cell-today { border-color: var(--color-black); border-width: 2px; }
+.calendar-cell-has-events { cursor: pointer; }
+.calendar-cell-has-events:hover { background: var(--color-bg); }
+.calendar-cell-number { font-weight: 500; }
+.calendar-dots { display: flex; gap: 3px; }
+.calendar-dot { width: 5px; height: 5px; border-radius: 50%; }
+.dot-partido { background: var(--accent-partido); }
+.dot-jugador { background: var(--accent-jugador); }
