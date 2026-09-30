@@ -559,6 +559,8 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: var(--color-bg);
+  color: var(--color-text-soft);
 }
 .action-icon svg { width: 22px; height: 22px; }
 .action-title { font-weight: 700; font-size: 0.92rem; margin-bottom: 3px; }
@@ -688,3 +690,27 @@ body {
 .calendar-dot { width: 5px; height: 5px; border-radius: 50%; }
 .dot-partido { background: var(--accent-partido); }
 .dot-jugador { background: var(--accent-jugador); }
+
+/* ---------- Selector de idioma ---------- */
+.lang-selector {
+  width: 100%;
+  margin: 0 0 14px;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 0.8rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.lang-selector-floating {
+  position: fixed;
+  top: 16px;
+  right: 64px;
+  width: auto;
+  margin: 0;
+  height: 40px;
+  border-radius: 20px;
+  background: var(--color-surface);
+  z-index: 10;
+}

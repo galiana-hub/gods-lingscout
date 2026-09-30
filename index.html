@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <script>try{if(localStorage.getItem("lingscout-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<script src="js/i18n.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LingScout — Acceso</title>
@@ -18,31 +19,39 @@
 </head>
 <body>
 <button type="button" class="theme-toggle-btn theme-toggle-floating"><span class="theme-toggle-icon">🌙</span></button>
+<select id="lang-selector" class="lang-selector lang-selector-floating">
+  <option value="es">Español</option>
+  <option value="en">English</option>
+  <option value="fr">Français</option>
+  <option value="it">Italiano</option>
+  <option value="de">Deutsch</option>
+  <option value="pt">Português</option>
+</select>
 <div class="auth-page">
   <div class="auth-card">
     <h1 class="logo">LingScout</h1>
-    <p class="tagline">Tu cuaderno de análisis de fútbol</p>
+    <p class="tagline" data-i18n="login.tagline">Tu cuaderno de análisis de fútbol</p>
 
     <div class="tabs">
-      <button class="tab-btn active" data-tab="login">Iniciar sesión</button>
-      <button class="tab-btn" data-tab="register">Crear cuenta</button>
+      <button class="tab-btn active" data-tab="login" data-i18n="login.tabLogin">Iniciar sesión</button>
+      <button class="tab-btn" data-tab="register" data-i18n="login.tabRegister">Crear cuenta</button>
     </div>
 
     <form id="login-form" class="auth-form active">
-      <label>Email</label>
+      <label data-i18n="login.emailLabel">Email</label>
       <input type="email" id="login-email" required placeholder="tú@email.com">
-      <label>Contraseña</label>
+      <label data-i18n="login.passwordLabel">Contraseña</label>
       <input type="password" id="login-password" required placeholder="••••••••">
-      <button type="submit" class="btn-primary">Entrar</button>
+      <button type="submit" class="btn-primary" data-i18n="login.enterBtn">Entrar</button>
       <p class="form-message" id="login-message"></p>
     </form>
 
     <form id="register-form" class="auth-form">
-      <label>Email</label>
+      <label data-i18n="login.emailLabel">Email</label>
       <input type="email" id="register-email" required placeholder="tú@email.com">
-      <label>Contraseña</label>
+      <label data-i18n="login.passwordLabel">Contraseña</label>
       <input type="password" id="register-password" required placeholder="Mínimo 6 caracteres" minlength="6">
-      <button type="submit" class="btn-primary">Crear cuenta</button>
+      <button type="submit" class="btn-primary" data-i18n="login.createAccountBtn">Crear cuenta</button>
       <p class="form-message" id="register-message"></p>
     </form>
   </div>

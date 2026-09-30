@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <script>try{if(localStorage.getItem("lingscout-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<script src="js/i18n.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuevo análisis de partido — LingScout</title>
@@ -20,41 +21,49 @@
 <div class="layout">
   <nav class="sidebar">
     <p class="sidebar-logo">LingScout</p>
+    <select id="lang-selector" class="lang-selector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="de">Deutsch</option>
+      <option value="pt">Português</option>
+    </select>
     <a href="app.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg></span>
-      <span>Inicio</span>
+      <span data-i18n="sidebar.inicio">Inicio</span>
     </a>
     <a href="partido.html" class="sidebar-link active">
       <span class="sidebar-icon accent-partido-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span>
-      <span>Nuevo Partido</span>
+      <span data-i18n="sidebar.nuevoPartido">Nuevo Partido</span>
     </a>
     <a href="jugador.html" class="sidebar-link">
       <span class="sidebar-icon accent-jugador-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.5-4 4-6 7-6s5.5 2 7 6"/></svg></span>
-      <span>Nuevo Jugador</span>
+      <span data-i18n="sidebar.nuevoJugador">Nuevo Jugador</span>
     </a>
     <a href="partidos.html" class="sidebar-link">
       <span class="sidebar-icon accent-partidos-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="19" y2="17"/></svg></span>
-      <span>Mis Partidos</span>
+      <span data-i18n="sidebar.misPartidos">Mis Partidos</span>
     </a>
     <a href="jugadores.html" class="sidebar-link">
       <span class="sidebar-icon accent-jugadores-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3.5 19c1-3.2 3-5 5.5-5s4.5 1.8 5.5 5"/><path d="M14 14.3c2 .2 3.6 1.8 4.5 4.7"/></svg></span>
-      <span>Mis Jugadores</span>
+      <span data-i18n="sidebar.misJugadores">Mis Jugadores</span>
     </a>
     <a href="calendario.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg></span>
-      <span>Calendario</span>
+      <span data-i18n="sidebar.calendario">Calendario</span>
     </a>
     <a href="revision.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h16"/><rect x="6" y="11" width="3" height="8"/><rect x="11" y="7" width="3" height="12"/><rect x="16" y="13" width="3" height="6"/></svg></span>
-      <span>Revisión anual</span>
+      <span data-i18n="sidebar.revision">Revisión anual</span>
     </a>
     <button type="button" class="sidebar-link theme-toggle-btn">
       <span class="sidebar-icon"><span class="theme-toggle-icon">🌙</span></span>
-      <span>Modo oscuro</span>
+      <span data-i18n="sidebar.modoOscuro">Modo oscuro</span>
     </button>
     <button type="button" class="sidebar-link logout-trigger sidebar-logout">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H6a2 2 0 00-2 2v12a2 2 0 002 2h3"/><path d="M15 8l4 4-4 4"/><line x1="19" y1="12" x2="9" y2="12"/></svg></span>
-      <span>Cerrar sesión</span>
+      <span data-i18n="sidebar.cerrarSesion">Cerrar sesión</span>
     </button>
   </nav>
 
@@ -62,8 +71,8 @@
   <div class="topbar">
     <h1 class="logo">LingScout</h1>
     <div class="topbar-actions">
-      <a href="app.html" class="btn-secondary">← Volver</a>
-      <button class="btn-secondary logout-trigger" id="logout-btn">Cerrar sesión</button>
+      <a href="app.html" class="btn-secondary" data-i18n="topbar.volver">← Volver</a>
+      <button class="btn-secondary logout-trigger" id="logout-btn" data-i18n="sidebar.cerrarSesion">Cerrar sesión</button>
     </div>
   </div>
 
@@ -74,10 +83,10 @@
 
       <!-- Datos generales -->
       <section class="form-section">
-        <h3>Datos generales</h3>
+        <h3 data-i18n="pf.sectionGeneral">Datos generales</h3>
         <div class="grid-2">
           <div>
-            <label>Competición</label>
+            <label data-i18n="pf.competicion">Competición</label>
             <input type="text" id="competicion" list="competiciones-list" required placeholder="La Liga, Champions...">
             <datalist id="competiciones-list">
               <option value="La Liga">
@@ -90,23 +99,23 @@
             </datalist>
           </div>
           <div>
-            <label>Temporada</label>
+            <label data-i18n="pf.temporada">Temporada</label>
             <input type="text" id="temporada" required placeholder="2025/2026">
-            <label>Tipo <span class="opcional-tag">(opcional)</span></label>
+            <label><span data-i18n="pf.tipoOpcional">Tipo</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></label>
             <select id="tipo-eliminatoria">
-              <option value="">Partido único</option>
-              <option value="ida">Ida</option>
-              <option value="vuelta">Vuelta</option>
+              <option value="" data-i18n="pf.optTipoUnico">Partido único</option>
+              <option value="ida" data-i18n="pf.optTipoIda">Ida</option>
+              <option value="vuelta" data-i18n="pf.optTipoVuelta">Vuelta</option>
             </select>
           </div>
         </div>
         <div class="grid-2">
           <div>
-            <label>Equipo local</label>
+            <label data-i18n="pf.equipoLocal">Equipo local</label>
             <input type="text" id="equipo-local" required placeholder="Real Madrid">
           </div>
           <div>
-            <label>Equipo visitante</label>
+            <label data-i18n="pf.equipoVisitante">Equipo visitante</label>
             <input type="text" id="equipo-visitante" required placeholder="Inter Milan">
           </div>
         </div>
@@ -114,7 +123,7 @@
 
       <!-- Resultado -->
       <section class="form-section">
-        <h3>Resultado</h3>
+        <h3 data-i18n="pf.sectionResultado">Resultado</h3>
         <div class="score-row">
           <input type="number" id="goles-local" min="0" required class="score-input">
           <span class="score-sep">—</span>
@@ -122,11 +131,11 @@
         </div>
         <div class="grid-2">
           <div>
-            <label>1ª parte (ej. 1-0)</label>
+            <label data-i18n="pf.p1">1ª parte (ej. 1-0)</label>
             <input type="text" id="marcador-1p" placeholder="1-0">
           </div>
           <div>
-            <label>2ª parte (ej. 1-1)</label>
+            <label data-i18n="pf.p2">2ª parte (ej. 1-1)</label>
             <input type="text" id="marcador-2p" placeholder="1-1">
           </div>
         </div>
@@ -134,7 +143,7 @@
 
       <!-- Posesión -->
       <section class="form-section">
-        <h3>Posesión</h3>
+        <h3 data-i18n="pf.sectionPosesion">Posesión</h3>
         <div class="radio-row">
           <label class="radio-option">
             <input type="radio" name="posesion" value="local">
@@ -149,20 +158,20 @@
 
       <!-- Sistemas tácticos -->
       <section class="form-section">
-        <h3>Sistema táctico</h3>
+        <h3 data-i18n="pf.sectionSistema">Sistema táctico</h3>
         <div class="grid-2">
           <div>
             <p class="subheading" id="sistema-local-heading">Local</p>
-            <label>Con balón</label>
+            <label data-i18n="pf.conBalon">Con balón</label>
             <input type="text" id="sistema-local-con" placeholder="4-3-3">
-            <label>Sin balón</label>
+            <label data-i18n="pf.sinBalon">Sin balón</label>
             <input type="text" id="sistema-local-sin" placeholder="4-4-2">
           </div>
           <div>
             <p class="subheading" id="sistema-visitante-heading">Visitante</p>
-            <label>Con balón</label>
+            <label data-i18n="pf.conBalon">Con balón</label>
             <input type="text" id="sistema-visitante-con" placeholder="4-2-3-1">
-            <label>Sin balón</label>
+            <label data-i18n="pf.sinBalon">Sin balón</label>
             <input type="text" id="sistema-visitante-sin" placeholder="4-5-1">
           </div>
         </div>
@@ -170,7 +179,7 @@
 
       <!-- Jugadores clave -->
       <section class="form-section">
-        <h3>Jugador clave</h3>
+        <h3 data-i18n="pf.sectionClave">Jugador clave</h3>
         <div class="grid-2">
           <div>
             <label id="clave-local-heading">Local</label>
@@ -185,60 +194,60 @@
 
       <!-- Alineación -->
       <section class="form-section">
-        <h3>Alineación</h3>
+        <h3 data-i18n="pf.sectionAlineacion">Alineación</h3>
         <div class="grid-2">
           <div>
             <p class="subheading" id="alineacion-local-heading">Local</p>
             <div class="lineup-list" id="lineup-local"></div>
-            <button type="button" class="btn-link" data-team="local">+ Añadir cambio</button>
+            <button type="button" class="btn-link" data-team="local" data-i18n="pf.addCambio">+ Añadir cambio</button>
           </div>
           <div>
             <p class="subheading" id="alineacion-visitante-heading">Visitante</p>
             <div class="lineup-list" id="lineup-visitante"></div>
-            <button type="button" class="btn-link" data-team="visitante">+ Añadir cambio</button>
+            <button type="button" class="btn-link" data-team="visitante" data-i18n="pf.addCambio">+ Añadir cambio</button>
           </div>
         </div>
       </section>
 
       <!-- Opcionales -->
       <section class="form-section">
-        <h3>Otros detalles <span class="opcional-tag">(opcional)</span></h3>
-        <label>Cambio táctico del entrenador</label>
-        <textarea id="cambio-tactico" rows="2" placeholder="Ej: Inzaghi pasó a defensa de 5 en el minuto 60"></textarea>
+        <h3><span data-i18n="pf.sectionOtros">Otros detalles</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></h3>
+        <label data-i18n="pf.cambioTactico">Cambio táctico del entrenador</label>
+        <textarea id="cambio-tactico" rows="2" placeholder="Ej: Inzaghi pasó a defensa de 5 en el minuto 60" data-i18n-placeholder="pf.cambioTacticoPh"></textarea>
 
         <div class="grid-2">
           <div>
-            <label>Minuto</label>
+            <label data-i18n="pf.minuto">Minuto</label>
             <input type="number" id="minuto" min="0" max="130" placeholder="60">
           </div>
           <div>
-            <label>Etiquetas (separadas por coma)</label>
-            <input type="text" id="etiquetas" placeholder="arbitraje, polémica">
+            <label data-i18n="pf.etiquetas">Etiquetas (separadas por coma)</label>
+            <input type="text" id="etiquetas" placeholder="arbitraje, polémica" data-i18n-placeholder="pf.etiquetasPh">
           </div>
         </div>
 
-        <label>Dibujo de una jugada</label>
+        <label data-i18n="pf.dibujo">Dibujo de una jugada</label>
         <div class="drawing-toolbar">
           <div class="toolbar-row">
-            <button type="button" class="tool-btn perspective-btn active" data-perspective="vertical">Campo completo</button>
-            <button type="button" class="tool-btn perspective-btn" data-perspective="half">Medio campo</button>
-            <button type="button" class="tool-btn perspective-btn" data-perspective="horizontal">Horizontal</button>
+            <button type="button" class="tool-btn perspective-btn active" data-perspective="vertical" data-i18n="pf.campoCompleto">Campo completo</button>
+            <button type="button" class="tool-btn perspective-btn" data-perspective="half" data-i18n="pf.medioCampo">Medio campo</button>
+            <button type="button" class="tool-btn perspective-btn" data-perspective="horizontal" data-i18n="pf.horizontal">Horizontal</button>
           </div>
           <div class="toolbar-row">
-            <button type="button" class="tool-btn mode-btn active" data-mode="draw">✏️ Lápiz</button>
-            <button type="button" class="tool-btn mode-btn" data-mode="own">⬤ Propio</button>
-            <button type="button" class="tool-btn mode-btn" data-mode="rival">◯ Rival</button>
-            <button type="button" class="tool-btn mode-btn" data-mode="ball">⚽ Balón</button>
-            <button type="button" class="tool-btn mode-btn" data-mode="erase">🗑️ Quitar</button>
+            <button type="button" class="tool-btn mode-btn active" data-mode="draw" data-i18n="pf.lapiz">✏️ Lápiz</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="own" data-i18n="pf.propio">⬤ Propio</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="rival" data-i18n="pf.rival">◯ Rival</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="ball" data-i18n="pf.balon">⚽ Balón</button>
+            <button type="button" class="tool-btn mode-btn" data-mode="erase" data-i18n="pf.quitar">🗑️ Quitar</button>
           </div>
         </div>
         <div class="canvas-wrap">
           <canvas id="drawing-canvas"></canvas>
-          <button type="button" class="btn-secondary" id="clear-canvas">Borrar todo</button>
+          <button type="button" class="btn-secondary" id="clear-canvas" data-i18n="pf.borrarTodo">Borrar todo</button>
         </div>
       </section>
 
-      <button type="submit" class="btn-primary btn-submit btn-accent-partido">Guardar análisis</button>
+      <button type="submit" class="btn-primary btn-submit btn-accent-partido" data-i18n="pf.guardar">Guardar análisis</button>
       <p class="form-message" id="form-message"></p>
     </form>
   </main>
@@ -250,7 +259,7 @@
 <!-- Modal de posición media -->
 <div class="modal-overlay" id="position-modal" hidden>
   <div class="modal-card">
-    <h3>Posición media</h3>
+    <h3 data-i18n="pf.posicionMedia">Posición media</h3>
     <p class="modal-player-name" id="modal-player-name"></p>
     <svg id="pitch-svg" viewBox="0 0 300 450" class="pitch">
       <rect x="2" y="2" width="296" height="446" fill="#F5F1EB" stroke="#111111" stroke-width="2"/>
@@ -261,8 +270,8 @@
       <circle id="pitch-marker" cx="-10" cy="-10" r="7" fill="#111111"/>
     </svg>
     <div class="modal-actions">
-      <button type="button" class="btn-secondary" id="modal-cancel">Cancelar</button>
-      <button type="button" class="btn-primary" id="modal-save">Guardar posición</button>
+      <button type="button" class="btn-secondary" id="modal-cancel" data-i18n="pf.cancelar">Cancelar</button>
+      <button type="button" class="btn-primary" id="modal-save" data-i18n="pf.guardarPosicion">Guardar posición</button>
     </div>
   </div>
 </div>

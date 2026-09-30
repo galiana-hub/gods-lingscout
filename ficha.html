@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <script>try{if(localStorage.getItem("lingscout-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<script src="js/i18n.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ficha de jugador — LingScout</title>
@@ -20,41 +21,49 @@
 <div class="layout">
   <nav class="sidebar">
     <p class="sidebar-logo">LingScout</p>
+    <select id="lang-selector" class="lang-selector">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="de">Deutsch</option>
+      <option value="pt">Português</option>
+    </select>
     <a href="app.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg></span>
-      <span>Inicio</span>
+      <span data-i18n="sidebar.inicio">Inicio</span>
     </a>
     <a href="partido.html" class="sidebar-link">
       <span class="sidebar-icon accent-partido-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span>
-      <span>Nuevo Partido</span>
+      <span data-i18n="sidebar.nuevoPartido">Nuevo Partido</span>
     </a>
     <a href="jugador.html" class="sidebar-link">
       <span class="sidebar-icon accent-jugador-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.5-4 4-6 7-6s5.5 2 7 6"/></svg></span>
-      <span>Nuevo Jugador</span>
+      <span data-i18n="sidebar.nuevoJugador">Nuevo Jugador</span>
     </a>
     <a href="partidos.html" class="sidebar-link">
       <span class="sidebar-icon accent-partidos-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="19" y2="17"/></svg></span>
-      <span>Mis Partidos</span>
+      <span data-i18n="sidebar.misPartidos">Mis Partidos</span>
     </a>
     <a href="jugadores.html" class="sidebar-link active">
       <span class="sidebar-icon accent-jugadores-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3.5 19c1-3.2 3-5 5.5-5s4.5 1.8 5.5 5"/><path d="M14 14.3c2 .2 3.6 1.8 4.5 4.7"/></svg></span>
-      <span>Mis Jugadores</span>
+      <span data-i18n="sidebar.misJugadores">Mis Jugadores</span>
     </a>
     <a href="calendario.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg></span>
-      <span>Calendario</span>
+      <span data-i18n="sidebar.calendario">Calendario</span>
     </a>
     <a href="revision.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h16"/><rect x="6" y="11" width="3" height="8"/><rect x="11" y="7" width="3" height="12"/><rect x="16" y="13" width="3" height="6"/></svg></span>
-      <span>Revisión anual</span>
+      <span data-i18n="sidebar.revision">Revisión anual</span>
     </a>
     <button type="button" class="sidebar-link theme-toggle-btn">
       <span class="sidebar-icon"><span class="theme-toggle-icon">🌙</span></span>
-      <span>Modo oscuro</span>
+      <span data-i18n="sidebar.modoOscuro">Modo oscuro</span>
     </button>
     <button type="button" class="sidebar-link logout-trigger sidebar-logout">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H6a2 2 0 00-2 2v12a2 2 0 002 2h3"/><path d="M15 8l4 4-4 4"/><line x1="19" y1="12" x2="9" y2="12"/></svg></span>
-      <span>Cerrar sesión</span>
+      <span data-i18n="sidebar.cerrarSesion">Cerrar sesión</span>
     </button>
   </nav>
 
@@ -62,8 +71,8 @@
   <div class="topbar">
     <h1 class="logo">LingScout</h1>
     <div class="topbar-actions">
-      <a href="jugadores.html" class="btn-secondary">← Volver</a>
-      <button class="btn-secondary logout-trigger" id="logout-btn">Cerrar sesión</button>
+      <a href="jugadores.html" class="btn-secondary" data-i18n="topbar.volver">← Volver</a>
+      <button class="btn-secondary logout-trigger" id="logout-btn" data-i18n="sidebar.cerrarSesion">Cerrar sesión</button>
     </div>
   </div>
 
@@ -73,43 +82,43 @@
     <p class="result-subtitle" id="ficha-equipo-actual"></p>
 
     <div class="filters-bar" style="margin-top:16px;">
-      <select id="filtro-competicion"><option value="">Competición (todas)</option></select>
-      <select id="filtro-temporada"><option value="">Temporada (todas)</option></select>
-      <button type="button" class="btn-secondary" id="limpiar-filtros-ficha">Limpiar</button>
+      <select id="filtro-competicion"><option value="" data-i18n="lp.competicionTodas">Competición (todas)</option></select>
+      <select id="filtro-temporada"><option value="" data-i18n="lp.temporadaTodas">Temporada (todas)</option></select>
+      <button type="button" class="btn-secondary" id="limpiar-filtros-ficha" data-i18n="lp.limpiar">Limpiar</button>
     </div>
 
     <div class="ficha-stats">
       <div class="stat-box">
         <p class="stat-number" id="stat-analisis">0</p>
-        <p class="stat-label">Análisis</p>
+        <p class="stat-label" data-i18n="fi.statAnalisis">Análisis</p>
       </div>
       <div class="stat-box">
         <p class="stat-number" id="stat-goles">0</p>
-        <p class="stat-label">Goles</p>
+        <p class="stat-label" data-i18n="fi.statGoles">Goles</p>
       </div>
       <div class="stat-box">
         <p class="stat-number" id="stat-asistencias">0</p>
-        <p class="stat-label">Asistencias</p>
+        <p class="stat-label" data-i18n="fi.statAsistencias">Asistencias</p>
       </div>
       <div class="stat-box">
         <p class="stat-number" id="stat-nota-media">—</p>
-        <p class="stat-label">Nota media</p>
+        <p class="stat-label" data-i18n="fi.statNotaMedia">Nota media</p>
       </div>
     </div>
 
     <section class="form-section">
-      <h3>Evolución de notas</h3>
+      <h3 data-i18n="fi.evolucionNotas">Evolución de notas</h3>
       <canvas id="chart-notas" height="180"></canvas>
     </section>
 
     <section class="form-section">
-      <h3>Goles y asistencias acumulados</h3>
+      <h3 data-i18n="fi.golesAsis">Goles y asistencias acumulados</h3>
       <canvas id="chart-goles-asis" height="180"></canvas>
     </section>
 
     <section class="form-section">
-      <h3>Mapa de posiciones medias</h3>
-      <p id="heatmap-empty" class="empty-message">Todavía no hay posiciones medias guardadas para este jugador.</p>
+      <h3 data-i18n="fi.mapaCalor">Mapa de posiciones medias</h3>
+      <p id="heatmap-empty" class="empty-message" data-i18n="fi.sinPosiciones">Todavía no hay posiciones medias guardadas para este jugador.</p>
       <svg id="heatmap-pitch" viewBox="0 0 300 450" class="mini-pitch" style="max-width:260px;" hidden>
         <rect x="2" y="2" width="296" height="446" fill="#F5F1EB" stroke="#111111" stroke-width="2"/>
         <line x1="2" y1="225" x2="298" y2="225" stroke="#111111" stroke-width="2"/>
@@ -121,7 +130,7 @@
     </section>
 
     <section class="form-section">
-      <h3>Historial de análisis</h3>
+      <h3 data-i18n="fi.historial">Historial de análisis</h3>
       <div id="historial-list" class="cards-list"></div>
     </section>
   </main>
