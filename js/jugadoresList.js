@@ -172,6 +172,9 @@ function construirDetalleJugador(a) {
     </div>
   `;
 
+  if (a.resistencia) {
+    html += `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>`;
+  }
   if (a.impresiones) {
     html += `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>`;
   }

@@ -190,6 +190,7 @@ function renderizarFicha(data) {
           <div><p class="detail-label">${t('ui.goles')}</p><p>${a.goles}</p></div>
           <div><p class="detail-label">${t('ui.asistencias')}</p><p>${a.asistencias}</p></div>
         </div>
+        ${a.resistencia ? `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>` : ''}
         ${a.impresiones ? `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>` : ''}
       </div>
     `;

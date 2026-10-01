@@ -117,7 +117,7 @@ function calcularRevision(temporada) {
         <div class="result-card-header" style="cursor:default;">
           <div>
             <p class="result-title">${i + 1}. <a class="player-link" href="ficha.html?jugador=${encodeURIComponent(j.nombre)}">${escapar(j.nombre)}</a></p>
-            <p class="result-subtitle">${j.n} ${j.n === 1 ? t('ui.analisisUno') : t('ui.analisisVarios')}</p>
+            <p class="result-subtitle">${j.n} ${pluralAnalisis(j.n)}</p>
           </div>
           <p class="stat-number" style="font-size:1.2rem;">${j.media.toFixed(1)}</p>
         </div>
