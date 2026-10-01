@@ -22,7 +22,7 @@ async function cargarPartidos() {
   const contenedor = document.getElementById('lista-partidos');
 
   if (error) {
-    contenedor.innerHTML = `<p class="empty-message">Error al cargar: ${error.message}</p>`;
+    contenedor.innerHTML = `<p class="empty-message">${t('ui.errorCargar')} ${error.message}</p>`;
     return;
   }
 
@@ -127,7 +127,7 @@ function renderizarLista(partidos) {
   contenedor.innerHTML = '';
 
   if (partidos.length === 0) {
-    contenedor.innerHTML = '<p class="empty-message">No hay análisis que coincidan con estos filtros.</p>';
+    contenedor.innerHTML = `<p class="empty-message">${t('ui.sinResultados')}</p>`;
     return;
   }
 
@@ -140,7 +140,7 @@ function renderizarLista(partidos) {
     header.innerHTML = `
       <div>
         <p class="result-title">${p.equipo_local} ${p.goles_local}-${p.goles_visitante} ${p.equipo_visitante}</p>
-        <p class="result-subtitle">${p.competicion} · ${p.temporada}${p.tipo_eliminatoria ? ' · ' + (p.tipo_eliminatoria === 'ida' ? 'Ida' : 'Vuelta') : ''}</p>
+        <p class="result-subtitle">${p.competicion} · ${p.temporada}${p.tipo_eliminatoria ? ' · ' + (p.tipo_eliminatoria === 'ida' ? t('pf.optTipoIda') : t('pf.optTipoVuelta')) : ''}</p>
       </div>
       <span class="expand-arrow">▾</span>
     `;
@@ -162,10 +162,10 @@ function renderizarLista(partidos) {
     const btnBorrar = detail.querySelector('.btn-delete');
     btnBorrar.addEventListener('click', async (ev) => {
       ev.stopPropagation();
-      if (!confirm('¿Seguro que quieres borrar este análisis? No se puede deshacer.')) return;
+      if (!confirm(t('ui.confirmBorrar'))) return;
       const { error } = await supabaseClient.from('analisis_partido').delete().eq('id', p.id);
       if (error) {
-        alert('Error al borrar: ' + error.message);
+        alert(t('ui.errorBorrar') + ' ' + error.message);
         return;
       }
       todosLosPartidos = todosLosPartidos.filter(x => x.id !== p.id);
@@ -182,66 +182,66 @@ function construirDetallePartido(p) {
 
   let html = `
     <div class="detail-actions">
-      <a href="partido.html?id=${p.id}" class="btn-secondary">Editar</a>
-      <button type="button" class="btn-secondary btn-delete" data-id="${p.id}">Borrar</button>
+      <a href="partido.html?id=${p.id}" class="btn-secondary">${t('ui.editar')}</a>
+      <button type="button" class="btn-secondary btn-delete" data-id="${p.id}">${t('ui.borrar')}</button>
     </div>
   `;
   html += `
     <div class="detail-grid">
       <div>
-        <p class="detail-label">Marcador por partes</p>
+        <p class="detail-label">${t('ui.marcadorPartes')}</p>
         <p>${p.marcador_1parte || '—'} / ${p.marcador_2parte || '—'}</p>
       </div>
       <div>
-        <p class="detail-label">Posesión</p>
+        <p class="detail-label">${t('pf.sectionPosesion')}</p>
         <p>${p.posesion || '—'}</p>
       </div>
     </div>
     <div class="detail-grid">
       <div>
-        <p class="detail-label">${p.equipo_local} — Sistema</p>
-        <p>Con balón: ${p.sistema_local_con_balon || '—'}</p>
-        <p>Sin balón: ${p.sistema_local_sin_balon || '—'}</p>
+        <p class="detail-label">${p.equipo_local} — ${t('ui.sistema')}</p>
+        <p>${t('pf.conBalon')}: ${p.sistema_local_con_balon || '—'}</p>
+        <p>${t('pf.sinBalon')}: ${p.sistema_local_sin_balon || '—'}</p>
       </div>
       <div>
-        <p class="detail-label">${p.equipo_visitante} — Sistema</p>
-        <p>Con balón: ${p.sistema_visitante_con_balon || '—'}</p>
-        <p>Sin balón: ${p.sistema_visitante_sin_balon || '—'}</p>
+        <p class="detail-label">${p.equipo_visitante} — ${t('ui.sistema')}</p>
+        <p>${t('pf.conBalon')}: ${p.sistema_visitante_con_balon || '—'}</p>
+        <p>${t('pf.sinBalon')}: ${p.sistema_visitante_sin_balon || '—'}</p>
       </div>
     </div>
     <div class="detail-grid">
       <div>
-        <p class="detail-label">Jugador clave ${p.equipo_local}</p>
+        <p class="detail-label">${t('pf.sectionClave')} ${p.equipo_local}</p>
         <p>${p.jugador_clave_local || '—'}</p>
       </div>
       <div>
-        <p class="detail-label">Jugador clave ${p.equipo_visitante}</p>
+        <p class="detail-label">${t('pf.sectionClave')} ${p.equipo_visitante}</p>
         <p>${p.jugador_clave_visitante || '—'}</p>
       </div>
     </div>
   `;
 
   if (p.cambio_tactico) {
-    html += `<p class="detail-label">Cambio táctico</p><p>${p.cambio_tactico}</p>`;
+    html += `<p class="detail-label">${t('ui.cambioTactico')}</p><p>${p.cambio_tactico}</p>`;
   }
   if (p.minuto) {
-    html += `<p class="detail-label">Minuto</p><p>${p.minuto}'</p>`;
+    html += `<p class="detail-label">${t('pf.minuto')}</p><p>${p.minuto}'</p>`;
   }
   if (p.etiquetas && p.etiquetas.length) {
-    html += `<p class="detail-label">Etiquetas</p><p>${p.etiquetas.join(', ')}</p>`;
+    html += `<p class="detail-label">${t('ui.etiquetas')}</p><p>${p.etiquetas.join(', ')}</p>`;
   }
   if (p.dibujo) {
-    html += `<p class="detail-label">Dibujo</p><img src="${p.dibujo}" class="detail-drawing">`;
+    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${p.dibujo}" class="detail-drawing">`;
   }
 
   html += `
     <div class="detail-grid">
       <div>
-        <p class="detail-label">Alineación ${p.equipo_local}</p>
+        <p class="detail-label">${t('ui.alineacion')} ${p.equipo_local}</p>
         ${renderizarAlineacion(alineacionLocal)}
       </div>
       <div>
-        <p class="detail-label">Alineación ${p.equipo_visitante}</p>
+        <p class="detail-label">${t('ui.alineacion')} ${p.equipo_visitante}</p>
         ${renderizarAlineacion(alineacionVisitante)}
       </div>
     </div>
@@ -249,7 +249,7 @@ function construirDetallePartido(p) {
 
   const conPosicion = (p.alineacion_partido || []).filter(a => a.posicion_x !== null && a.posicion_x !== undefined);
   if (conPosicion.length) {
-    html += `<p class="detail-label">Posiciones medias</p>${renderizarMiniPitch(conPosicion)}`;
+    html += `<p class="detail-label">${t('ui.posicionesMedias')}</p>${renderizarMiniPitch(conPosicion)}`;
   }
 
   return html;
@@ -258,7 +258,7 @@ function construirDetallePartido(p) {
 function renderizarAlineacion(jugadores) {
   if (!jugadores.length) return '<p class="detail-empty">—</p>';
   return '<ul class="lineup-view">' + jugadores.map(j =>
-    `<li>${j.jugador_nombre}${j.titular ? '' : ' (cambio)'}${j.posicion_x !== null ? ' 📍' : ''}</li>`
+    `<li>${j.jugador_nombre}${j.titular ? '' : ' (' + t('ui.suplente') + ')'}${j.posicion_x !== null ? ' 📍' : ''}</li>`
   ).join('') + '</ul>';
 }
 

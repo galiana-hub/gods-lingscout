@@ -46,16 +46,16 @@ async function cargarEventos() {
 }
 
 function renderizarCalendario() {
-  const nombreMes = mesActual.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+  const nombreMes = mesActual.toLocaleDateString(currentLocale(), { month: 'long', year: 'numeric' });
   document.getElementById('mes-actual-label').textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
 
   const grid = document.getElementById('calendar-grid');
   grid.innerHTML = '';
 
-  ['L', 'M', 'X', 'J', 'V', 'S', 'D'].forEach(d => {
+  [0, 1, 2, 3, 4, 5, 6].forEach(i => {
     const cabecera = document.createElement('div');
     cabecera.className = 'calendar-day-header';
-    cabecera.textContent = d;
+    cabecera.textContent = t('cal.day' + i);
     grid.appendChild(cabecera);
   });
 
@@ -109,21 +109,21 @@ function mostrarDia(fecha, eventos) {
   const lista = document.getElementById('dia-seleccionado-lista');
 
   section.hidden = false;
-  titulo.textContent = fecha.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' });
+  titulo.textContent = fecha.toLocaleDateString(currentLocale(), { weekday: 'long', day: 'numeric', month: 'long' });
   lista.innerHTML = '';
 
   eventos.forEach(ev => {
     const card = document.createElement('div');
     card.className = 'result-card';
     const href = ev.tipo === 'partido' ? `partido.html?id=${ev.id}` : `jugador.html?id=${ev.id}`;
-    const etiqueta = ev.tipo === 'partido' ? 'Partido' : 'Jugador';
+    const etiqueta = ev.tipo === 'partido' ? t('ui.partido') : t('ui.jugador');
     card.innerHTML = `
       <div class="result-card-header" style="cursor:default;">
         <div>
           <p class="result-title">${ev.texto}</p>
           <p class="result-subtitle">${etiqueta}</p>
         </div>
-        <a href="${href}" class="btn-secondary">Abrir</a>
+        <a href="${href}" class="btn-secondary">${t('ui.abrir')}</a>
       </div>
     `;
     lista.appendChild(card);

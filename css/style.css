@@ -714,3 +714,29 @@ body {
   background: var(--color-surface);
   z-index: 10;
 }
+
+/* ---------- Barra superior (móvil): idioma y modo oscuro ---------- */
+.topbar-actions { align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.topbar-lang-selector {
+  width: auto;
+  margin: 0;
+  height: 36px;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: var(--color-surface);
+}
+.topbar-actions .topbar-theme-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+@media (max-width: 560px) {
+  .topbar { padding: 12px 14px; gap: 8px; flex-wrap: wrap; }
+  .topbar-actions { gap: 6px; }
+  .topbar-actions .btn-secondary { padding: 7px 10px; font-size: 0.8rem; }
+  .topbar-actions .topbar-theme-btn { padding: 0; }
+}

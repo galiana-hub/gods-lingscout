@@ -39,7 +39,7 @@ async function cargarDatos() {
   if (temporadas.size === 0) {
     document.getElementById('revision-contenido').hidden = true;
     const vacio = document.getElementById('revision-vacio');
-    vacio.textContent = 'Todavía no tienes análisis guardados.';
+    vacio.textContent = t('ui.revSinAnalisis');
     vacio.hidden = false;
     return;
   }
@@ -79,7 +79,7 @@ function calcularRevision(temporada) {
 
   if (partidos.length === 0 && analisis.length === 0) {
     contenido.hidden = true;
-    vacio.textContent = 'No hay análisis guardados en esta temporada.';
+    vacio.textContent = t('ui.revSinTemporada');
     vacio.hidden = false;
     return;
   }
@@ -108,7 +108,7 @@ function calcularRevision(temporada) {
   const topCont = document.getElementById('rev-top-jugadores');
   topCont.innerHTML = '';
   if (ranking.length === 0) {
-    topCont.innerHTML = '<p class="empty-message">Aún no hay notas de jugadores en esta temporada.</p>';
+    topCont.innerHTML = `<p class="empty-message">${t('ui.revSinNotas')}</p>`;
   } else {
     ranking.forEach((j, i) => {
       const card = document.createElement('div');
@@ -117,7 +117,7 @@ function calcularRevision(temporada) {
         <div class="result-card-header" style="cursor:default;">
           <div>
             <p class="result-title">${i + 1}. <a class="player-link" href="ficha.html?jugador=${encodeURIComponent(j.nombre)}">${escapar(j.nombre)}</a></p>
-            <p class="result-subtitle">${j.n} ${j.n === 1 ? 'análisis' : 'análisis'}</p>
+            <p class="result-subtitle">${j.n} ${j.n === 1 ? t('ui.analisisUno') : t('ui.analisisVarios')}</p>
           </div>
           <p class="stat-number" style="font-size:1.2rem;">${j.media.toFixed(1)}</p>
         </div>

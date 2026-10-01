@@ -14,8 +14,8 @@ const editId = params.get('id');
   inicializarAlineaciones();
 
   if (editId) {
-    document.querySelector('.form-page h2').textContent = 'Editar análisis de partido';
-    document.querySelector('.btn-submit').textContent = 'Guardar cambios';
+    document.querySelector('.form-page h2').textContent = t('ui.editarPartido');
+    document.querySelector('.btn-submit').textContent = t('ui.guardarCambios');
     await cargarDatosExistentes(editId);
   }
 })();
@@ -70,13 +70,14 @@ function crearFilaJugador(team, index, esTitular = true) {
   const input = document.createElement('input');
   input.type = 'text';
   input.setAttribute('list', 'jugadores-list');
-  input.placeholder = esTitular ? `Jugador ${index + 1}` : 'Cambio';
+  input.placeholder = esTitular ? `${t('ui.jugador')} ${index + 1}` : t('ui.cambioPh');
+  input.dataset.suplente = esTitular ? '' : '1';
   input.className = 'lineup-input';
 
   const posBtn = document.createElement('button');
   posBtn.type = 'button';
   posBtn.className = 'btn-position';
-  posBtn.title = 'Marcar posición media';
+  posBtn.title = t('ui.marcarPosicion');
   posBtn.textContent = '📍';
   posBtn.addEventListener('click', () => abrirModalPosicion(row, input));
 
@@ -128,7 +129,7 @@ let posTemporal = null;
 
 function abrirModalPosicion(row, input) {
   if (!input.value.trim()) {
-    alert('Escribe primero el nombre del jugador.');
+    alert(t('ui.nombreJugadorPrimero'));
     return;
   }
   filaActiva = row;
@@ -187,7 +188,7 @@ async function cargarDatosExistentes(id) {
     .single();
 
   if (error || !p) {
-    document.getElementById('form-message').textContent = 'No se pudo cargar el análisis a editar.';
+    document.getElementById('form-message').textContent = t('ui.errorCargarEditar');
     document.getElementById('form-message').classList.add('error');
     return;
   }
@@ -300,7 +301,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
       .eq('id', editId);
 
     if (errorUpdate) {
-      msg.textContent = 'Error al guardar: ' + errorUpdate.message;
+      msg.textContent = t('ui.errorGuardar') + ' ' + errorUpdate.message;
       msg.classList.add('error');
       return;
     }
@@ -315,7 +316,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
       .single();
 
     if (errorPartido) {
-      msg.textContent = 'Error al guardar: ' + errorPartido.message;
+      msg.textContent = t('ui.errorGuardar') + ' ' + errorPartido.message;
       msg.classList.add('error');
       return;
     }
@@ -332,7 +333,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
     if (!nombre) continue;
 
     const equipo = fila.dataset.team;
-    const esCambio = input.placeholder === 'Cambio';
+    const esCambio = input.dataset.suplente === '1';
 
     await supabaseClient.from('alineacion_partido').insert({
       analisis_partido_id: analisisId,

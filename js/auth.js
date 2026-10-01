@@ -34,7 +34,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     msg.textContent = error.message;
     msg.classList.add('error');
   } else {
-    msg.textContent = 'Cuenta creada. Revisa tu email para confirmarla antes de entrar.';
+    msg.textContent = t('ui.cuentaCreada');
     msg.classList.add('success');
   }
 });

@@ -20,7 +20,7 @@ async function cargarFicha() {
   const nombreJugador = params.get('jugador');
 
   if (!nombreJugador) {
-    document.getElementById('ficha-nombre').textContent = 'Jugador no especificado';
+    document.getElementById('ficha-nombre').textContent = t('ui.jugadorNoEspecificado');
     return;
   }
 
@@ -32,7 +32,7 @@ async function cargarFicha() {
 
   if (error || !data || data.length === 0) {
     document.getElementById('ficha-nombre').textContent = nombreJugador;
-    document.getElementById('historial-list').innerHTML = '<p class="empty-message">Todavía no hay análisis guardados de este jugador.</p>';
+    document.getElementById('historial-list').innerHTML = `<p class="empty-message">${t('ui.sinHistorial')}</p>`;
     return;
   }
 
@@ -85,7 +85,7 @@ document.getElementById('limpiar-filtros-ficha').addEventListener('click', () =>
 
 function renderizarFicha(data) {
   if (data.length === 0) {
-    document.getElementById('ficha-equipo-actual').textContent = 'Sin análisis con estos filtros';
+    document.getElementById('ficha-equipo-actual').textContent = t('ui.sinAnalisisFiltros');
   } else {
     document.getElementById('ficha-equipo-actual').textContent = data[data.length - 1].equipo;
   }
@@ -100,7 +100,7 @@ function renderizarFicha(data) {
   document.getElementById('stat-asistencias').textContent = totalAsistencias;
   document.getElementById('stat-nota-media').textContent = notaMedia;
 
-  const labels = data.map((a, i) => `#${i + 1} · ${new Date(a.creado_en).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })}`);
+  const labels = data.map((a, i) => `#${i + 1} · ${new Date(a.creado_en).toLocaleDateString(currentLocale(), { day: '2-digit', month: '2-digit' })}`);
 
   // Gráfico de notas
   if (chartNotas) chartNotas.destroy();
@@ -109,7 +109,7 @@ function renderizarFicha(data) {
     data: {
       labels: labels,
       datasets: [{
-        label: 'Nota',
+        label: t('ui.nota'),
         data: data.map(a => a.nota),
         borderColor: '#111111',
         backgroundColor: 'rgba(17,17,17,0.08)',
@@ -177,20 +177,20 @@ function renderizarFicha(data) {
   [...data].reverse().forEach(a => {
     const card = document.createElement('div');
     card.className = 'result-card';
-    const fecha = new Date(a.creado_en).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const fecha = new Date(a.creado_en).toLocaleDateString(currentLocale(), { day: '2-digit', month: '2-digit', year: 'numeric' });
     card.innerHTML = `
       <div class="result-card-header" style="cursor:default;">
         <div>
-          <p class="result-title">${a.equipo} · Nota ${a.nota ?? '—'}/10</p>
+          <p class="result-title">${a.equipo} · ${t('ui.nota')} ${a.nota ?? '—'}/10</p>
           <p class="result-subtitle">${a.competicion} · ${a.temporada} · ${fecha}</p>
         </div>
       </div>
       <div class="result-card-detail">
         <div class="detail-grid">
-          <div><p class="detail-label">Goles</p><p>${a.goles}</p></div>
-          <div><p class="detail-label">Asistencias</p><p>${a.asistencias}</p></div>
+          <div><p class="detail-label">${t('ui.goles')}</p><p>${a.goles}</p></div>
+          <div><p class="detail-label">${t('ui.asistencias')}</p><p>${a.asistencias}</p></div>
         </div>
-        ${a.impresiones ? `<p class="detail-label">Impresiones</p><p>${a.impresiones}</p>` : ''}
+        ${a.impresiones ? `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>` : ''}
       </div>
     `;
     historial.appendChild(card);

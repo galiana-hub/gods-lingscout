@@ -22,7 +22,7 @@ async function cargarAnalisis() {
   const contenedor = document.getElementById('lista-jugadores');
 
   if (error) {
-    contenedor.innerHTML = `<p class="empty-message">Error al cargar: ${error.message}</p>`;
+    contenedor.innerHTML = `<p class="empty-message">${t('ui.errorCargar')} ${error.message}</p>`;
     return;
   }
 
@@ -103,7 +103,7 @@ function renderizarLista(analisis) {
   contenedor.innerHTML = '';
 
   if (analisis.length === 0) {
-    contenedor.innerHTML = '<p class="empty-message">No hay análisis que coincidan con estos filtros.</p>';
+    contenedor.innerHTML = `<p class="empty-message">${t('ui.sinResultados')}</p>`;
     return;
   }
 
@@ -116,7 +116,7 @@ function renderizarLista(analisis) {
     header.innerHTML = `
       <div>
         <p class="result-title"><a href="ficha.html?jugador=${encodeURIComponent(a.jugador_nombre)}" class="player-link" onclick="event.stopPropagation()">${a.jugador_nombre}</a> — ${a.equipo}</p>
-        <p class="result-subtitle">${a.competicion} · ${a.temporada} · Nota: ${a.nota ?? '—'}/10</p>
+        <p class="result-subtitle">${a.competicion} · ${a.temporada} · ${t('ui.nota')}: ${a.nota ?? '—'}/10</p>
       </div>
       <span class="expand-arrow">▾</span>
     `;
@@ -138,10 +138,10 @@ function renderizarLista(analisis) {
     const btnBorrar = detail.querySelector('.btn-delete');
     btnBorrar.addEventListener('click', async (ev) => {
       ev.stopPropagation();
-      if (!confirm('¿Seguro que quieres borrar este análisis? No se puede deshacer.')) return;
+      if (!confirm(t('ui.confirmBorrar'))) return;
       const { error } = await supabaseClient.from('analisis_jugador').delete().eq('id', a.id);
       if (error) {
-        alert('Error al borrar: ' + error.message);
+        alert(t('ui.errorBorrar') + ' ' + error.message);
         return;
       }
       todosLosAnalisis = todosLosAnalisis.filter(x => x.id !== a.id);
@@ -155,40 +155,40 @@ function renderizarLista(analisis) {
 function construirDetalleJugador(a) {
   let html = `
     <div class="detail-actions">
-      <a href="jugador.html?id=${a.id}" class="btn-secondary">Editar</a>
-      <button type="button" class="btn-secondary btn-delete" data-id="${a.id}">Borrar</button>
+      <a href="jugador.html?id=${a.id}" class="btn-secondary">${t('ui.editar')}</a>
+      <button type="button" class="btn-secondary btn-delete" data-id="${a.id}">${t('ui.borrar')}</button>
     </div>
   `;
   html += `
     <div class="detail-grid">
       <div>
-        <p class="detail-label">Goles</p>
+        <p class="detail-label">${t('ui.goles')}</p>
         <p>${a.goles}</p>
       </div>
       <div>
-        <p class="detail-label">Asistencias</p>
+        <p class="detail-label">${t('ui.asistencias')}</p>
         <p>${a.asistencias}</p>
       </div>
     </div>
   `;
 
   if (a.impresiones) {
-    html += `<p class="detail-label">Impresiones</p><p>${a.impresiones}</p>`;
+    html += `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>`;
   }
   if (a.minuto) {
-    html += `<p class="detail-label">Minuto</p><p>${a.minuto}'</p>`;
+    html += `<p class="detail-label">${t('pf.minuto')}</p><p>${a.minuto}'</p>`;
   }
   if (a.etiquetas && a.etiquetas.length) {
-    html += `<p class="detail-label">Etiquetas</p><p>${a.etiquetas.join(', ')}</p>`;
+    html += `<p class="detail-label">${t('ui.etiquetas')}</p><p>${a.etiquetas.join(', ')}</p>`;
   }
   if (a.dibujo) {
-    html += `<p class="detail-label">Dibujo</p><img src="${a.dibujo}" class="detail-drawing">`;
+    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${a.dibujo}" class="detail-drawing">`;
   }
   if (a.posicion_x !== null && a.posicion_x !== undefined) {
     const cx = (parseFloat(a.posicion_x) / 100) * 300;
     const cy = (parseFloat(a.posicion_y) / 100) * 450;
     html += `
-      <p class="detail-label">Posición media</p>
+      <p class="detail-label">${t('pf.posicionMedia')}</p>
       <svg viewBox="0 0 300 450" class="mini-pitch">
         <rect x="2" y="2" width="296" height="446" fill="#F5F1EB" stroke="#111111" stroke-width="2"/>
         <line x1="2" y1="225" x2="298" y2="225" stroke="#111111" stroke-width="2"/>

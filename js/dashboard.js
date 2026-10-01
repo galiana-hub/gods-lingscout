@@ -22,7 +22,7 @@ document.getElementById('export-data-btn').addEventListener('click', exportarDat
 async function exportarDatos() {
   const btn = document.getElementById('export-data-btn');
   const textoOriginal = btn.textContent;
-  btn.textContent = 'Preparando...';
+  btn.textContent = t('ui.preparando');
   btn.disabled = true;
 
   try {
@@ -49,7 +49,7 @@ async function exportarDatos() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   } catch (err) {
-    alert('Error al exportar: ' + err.message);
+    alert(t('ui.errorExportar') + ' ' + err.message);
   } finally {
     btn.textContent = textoOriginal;
     btn.disabled = false;

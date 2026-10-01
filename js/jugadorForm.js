@@ -13,8 +13,8 @@ const editId = params.get('id');
   await cargarSugerenciasJugadores();
 
   if (editId) {
-    document.querySelector('.form-page h2').textContent = 'Editar análisis de jugador';
-    document.querySelector('.btn-submit').textContent = 'Guardar cambios';
+    document.querySelector('.form-page h2').textContent = t('ui.editarJugador');
+    document.querySelector('.btn-submit').textContent = t('ui.guardarCambios');
     await cargarDatosExistentes(editId);
   }
 })();
@@ -48,7 +48,7 @@ let posTemporal = null;
 document.getElementById('btn-posicion-media').addEventListener('click', () => {
   const nombre = document.getElementById('jugador-nombre').value.trim();
   if (!nombre) {
-    alert('Escribe primero el nombre del jugador.');
+    alert(t('ui.nombreJugadorPrimero'));
     return;
   }
   document.getElementById('modal-player-name').textContent = nombre;
@@ -103,7 +103,7 @@ async function cargarDatosExistentes(id) {
     .single();
 
   if (error || !a) {
-    document.getElementById('form-message').textContent = 'No se pudo cargar el análisis a editar.';
+    document.getElementById('form-message').textContent = t('ui.errorCargarEditar');
     document.getElementById('form-message').classList.add('error');
     return;
   }
@@ -169,7 +169,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
   }
 
   if (error) {
-    msg.textContent = 'Error al guardar: ' + error.message;
+    msg.textContent = t('ui.errorGuardar') + ' ' + error.message;
     msg.classList.add('error');
     return;
   }
