@@ -275,6 +275,10 @@ function renderizarFicha(data) {
         ${a.potencial ? `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>` : ''}
         ${a.resistencia ? `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>` : ''}
         ${a.impresiones ? `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>` : ''}
+        ${a.como_recibe_orientacion ? `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${a.como_recibe_orientacion}</p>` : ''}
+        ${a.como_recibe_despues ? `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${a.como_recibe_despues}</p>` : ''}
+        ${a.como_recibe_progresa ? `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${a.como_recibe_progresa}</p>` : ''}
+        ${a.conductas_repetitivas ? `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${a.conductas_repetitivas}</p>` : ''}
         ${a.acciones_clave && a.acciones_clave.length ? `<p class="detail-label">${t('jf.acciones')}</p>${htmlAcciones(a.acciones_clave)}` : ''}
         ${a.etiquetas && a.etiquetas.length ? `<p class="detail-label">${t('ui.etiquetas')}</p>${htmlTags(a.etiquetas)}` : ''}
       </div>

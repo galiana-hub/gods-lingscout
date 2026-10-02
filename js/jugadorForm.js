@@ -222,6 +222,10 @@ async function cargarDatosExistentes(id) {
   document.getElementById('tendencia').value = a.tendencia || '';
   document.getElementById('importancia').value = a.importancia || '';
   document.getElementById('impresiones').value = a.impresiones || '';
+  document.getElementById('como-recibe-orientacion').value = a.como_recibe_orientacion || '';
+  document.getElementById('como-recibe-despues').value = a.como_recibe_despues || '';
+  document.getElementById('como-recibe-progresa').value = a.como_recibe_progresa || '';
+  document.getElementById('conductas-repetitivas').value = a.conductas_repetitivas || '';
   document.getElementById('minuto').value = a.minuto || '';
   accionesSeleccionadas = new Set(a.acciones_clave || []);
   construirAcciones();
@@ -271,6 +275,10 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     tendencia: document.getElementById('tendencia').value || null,
     importancia: document.getElementById('importancia').value || null,
     impresiones: document.getElementById('impresiones').value.trim() || null,
+    como_recibe_orientacion: document.getElementById('como-recibe-orientacion').value.trim() || null,
+    como_recibe_despues: document.getElementById('como-recibe-despues').value.trim() || null,
+    como_recibe_progresa: document.getElementById('como-recibe-progresa').value.trim() || null,
+    conductas_repetitivas: document.getElementById('conductas-repetitivas').value.trim() || null,
     minuto: document.getElementById('minuto').value ? parseInt(document.getElementById('minuto').value, 10) : null,
     etiquetas: etiquetas,
     acciones_clave: accionesClave.length ? accionesClave : null,

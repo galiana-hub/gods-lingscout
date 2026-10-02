@@ -73,7 +73,7 @@ function aplicarFiltros() {
 
     if (busqueda) {
       const textoCompleto = [
-        a.jugador_nombre, a.equipo, a.competicion, a.impresiones,
+        a.jugador_nombre, a.equipo, a.competicion, a.impresiones, a.como_recibe_orientacion, a.como_recibe_despues, a.como_recibe_progresa, a.conductas_repetitivas,
         (a.etiquetas || []).join(' ')
       ].join(' ').toLowerCase();
       if (!textoCompleto.includes(busqueda)) return false;
@@ -195,6 +195,18 @@ function construirDetalleJugador(a) {
   }
   if (a.impresiones) {
     html += `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>`;
+  }
+  if (a.como_recibe_orientacion) {
+    html += `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${a.como_recibe_orientacion}</p>`;
+  }
+  if (a.como_recibe_despues) {
+    html += `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${a.como_recibe_despues}</p>`;
+  }
+  if (a.como_recibe_progresa) {
+    html += `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${a.como_recibe_progresa}</p>`;
+  }
+  if (a.conductas_repetitivas) {
+    html += `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${a.conductas_repetitivas}</p>`;
   }
   if (a.minuto) {
     html += `<p class="detail-label">${t('pf.minuto')}</p><p>${a.minuto}'</p>`;

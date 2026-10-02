@@ -42,6 +42,11 @@
       <option value="uk">Українська</option>
       <option value="ary">الدارجة المغربية</option>
       <option value="ar">العربية</option>
+      <option value="tr">Türkçe</option>
+      <option value="fa">فارسی</option>
+      <option value="he">עברית</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="hi">हिन्दी</option>
     </select>
     <a href="app.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg></span>
@@ -110,6 +115,11 @@
         <option value="uk">Українська</option>
         <option value="ary">الدارجة المغربية</option>
         <option value="ar">العربية</option>
+      <option value="tr">Türkçe</option>
+      <option value="fa">فارسی</option>
+      <option value="he">עברית</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="hi">हिन्दी</option>
       </select>
       <button type="button" class="btn-secondary theme-toggle-btn topbar-theme-btn" data-i18n-title="sidebar.modoOscuro" title="Modo oscuro" aria-label="Modo oscuro"><span class="theme-toggle-icon">🌙</span></button>
       <a href="app.html" class="btn-secondary" data-i18n="topbar.volver">← Volver</a>
@@ -228,6 +238,21 @@
         </select>
         <label data-i18n="jf.impresiones">Impresiones</label>
         <textarea id="impresiones" rows="4" placeholder="Cómo ha jugado, qué ha destacado..." data-i18n-placeholder="jf.impresionesPh"></textarea>
+      </section>
+
+      <section class="form-section">
+        <h3><span data-i18n="jf.comoRecibe">Cómo recibe</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></h3>
+        <label for="como-recibe-orientacion" data-i18n="jf.comoRecibeOrientacion">Cómo orienta el cuerpo</label>
+        <textarea id="como-recibe-orientacion" rows="2" data-i18n-placeholder="jf.comoRecibeOrientacionPh" placeholder="Ej.: de perfil, de cara, orientado hacia delante..."></textarea>
+        <label for="como-recibe-despues" data-i18n="jf.comoRecibeDespues">Qué hace después de recibir</label>
+        <textarea id="como-recibe-despues" rows="2" data-i18n-placeholder="jf.comoRecibeDespuesPh" placeholder="Ej.: juega de primeras, conduce, protege, gira..."></textarea>
+        <label for="como-recibe-progresa" data-i18n="jf.comoRecibeProgresa">Cómo progresa</label>
+        <textarea id="como-recibe-progresa" rows="2" data-i18n-placeholder="jf.comoRecibeProgresaPh" placeholder="Ej.: conduciendo, mediante pase, atacando espacio..."></textarea>
+      </section>
+
+      <section class="form-section">
+        <h3><span data-i18n="jf.conductasRepetitivas">Conductas que aparecen repetidamente en sus acciones</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></h3>
+        <textarea id="conductas-repetitivas" rows="4" data-i18n-placeholder="jf.conductasRepetitivasPh" placeholder="Describe patrones de comportamiento que se repiten..."></textarea>
       </section>
 
       <section class="form-section">
