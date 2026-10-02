@@ -118,6 +118,9 @@ async function cargarDatosExistentes(id) {
   document.getElementById('resistencia').value = a.resistencia || '';
   document.getElementById('pie-dominante').value = a.pie_dominante || '';
   document.getElementById('potencial').value = a.potencial || '';
+  document.getElementById('punto-debil').value = a.punto_debil || '';
+  document.getElementById('tendencia').value = a.tendencia || '';
+  document.getElementById('importancia').value = a.importancia || '';
   document.getElementById('impresiones').value = a.impresiones || '';
   document.getElementById('minuto').value = a.minuto || '';
   document.getElementById('etiquetas').value = (a.etiquetas || []).join(', ');
@@ -159,6 +162,9 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     resistencia: document.getElementById('resistencia').value || null,
     pie_dominante: document.getElementById('pie-dominante').value || null,
     potencial: document.getElementById('potencial').value || null,
+    punto_debil: document.getElementById('punto-debil').value.trim() || null,
+    tendencia: document.getElementById('tendencia').value || null,
+    importancia: document.getElementById('importancia').value || null,
     impresiones: document.getElementById('impresiones').value.trim() || null,
     minuto: document.getElementById('minuto').value ? parseInt(document.getElementById('minuto').value, 10) : null,
     etiquetas: etiquetas,

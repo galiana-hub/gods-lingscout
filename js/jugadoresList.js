@@ -172,6 +172,15 @@ function construirDetalleJugador(a) {
     </div>
   `;
 
+  if (a.tendencia) {
+    html += `<p class="detail-label">${t('jf.tendencia')}</p><p>${etiquetaTendencia(a.tendencia)}</p>`;
+  }
+  if (a.importancia) {
+    html += `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>`;
+  }
+  if (a.punto_debil) {
+    html += `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>`;
+  }
   if (a.pie_dominante) {
     html += `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>`;
   }

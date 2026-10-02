@@ -190,6 +190,9 @@ function renderizarFicha(data) {
           <div><p class="detail-label">${t('ui.goles')}</p><p>${a.goles}</p></div>
           <div><p class="detail-label">${t('ui.asistencias')}</p><p>${a.asistencias}</p></div>
         </div>
+        ${a.tendencia ? `<p class="detail-label">${t('jf.tendencia')}</p><p>${etiquetaTendencia(a.tendencia)}</p>` : ''}
+        ${a.importancia ? `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>` : ''}
+        ${a.punto_debil ? `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>` : ''}
         ${a.pie_dominante ? `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>` : ''}
         ${a.potencial ? `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>` : ''}
         ${a.resistencia ? `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>` : ''}

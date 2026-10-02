@@ -23,6 +23,7 @@
     <p class="sidebar-logo">LingScout</p>
     <select id="lang-selector" class="lang-selector">
       <option value="es">Español</option>
+      <option value="ca">Català</option>
       <option value="en">English</option>
       <option value="fr">Français</option>
       <option value="it">Italiano</option>
@@ -86,6 +87,7 @@
     <div class="topbar-actions">
       <select class="lang-selector topbar-lang-selector" data-i18n-title="sidebar.idioma" title="Idioma" aria-label="Idioma">
         <option value="es">Español</option>
+        <option value="ca">Català</option>
         <option value="en">English</option>
         <option value="fr">Français</option>
         <option value="it">Italiano</option>
@@ -184,6 +186,23 @@
           <option value="no_llega" data-i18n="jf.potNoLlega">No llega a más</option>
           <option value="liga_inferior" data-i18n="jf.potInferior">Debería estar en una liga más baja</option>
           <option value="veterano" data-i18n="jf.potVeterano">Veterano</option>
+        </select>
+        <label for="punto-debil"><span data-i18n="jf.puntoDebil">Qué necesita mejorar (punto débil)</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></label>
+        <textarea id="punto-debil" rows="2" placeholder="Ej.: juego aéreo, pierna menos hábil, toma de decisiones..." data-i18n-placeholder="jf.puntoDebilPh"></textarea>
+        <label for="tendencia" data-i18n="jf.tendencia">Tendencia</label>
+        <select id="tendencia">
+          <option value="" data-i18n="jf.resElegir">Seleccionar</option>
+          <option value="mejorando" data-i18n="jf.tendMejorando">Mejorando</option>
+          <option value="estancado" data-i18n="jf.tendEstancado">Estancado</option>
+          <option value="bajando" data-i18n="jf.tendBajando">Bajando</option>
+        </select>
+        <label for="importancia"><span data-i18n="jf.importancia">Importancia actual para la plantilla o el entrenador</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></label>
+        <select id="importancia">
+          <option value="" data-i18n="jf.resElegir">Seleccionar</option>
+          <option value="clave" data-i18n="jf.impClave">Pieza clave, indiscutible</option>
+          <option value="importante" data-i18n="jf.impImportante">Importante, titular habitual</option>
+          <option value="rotacion" data-i18n="jf.impRotacion">Rotación o complemento</option>
+          <option value="secundario" data-i18n="jf.impSecundario">Secundario o fuera de planes</option>
         </select>
         <label data-i18n="jf.impresiones">Impresiones</label>
         <textarea id="impresiones" rows="4" placeholder="Cómo ha jugado, qué ha destacado..." data-i18n-placeholder="jf.impresionesPh"></textarea>
