@@ -35,6 +35,12 @@
       <option value="pl">Polski</option>
       <option value="ru">Русский</option>
       <option value="af">Afrikaans</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文（简体）</option>
+      <option value="ko">한국어</option>
+      <option value="uk">Українська</option>
+      <option value="ary">الدارجة المغربية</option>
+      <option value="ar">العربية</option>
     </select>
     <a href="app.html" class="sidebar-link">
       <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg></span>
@@ -92,6 +98,12 @@
         <option value="pl">Polski</option>
         <option value="ru">Русский</option>
         <option value="af">Afrikaans</option>
+        <option value="ja">日本語</option>
+        <option value="zh">中文（简体）</option>
+        <option value="ko">한국어</option>
+        <option value="uk">Українська</option>
+        <option value="ary">الدارجة المغربية</option>
+        <option value="ar">العربية</option>
       </select>
       <button type="button" class="btn-secondary theme-toggle-btn topbar-theme-btn" data-i18n-title="sidebar.modoOscuro" title="Modo oscuro" aria-label="Modo oscuro"><span class="theme-toggle-icon">🌙</span></button>
       <a href="app.html" class="btn-secondary" data-i18n="topbar.volver">← Volver</a>
@@ -153,6 +165,25 @@
           <option value="buena" data-i18n="jf.resBuena">Buena</option>
           <option value="media" data-i18n="jf.resMedia">Media</option>
           <option value="mala" data-i18n="jf.resMala">Mala</option>
+        </select>
+        <label for="pie-dominante" data-i18n="jf.pie">Pie dominante</label>
+        <select id="pie-dominante">
+          <option value="" data-i18n="jf.resElegir">Seleccionar</option>
+          <option value="derecho" data-i18n="jf.pieDer">Derecho</option>
+          <option value="izquierdo" data-i18n="jf.pieIzq">Izquierdo</option>
+          <option value="ambidiestro" data-i18n="jf.pieAmbos">Ambidiestro</option>
+        </select>
+        <label for="potencial" data-i18n="jf.potencial">Potencial</label>
+        <select id="potencial">
+          <option value="" data-i18n="jf.resElegir">Seleccionar</option>
+          <option value="top_mundial" data-i18n="jf.potTopMundial">División/equipo top mundial</option>
+          <option value="top_pais" data-i18n="jf.potTopPais">División/equipo top de su país</option>
+          <option value="superior" data-i18n="jf.potSuperior">División/equipo superior al actual</option>
+          <option value="poco_superior" data-i18n="jf.potPocoSuperior">Un poco superior</option>
+          <option value="igual" data-i18n="jf.potIgual">Se queda como está</option>
+          <option value="no_llega" data-i18n="jf.potNoLlega">No llega a más</option>
+          <option value="liga_inferior" data-i18n="jf.potInferior">Debería estar en una liga más baja</option>
+          <option value="veterano" data-i18n="jf.potVeterano">Veterano</option>
         </select>
         <label data-i18n="jf.impresiones">Impresiones</label>
         <textarea id="impresiones" rows="4" placeholder="Cómo ha jugado, qué ha destacado..." data-i18n-placeholder="jf.impresionesPh"></textarea>

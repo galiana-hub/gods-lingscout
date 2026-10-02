@@ -172,6 +172,12 @@ function construirDetalleJugador(a) {
     </div>
   `;
 
+  if (a.pie_dominante) {
+    html += `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>`;
+  }
+  if (a.potencial) {
+    html += `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>`;
+  }
   if (a.resistencia) {
     html += `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>`;
   }
