@@ -54,13 +54,18 @@ function actualizarNombresEquipos() {
   document.getElementById('clave-local-heading').textContent = local;
   document.getElementById('juego-local-heading').textContent = local;
   document.getElementById('juego-visitante-heading').textContent = visitante;
+  document.getElementById('defensa-local-heading').textContent = local;
+  document.getElementById('defensa-visitante-heading').textContent = visitante;
   document.getElementById('clave-visitante-heading').textContent = visitante;
   document.getElementById('alineacion-local-heading').textContent = local;
   document.getElementById('alineacion-visitante-heading').textContent = visitante;
 }
 // ---------- Salida de balón, bandas y laterales ----------
 const salidaSeleccion = { local: new Set(), visitante: new Set() };
-const CAMPOS_JUEGO = [['banda-izq', 'banda_izq'], ['banda-der', 'banda_der'], ['lateral-izq', 'lateral_izq'], ['lateral-der', 'lateral_der']];
+const CAMPOS_JUEGO = [['banda-izq', 'banda_izq'], ['banda-der', 'banda_der'], ['lateral-izq', 'lateral_izq'], ['lateral-der', 'lateral_der'],
+  // Fase defensiva (mismo patrón: id "<campo>-<lado>" ↔ columna "<campo>_<lado>")
+  ['presion-tipo', 'presion_tipo'], ['presion-intensidad', 'presion_intensidad'], ['presion-coord', 'presion_coordinacion'],
+  ['marcaje', 'marcaje'], ['tras-encajar', 'tras_encajar'], ['tras-marcar', 'tras_marcar']];
 
 function construirSalidas() {
   ['local', 'visitante'].forEach(lado => construirChipsToggle('salida-' + lado, LINGSCOUT_SALIDAS, 'pf.sal_', salidaSeleccion[lado]));

@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
 <script>try{if(localStorage.getItem("lingscout-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
-<script src="js/i18n.js?v=20261002a"></script>
+<script src="js/i18n.js?v=20261002b"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuevo análisis de partido — LingScout</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261002a">
+<link rel="stylesheet" href="css/style.css?v=20261002b">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -248,6 +248,43 @@
         </div>
       </section>
 
+      <!-- Fase defensiva -->
+      <section class="form-section">
+        <h3><span data-i18n="pf.defensaSection">Fase defensiva</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></h3>
+        <div class="grid-2">
+          <div>
+            <p class="subheading" id="defensa-local-heading">Local</p>
+            <label for="presion-tipo-local" data-i18n="pf.presionTipo">Tipo de presión</label>
+            <select id="presion-tipo-local"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="alta" data-i18n="pf.nivel_alta">Alta</option><option value="media" data-i18n="pf.nivel_media">Media</option><option value="baja" data-i18n="pf.nivel_baja">Baja</option></select>
+            <label for="presion-intensidad-local" data-i18n="pf.presionIntensidad">Intensidad de la presión</label>
+            <select id="presion-intensidad-local"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="alta" data-i18n="pf.inten_alta">Alta</option><option value="media" data-i18n="pf.inten_media">Media</option><option value="baja" data-i18n="pf.inten_baja">Baja</option></select>
+            <label for="presion-coord-local" data-i18n="pf.presionCoordinacion">Coordinación de la presión</label>
+            <select id="presion-coord-local"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="buena" data-i18n="jf.resBuena">Buena</option><option value="media" data-i18n="jf.resMedia">Media</option><option value="mala" data-i18n="jf.resMala">Mala</option></select>
+            <label for="marcaje-local" data-i18n="pf.marcajeTipo">Tipo de marcaje</label>
+            <select id="marcaje-local"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="hombre" data-i18n="pf.marc_hombre">Al hombre</option><option value="zonal" data-i18n="pf.marc_zonal">Zonal</option><option value="mixto" data-i18n="pf.marc_mixto">Mixto</option></select>
+            <label for="tras-encajar-local" data-i18n="pf.trasEncajar">Tras encajar gol</label>
+            <select id="tras-encajar-local"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="mantiene" data-i18n="pf.reac_mantiene">Mantiene su plan</option><option value="sube" data-i18n="pf.reac_sube">Sube líneas y aprieta más</option><option value="repliega" data-i18n="pf.reac_repliega">Se repliega y espera</option><option value="desordena" data-i18n="pf.reac_desordena">Se desordena o pierde intensidad</option></select>
+            <label for="tras-marcar-local" data-i18n="pf.trasMarcar">Tras marcar gol</label>
+            <select id="tras-marcar-local"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="mantiene" data-i18n="pf.reac_mantiene">Mantiene su plan</option><option value="sube" data-i18n="pf.reac_sube">Sube líneas y aprieta más</option><option value="repliega" data-i18n="pf.reac_repliega">Se repliega y espera</option><option value="desordena" data-i18n="pf.reac_desordena">Se desordena o pierde intensidad</option></select>
+          </div>
+          <div>
+            <p class="subheading" id="defensa-visitante-heading">Visitante</p>
+            <label for="presion-tipo-visitante" data-i18n="pf.presionTipo">Tipo de presión</label>
+            <select id="presion-tipo-visitante"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="alta" data-i18n="pf.nivel_alta">Alta</option><option value="media" data-i18n="pf.nivel_media">Media</option><option value="baja" data-i18n="pf.nivel_baja">Baja</option></select>
+            <label for="presion-intensidad-visitante" data-i18n="pf.presionIntensidad">Intensidad de la presión</label>
+            <select id="presion-intensidad-visitante"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="alta" data-i18n="pf.inten_alta">Alta</option><option value="media" data-i18n="pf.inten_media">Media</option><option value="baja" data-i18n="pf.inten_baja">Baja</option></select>
+            <label for="presion-coord-visitante" data-i18n="pf.presionCoordinacion">Coordinación de la presión</label>
+            <select id="presion-coord-visitante"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="buena" data-i18n="jf.resBuena">Buena</option><option value="media" data-i18n="jf.resMedia">Media</option><option value="mala" data-i18n="jf.resMala">Mala</option></select>
+            <label for="marcaje-visitante" data-i18n="pf.marcajeTipo">Tipo de marcaje</label>
+            <select id="marcaje-visitante"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="hombre" data-i18n="pf.marc_hombre">Al hombre</option><option value="zonal" data-i18n="pf.marc_zonal">Zonal</option><option value="mixto" data-i18n="pf.marc_mixto">Mixto</option></select>
+            <label for="tras-encajar-visitante" data-i18n="pf.trasEncajar">Tras encajar gol</label>
+            <select id="tras-encajar-visitante"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="mantiene" data-i18n="pf.reac_mantiene">Mantiene su plan</option><option value="sube" data-i18n="pf.reac_sube">Sube líneas y aprieta más</option><option value="repliega" data-i18n="pf.reac_repliega">Se repliega y espera</option><option value="desordena" data-i18n="pf.reac_desordena">Se desordena o pierde intensidad</option></select>
+            <label for="tras-marcar-visitante" data-i18n="pf.trasMarcar">Tras marcar gol</label>
+            <select id="tras-marcar-visitante"><option value="" data-i18n="jf.resElegir">Seleccionar</option><option value="mantiene" data-i18n="pf.reac_mantiene">Mantiene su plan</option><option value="sube" data-i18n="pf.reac_sube">Sube líneas y aprieta más</option><option value="repliega" data-i18n="pf.reac_repliega">Se repliega y espera</option><option value="desordena" data-i18n="pf.reac_desordena">Se desordena o pierde intensidad</option></select>
+          </div>
+        </div>
+      </section>
+
       <!-- Jugadores clave -->
       <section class="form-section">
         <h3 data-i18n="pf.sectionClave">Jugador clave</h3>
@@ -348,10 +385,10 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabaseConfig.js?v=20261002a"></script>
-<script src="js/drawingTool.js?v=20261002a"></script>
-<script src="js/partidoForm.js?v=20261002a"></script>
-<script src="js/theme.js?v=20261002a"></script>
-<script src="js/pwa.js?v=20261002a"></script>
+<script src="js/supabaseConfig.js?v=20261002b"></script>
+<script src="js/drawingTool.js?v=20261002b"></script>
+<script src="js/partidoForm.js?v=20261002b"></script>
+<script src="js/theme.js?v=20261002b"></script>
+<script src="js/pwa.js?v=20261002b"></script>
 </body>
 </html>

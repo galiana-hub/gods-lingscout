@@ -231,6 +231,16 @@ function construirDetallePartido(p) {
       </div>`;
   }
 
+  const defensaLocal = htmlDefensaEquipo(p, 'local');
+  const defensaVisitante = htmlDefensaEquipo(p, 'visitante');
+  if (defensaLocal || defensaVisitante) {
+    html += `
+      <div class="detail-grid">
+        <div><p class="detail-label">${p.equipo_local} — ${t('pf.defensaSection')}</p>${defensaLocal || '<p>—</p>'}</div>
+        <div><p class="detail-label">${p.equipo_visitante} — ${t('pf.defensaSection')}</p>${defensaVisitante || '<p>—</p>'}</div>
+      </div>`;
+  }
+
   if (p.cambio_tactico) {
     html += `<p class="detail-label">${t('ui.cambioTactico')}</p><p>${p.cambio_tactico}</p>`;
   }
@@ -301,4 +311,20 @@ function htmlJuegoEquipo(p, lado) {
     .map(([clave, db]) => `<p>${t(clave)}: ${etiquetaJuego(p[`${db}_${lado}`])}</p>`);
   if (!salida.length && !lineas.length) return '';
   return (salida.length ? `<p class="detail-label">${t('pf.salidaBalon')}</p>${htmlSalida(salida)}` : '') + lineas.join('');
+}
+
+// Presión, marcaje y reacción ante goles de un equipo (solo las líneas rellenadas)
+function htmlDefensaEquipo(p, lado) {
+  const campos = [
+    ['pf.presionTipo', 'presion_tipo', etiquetaNivel],
+    ['pf.presionIntensidad', 'presion_intensidad', etiquetaIntensidad],
+    ['pf.presionCoordinacion', 'presion_coordinacion', etiquetaCoordinacion],
+    ['pf.marcajeTipo', 'marcaje', etiquetaMarcaje],
+    ['pf.trasEncajar', 'tras_encajar', etiquetaReaccion],
+    ['pf.trasMarcar', 'tras_marcar', etiquetaReaccion]
+  ];
+  return campos
+    .filter(([, db]) => p[`${db}_${lado}`])
+    .map(([clave, db, etiqueta]) => `<p>${t(clave)}: ${etiqueta(p[`${db}_${lado}`])}</p>`)
+    .join('');
 }
