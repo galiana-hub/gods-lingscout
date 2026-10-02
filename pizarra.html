@@ -5,7 +5,7 @@
 <script src="js/i18n.js?v=20261002f"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pizarra táctica — LingScout</title>
+<title data-i18n="pz.title">Pizarra táctica — LingScout</title>
 <meta name="theme-color" content="#111111">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -119,7 +119,7 @@
       <option value="id">Bahasa Indonesia</option>
       <option value="hi">हिन्दी</option>
       </select>
-      <button type="button" class="topbar-theme-btn theme-toggle-btn" aria-label="Tema"><span class="theme-toggle-icon">🌙</span></button>
+      <button type="button" class="topbar-theme-btn theme-toggle-btn" data-i18n-title="sidebar.modoOscuro" aria-label="Tema"><span class="theme-toggle-icon">🌙</span></button>
       <button class="btn-secondary logout-trigger" id="logout-btn" data-i18n="sidebar.cerrarSesion">Cerrar sesión</button>
     </div>
   </div>
@@ -137,23 +137,23 @@
     <!-- Herramientas principales: agrupadas para que solo haya que pensar en QUÉ quieres dibujar -->
     <div class="pz-toolbar-card">
       <div class="pz-tool-group">
-        <span class="pz-group-label">Editar</span>
+        <span class="pz-group-label" data-i18n="pz.ui.edit">Editar</span>
         <div class="toolbar-row">
-          <button type="button" class="tool-btn active" data-pz-tool="select" title="Seleccionar / mover">✋ <span>Seleccionar</span></button>
-          <button type="button" class="tool-btn" data-pz-tool="erase">🗑️ <span>Borrar</span></button>
-          <button type="button" class="tool-btn" id="pz-undo">↩ <span>Deshacer</span></button>
-          <button type="button" class="tool-btn" id="pz-redo">↪ <span>Rehacer</span></button>
+          <button type="button" class="tool-btn active" data-pz-tool="select" data-i18n-title="pz.ui.selectMove" title="Seleccionar / mover">✋ <span data-i18n="pz.ui.select">Seleccionar</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="erase">🗑️ <span data-i18n="pz.ui.erase">Borrar</span></button>
+          <button type="button" class="tool-btn" id="pz-undo">↩ <span data-i18n="pz.ui.undo">Deshacer</span></button>
+          <button type="button" class="tool-btn" id="pz-redo">↪ <span data-i18n="pz.ui.redo">Rehacer</span></button>
         </div>
       </div>
       <div class="pz-tool-group">
-        <span class="pz-group-label">Dibujar</span>
+        <span class="pz-group-label" data-i18n="pz.ui.draw">Dibujar</span>
         <div class="toolbar-row">
-          <button type="button" class="tool-btn" data-pz-tool="token">👤 <span>Jugador</span></button>
-          <button type="button" class="tool-btn" data-pz-tool="pass">↗ <span>Pase</span></button>
-          <button type="button" class="tool-btn" data-pz-tool="movement">➜ <span>Movimiento</span></button>
-          <button type="button" class="tool-btn" data-pz-tool="zone">▣ <span>Zona</span></button>
-          <button type="button" class="tool-btn" data-pz-tool="line">━ <span>Línea</span></button>
-          <button type="button" class="tool-btn" data-pz-tool="text">T <span>Texto</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="token">👤 <span data-i18n="pz.ui.player">Jugador</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="pass">↗ <span data-i18n="pz.ui.pass">Pase</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="movement">➜ <span data-i18n="pz.ui.movement">Movimiento</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="zone">▣ <span data-i18n="pz.ui.zone">Zona</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="line">━ <span data-i18n="pz.ui.line">Línea</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="text">T <span data-i18n="pz.ui.text">Texto</span></button>
         </div>
       </div>
     </div>
@@ -161,65 +161,65 @@
     <!-- Subopciones contextuales -->
     <div id="pz-suboptions" class="pz-context-panel">
       <div class="pz-sub toolbar-row" data-for="token" hidden>
-        <span class="pz-label">Equipo:</span>
-        <button type="button" class="tool-btn active" data-token-team="own">⬤ Propio</button>
-        <button type="button" class="tool-btn" data-token-team="rival">◯ Rival</button>
-        <button type="button" class="tool-btn" data-token-team="ball">⚽ Balón</button>
+        <span class="pz-label" data-i18n="pz.ui.team">Equipo:</span>
+        <button type="button" class="tool-btn active" data-token-team="own">⬤ <span data-i18n="pf.propio">Propio</span></button>
+        <button type="button" class="tool-btn" data-token-team="rival">◯ <span data-i18n="pf.rival">Rival</span></button>
+        <button type="button" class="tool-btn" data-token-team="ball">⚽ <span data-i18n="pz.ui.ball">Balón</span></button>
       </div>
       <div class="pz-sub toolbar-row" data-for="pass" hidden>
-        <span class="pz-label">Tipo de pase:</span>
-        <button type="button" class="tool-btn active" data-pass-style="dashed">Pase</button>
-        <button type="button" class="tool-btn" data-pass-style="solid">Vertical</button>
-        <button type="button" class="tool-btn" data-pass-style="numbered">Secuencia</button>
+        <span class="pz-label" data-i18n="pz.ui.passType">Tipo de pase:</span>
+        <button type="button" class="tool-btn active" data-pass-style="dashed" data-i18n="pz.ui.pass">Pase</button>
+        <button type="button" class="tool-btn" data-pass-style="solid" data-i18n="pz.ui.vertical">Vertical</button>
+        <button type="button" class="tool-btn" data-pass-style="numbered" data-i18n="pz.ui.sequence">Secuencia</button>
       </div>
       <div class="pz-sub toolbar-row" data-for="movement" hidden>
-        <span class="pz-label">Movimiento:</span>
-        <button type="button" class="tool-btn active" data-arrow-style="solid">Continuo</button>
-        <button type="button" class="tool-btn" data-arrow-style="dashed">Sin balón</button>
-        <button type="button" class="tool-btn" data-arrow-style="double">Intercambio</button>
-        <button type="button" class="tool-btn" data-arrow-style="feint">Engaño / arrastre</button>
-        <button type="button" class="tool-btn" data-arrow-style="numbered">Numerado</button>
+        <span class="pz-label" data-i18n="pz.ui.movement">Movimiento:</span>
+        <button type="button" class="tool-btn active" data-arrow-style="solid" data-i18n="pz.ui.continuous">Continuo</button>
+        <button type="button" class="tool-btn" data-arrow-style="dashed" data-i18n="pz.ui.offBall">Sin balón</button>
+        <button type="button" class="tool-btn" data-arrow-style="double" data-i18n="pz.ui.exchange">Intercambio</button>
+        <button type="button" class="tool-btn" data-arrow-style="feint" data-i18n="pz.ui.feint">Engaño / arrastre</button>
+        <button type="button" class="tool-btn" data-arrow-style="numbered" data-i18n="pz.ui.numbered">Numerado</button>
       </div>
       <div class="pz-sub" data-for="arrow" hidden>
         <div class="toolbar-row">
-          <button type="button" class="tool-btn active" data-arrow-style="solid">Continua</button>
-          <button type="button" class="tool-btn" data-arrow-style="dashed">Discontinua</button>
-          <button type="button" class="tool-btn" data-arrow-style="double">Doble punta</button>
-          <button type="button" class="tool-btn" data-arrow-style="numbered">Numerada</button>
-          <button type="button" class="tool-btn" data-arrow-style="feint">Engaño</button>
+          <button type="button" class="tool-btn active" data-arrow-style="solid" data-i18n="pz.ui.continuous">Continua</button>
+          <button type="button" class="tool-btn" data-arrow-style="dashed" data-i18n="pz.ui.offBall">Discontinua</button>
+          <button type="button" class="tool-btn" data-arrow-style="double" data-i18n="pz.ui.exchange">Doble punta</button>
+          <button type="button" class="tool-btn" data-arrow-style="numbered" data-i18n="pz.ui.numbered">Numerada</button>
+          <button type="button" class="tool-btn" data-arrow-style="feint" data-i18n="pz.ui.feint">Engaño</button>
         </div>
       </div>
       <div class="pz-sub" data-for="zone" hidden>
         <div class="toolbar-row">
-          <span class="pz-label">Forma:</span>
-          <button type="button" class="tool-btn active" data-zone-shape="circle">◯ Círculo</button>
-          <button type="button" class="tool-btn" data-zone-shape="rect">▭ Rectángulo</button>
+          <span class="pz-label" data-i18n="pz.ui.shape">Forma:</span>
+          <button type="button" class="tool-btn active" data-zone-shape="circle">◯ <span data-i18n="pz.ui.circle">Círculo</span></button>
+          <button type="button" class="tool-btn" data-zone-shape="rect">▭ <span data-i18n="pz.ui.rectangle">Rectángulo</span></button>
         </div>
         <div class="toolbar-row">
-          <span class="pz-label">Uso:</span>
-          <button type="button" class="tool-btn active" data-zone-type="pressure">Presión</button>
-          <button type="button" class="tool-btn" data-zone-type="influence">Influencia</button>
-          <button type="button" class="tool-btn" data-zone-type="free">Espacio libre</button>
-          <button type="button" class="tool-btn" data-zone-type="danger">Peligro</button>
-          <button type="button" class="tool-btn" data-zone-type="corridor">Pasillo</button>
+          <span class="pz-label" data-i18n="pz.ui.use">Uso:</span>
+          <button type="button" class="tool-btn active" data-zone-type="pressure" data-i18n="pz.zonaPresion">Presión</button>
+          <button type="button" class="tool-btn" data-zone-type="influence" data-i18n="pz.zonaInfluencia">Influencia</button>
+          <button type="button" class="tool-btn" data-zone-type="free" data-i18n="pz.zonaLibre">Espacio libre</button>
+          <button type="button" class="tool-btn" data-zone-type="danger" data-i18n="pz.zonaPeligro">Peligro</button>
+          <button type="button" class="tool-btn" data-zone-type="corridor" data-i18n="pz.zonaPasillo">Pasillo</button>
         </div>
       </div>
       <div class="pz-sub toolbar-row" data-for="line" hidden>
-        <button type="button" class="tool-btn active" data-line-type="pass">Pase posible</button>
-        <button type="button" class="tool-btn" data-line-type="coverage">Cobertura</button>
-        <button type="button" class="tool-btn" data-line-type="support">Apoyo</button>
-        <button type="button" class="tool-btn" data-line-type="connection">Conexión</button>
-        <button type="button" class="tool-btn" data-line-type="defensive">Línea defensiva</button>
-        <button type="button" class="tool-btn" data-line-type="pressure">Línea de presión</button>
-        <button type="button" class="tool-btn" data-line-type="offside">Fuera de juego</button>
-        <button type="button" class="tool-btn" data-line-type="orientation">Orientación</button>
+        <button type="button" class="tool-btn active" data-line-type="pass" data-i18n="pz.lineaPase">Pase posible</button>
+        <button type="button" class="tool-btn" data-line-type="coverage" data-i18n="pz.lineaCobertura">Cobertura</button>
+        <button type="button" class="tool-btn" data-line-type="support" data-i18n="pz.lineaApoyo">Apoyo</button>
+        <button type="button" class="tool-btn" data-line-type="connection" data-i18n="pz.lineaConexion">Conexión</button>
+        <button type="button" class="tool-btn" data-line-type="defensive" data-i18n="pz.ui.defensiveLine">Línea defensiva</button>
+        <button type="button" class="tool-btn" data-line-type="pressure" data-i18n="pz.ui.pressureLine">Línea de presión</button>
+        <button type="button" class="tool-btn" data-line-type="offside" data-i18n="pz.ui.offside">Fuera de juego</button>
+        <button type="button" class="tool-btn" data-line-type="orientation" data-i18n="pz.ui.orientation">Orientación</button>
       </div>
       <div class="pz-sub toolbar-row" data-for="text" hidden>
-        <span class="pz-label">Tamaño:</span>
-        <button type="button" class="tool-btn" data-text-size="13">Pequeño</button>
-        <button type="button" class="tool-btn active" data-text-size="15">Medio</button>
-        <button type="button" class="tool-btn" data-text-size="18">Grande</button>
-        <span class="pz-label">Al pulsar el campo podrás escribir la anotación.</span>
+        <span class="pz-label" data-i18n="pz.ui.size">Tamaño:</span>
+        <button type="button" class="tool-btn" data-text-size="13" data-i18n="pz.ui.small">Pequeño</button>
+        <button type="button" class="tool-btn active" data-text-size="15" data-i18n="pz.ui.medium">Medio</button>
+        <button type="button" class="tool-btn" data-text-size="18" data-i18n="pz.ui.large">Grande</button>
+        <span class="pz-label" data-i18n="pz.ui.textHint">Al pulsar el campo podrás escribir la anotación.</span>
       </div>
     </div>
 
@@ -229,9 +229,9 @@
       <button type="button" class="tool-btn" id="pz-step-prev">−</button>
       <strong id="pizarra-step-label">1 / 1</strong>
       <button type="button" class="tool-btn" id="pz-step-next">+</button>
-      <button type="button" class="tool-btn btn-primary" id="pz-play" title="Reproducir secuencia">▶ Reproducir</button>
-      <button type="button" class="tool-btn" id="pz-duplicate-selected">⧉ Duplicar</button>
-      <button type="button" class="tool-btn" id="pz-delete-selected">⌫ Eliminar selección</button>
+      <button type="button" class="tool-btn btn-primary" id="pz-play" data-i18n-title="pz.ui.playTitle" title="Reproducir secuencia">▶ <span data-i18n="pz.ui.play">Reproducir</span></button>
+      <button type="button" class="tool-btn" id="pz-duplicate-selected">⧉ <span data-i18n="pz.ui.duplicate">Duplicar</span></button>
+      <button type="button" class="tool-btn" id="pz-delete-selected">⌫ <span data-i18n="pz.ui.deleteSelected">Eliminar selección</span></button>
     </div>
 
     <div class="pizarra-layout">
@@ -239,23 +239,23 @@
         <canvas id="pizarra-canvas"></canvas>
       </div>
       <aside class="pizarra-side">
-        <h3>Formaciones</h3>
+        <h3 data-i18n="pz.ui.formations">Formaciones</h3>
         <div class="pz-formation-grid">
           <button type="button" class="tool-btn" data-template="4-3-3">4-3-3</button><button type="button" class="tool-btn" data-template="4-4-2">4-4-2</button><button type="button" class="tool-btn" data-template="3-5-2">3-5-2</button><button type="button" class="tool-btn" data-template="4-2-3-1">4-2-3-1</button><button type="button" class="tool-btn" data-template="4-1-4-1">4-1-4-1</button><button type="button" class="tool-btn" data-template="4-3-1-2">4-3-1-2</button><button type="button" class="tool-btn" data-template="4-5-1">4-5-1</button><button type="button" class="tool-btn" data-template="5-3-2">5-3-2</button><button type="button" class="tool-btn" data-template="5-4-1">5-4-1</button><button type="button" class="tool-btn" data-template="3-4-3">3-4-3</button><button type="button" class="tool-btn" data-template="3-4-2-1">3-4-2-1</button><button type="button" class="tool-btn" data-template="4-2-2-2">4-2-2-2</button><button type="button" class="tool-btn" data-template="4-4-1-1">4-4-1-1</button><button type="button" class="tool-btn" data-template="5-2-3">5-2-3</button><button type="button" class="tool-btn" data-template="3-2-5">3-2-5</button>
         </div>
-        <h3>Biblioteca de situaciones</h3>
+        <h3 data-i18n="pz.ui.situationLibrary">Biblioteca de situaciones</h3>
         <div class="pz-situation-groups">
-          <details open><summary>Ataque</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="salida-balon">Salida de balón</button><button type="button" class="tool-btn" data-situation="ataque-posicional">Ataque posicional</button><button type="button" class="tool-btn" data-situation="ataque-banda">Ataque por banda</button><button type="button" class="tool-btn" data-situation="cambio-orientacion">Cambio de orientación</button><button type="button" class="tool-btn" data-situation="contraataque">Contraataque</button><button type="button" class="tool-btn" data-situation="ultimo-tercio">Último tercio</button><button type="button" class="tool-btn" data-situation="ataque-bloque-bajo">Ataque contra bloque bajo</button></div></details>
-          <details open><summary>Defensa</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="bloque-bajo">Bloque bajo</button><button type="button" class="tool-btn" data-situation="bloque-medio">Bloque medio</button><button type="button" class="tool-btn" data-situation="press-alto">Presión alta</button><button type="button" class="tool-btn" data-situation="presion-perdida">Presión tras pérdida</button><button type="button" class="tool-btn" data-situation="defensa-centros">Defensa de centros</button><button type="button" class="tool-btn" data-situation="defensa-area">Defensa del área</button></div></details>
-          <details open><summary>Transiciones</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="tras-perdida">Tras pérdida</button><button type="button" class="tool-btn" data-situation="tras-recuperacion">Tras recuperación</button></div></details>
-          <details open><summary>ABP</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="corner-ofensivo">Córner ofensivo</button><button type="button" class="tool-btn" data-situation="corner-defensivo">Córner defensivo</button><button type="button" class="tool-btn" data-situation="falta-lateral">Falta lateral</button><button type="button" class="tool-btn" data-situation="falta-frontal">Falta frontal</button><button type="button" class="tool-btn" data-situation="saque-banda">Saque de banda</button></div></details>
+          <details open><summary data-i18n="pz.ui.attack">Ataque</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="salida-balon" data-i18n="pz.sit.salidaBalon">Salida de balón</button><button type="button" class="tool-btn" data-situation="ataque-posicional" data-i18n="pz.sit.ataquePosicional">Ataque posicional</button><button type="button" class="tool-btn" data-situation="ataque-banda" data-i18n="pz.sit.ataqueBanda">Ataque por banda</button><button type="button" class="tool-btn" data-situation="cambio-orientacion" data-i18n="pz.sit.cambioOrientacion">Cambio de orientación</button><button type="button" class="tool-btn" data-situation="contraataque" data-i18n="pz.sit.contraataque">Contraataque</button><button type="button" class="tool-btn" data-situation="ultimo-tercio" data-i18n="pz.sit.ultimoTercio">Último tercio</button><button type="button" class="tool-btn" data-situation="ataque-bloque-bajo" data-i18n="pz.sit.ataqueBloqueBajo">Ataque contra bloque bajo</button></div></details>
+          <details open><summary data-i18n="pz.ui.defense">Defensa</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="bloque-bajo" data-i18n="pz.sit.bloqueBajo">Bloque bajo</button><button type="button" class="tool-btn" data-situation="bloque-medio" data-i18n="pz.sit.bloqueMedio">Bloque medio</button><button type="button" class="tool-btn" data-situation="press-alto" data-i18n="pz.sit.presionAlta">Presión alta</button><button type="button" class="tool-btn" data-situation="presion-perdida" data-i18n="pz.sit.presionTrasPerdida">Presión tras pérdida</button><button type="button" class="tool-btn" data-situation="defensa-centros" data-i18n="pz.sit.defensaCentros">Defensa de centros</button><button type="button" class="tool-btn" data-situation="defensa-area" data-i18n="pz.sit.defensaArea">Defensa del área</button></div></details>
+          <details open><summary data-i18n="pz.ui.transitions">Transiciones</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="tras-perdida" data-i18n="pz.sit.trasPerdida">Tras pérdida</button><button type="button" class="tool-btn" data-situation="tras-recuperacion" data-i18n="pz.sit.trasRecuperacion">Tras recuperación</button></div></details>
+          <details open><summary data-i18n="pz.ui.setPieces">ABP</summary><div class="pz-situation-list"><button type="button" class="tool-btn" data-situation="corner-ofensivo" data-i18n="pz.sit.cornerOfensivo">Córner ofensivo</button><button type="button" class="tool-btn" data-situation="corner-defensivo" data-i18n="pz.sit.cornerDefensivo">Córner defensivo</button><button type="button" class="tool-btn" data-situation="falta-lateral" data-i18n="pz.sit.faltaLateral">Falta lateral</button><button type="button" class="tool-btn" data-situation="falta-frontal" data-i18n="pz.sit.faltaFrontal">Falta frontal</button><button type="button" class="tool-btn" data-situation="saque-banda" data-i18n="pz.sit.saqueBanda">Saque de banda</button></div></details>
         </div>
-        <h3>Editar jugador</h3>
+        <h3 data-i18n="pz.ui.editPlayer">Editar jugador</h3>
         <div id="pz-player-editor" class="pz-player-editor" hidden>
-          <label>Nombre<input id="pz-player-name" type="text" maxlength="30"></label>
-          <label>Número<input id="pz-player-number" type="number" min="1" max="99"></label>
-          <label>Posición<input id="pz-player-position" type="text" maxlength="12" placeholder="MC"></label>
-          <button type="button" class="btn-primary" id="pz-player-save">Guardar jugador</button>
+          <label><span data-i18n="pz.ui.name">Nombre</span><input id="pz-player-name" type="text" maxlength="30"></label>
+          <label><span data-i18n="pz.ui.number">Número</span><input id="pz-player-number" type="number" min="1" max="99"></label>
+          <label><span data-i18n="pz.ui.position">Posición</span><input id="pz-player-position" type="text" maxlength="12" placeholder="MC"></label>
+          <button type="button" class="btn-primary" id="pz-player-save" data-i18n="pz.ui.savePlayer">Guardar jugador</button>
         </div>
 
         <h3 data-i18n="pz.leyenda">Leyenda</h3>
@@ -275,7 +275,7 @@
         <input type="text" id="pz-nombre" placeholder="Nombre del patrón" data-i18n-placeholder="pz.nombrePh">
         <button type="button" class="btn-primary" id="pz-save" data-i18n="pz.guardar">Guardar</button>
         <button type="button" class="btn-secondary" id="pz-export-png" data-i18n="pz.exportPng">Exportar PNG</button>
-        <button type="button" class="btn-secondary" id="pz-clear">Borrar toda la pizarra</button>
+        <button type="button" class="btn-secondary" id="pz-clear" data-i18n="pz.ui.clearBoard">Borrar toda la pizarra</button>
         <p class="form-message" id="pizarra-msg"></p>
 
         <h3 data-i18n="pz.misPatrones">Mis patrones</h3>

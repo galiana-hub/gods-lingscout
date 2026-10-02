@@ -274,7 +274,7 @@
     }
 
     if (tool === 'text') {
-      const value = window.prompt('Texto táctico:');
+      const value = window.prompt(t('pz.ui.promptText') || 'Texto táctico:');
       if (!value || !value.trim()) return;
       this.pushHistory();
       const el = { id: uid(), type: 'text', text: value.trim(), x: p.x, y: p.y, size: this.textSize || 15, step: this.currentStep };
