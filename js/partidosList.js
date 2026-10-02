@@ -275,10 +275,17 @@ function construirDetallePartido(p) {
   return html;
 }
 
+function emojiTarjeta(tarjeta) {
+  if (tarjeta === 'amarilla') return ' 🟨';
+  if (tarjeta === 'doble_amarilla') return ' 🟨🟨';
+  if (tarjeta === 'roja') return ' 🟥';
+  return '';
+}
+
 function renderizarAlineacion(jugadores) {
   if (!jugadores.length) return '<p class="detail-empty">—</p>';
   return '<ul class="lineup-view">' + jugadores.map(j =>
-    `<li>${j.jugador_nombre}${j.titular ? '' : ' (' + t('ui.suplente') + ')'}${j.posicion_x !== null ? ' 📍' : ''}</li>`
+    `<li>${j.jugador_nombre}${j.titular ? '' : ' (' + t('ui.suplente') + ')'}${emojiTarjeta(j.tarjeta)}${j.posicion_x !== null && j.posicion_x !== undefined ? ' 📍' : ''}</li>`
   ).join('') + '</ul>';
 }
 

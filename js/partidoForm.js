@@ -100,6 +100,7 @@ function crearFilaJugador(team, index, esTitular = true) {
   row.dataset.team = team;
   row.dataset.posX = '';
   row.dataset.posY = '';
+  row.dataset.tarjeta = '';
 
   const input = document.createElement('input');
   input.type = 'text';
@@ -120,7 +121,34 @@ function crearFilaJugador(team, index, esTitular = true) {
   badge.hidden = true;
   badge.textContent = '✓';
 
+  const cardWrap = document.createElement('div');
+  cardWrap.className = 'card-btns';
+  const tarjetas = [
+    { valor: 'amarilla', emoji: '🟨', titleKey: 'pf.tarjetaAmarilla' },
+    { valor: 'doble_amarilla', emoji: '🟨🟨', titleKey: 'pf.tarjetaDoble' },
+    { valor: 'roja', emoji: '🟥', titleKey: 'pf.tarjetaRoja' }
+  ];
+  tarjetas.forEach(({ valor, emoji, titleKey }) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-card';
+    btn.dataset.card = valor;
+    btn.textContent = emoji;
+    btn.title = t(titleKey);
+    btn.setAttribute('aria-label', t(titleKey));
+    btn.addEventListener('click', () => {
+      const actual = row.dataset.tarjeta || '';
+      const nuevo = actual === valor ? '' : valor;
+      row.dataset.tarjeta = nuevo;
+      cardWrap.querySelectorAll('.btn-card').forEach(b => {
+        b.classList.toggle('active', b.dataset.card === nuevo);
+      });
+    });
+    cardWrap.appendChild(btn);
+  });
+
   row.appendChild(input);
+  row.appendChild(cardWrap);
   row.appendChild(posBtn);
   row.appendChild(badge);
   return row;
@@ -152,6 +180,11 @@ function rellenarFila(row, jugador) {
     row.dataset.posY = jugador.posicion_y;
     row.querySelector('.position-badge').hidden = false;
   }
+  const tarjeta = jugador.tarjeta || '';
+  row.dataset.tarjeta = tarjeta;
+  row.querySelectorAll('.btn-card').forEach(b => {
+    b.classList.toggle('active', b.dataset.card === tarjeta);
+  });
 }
 
 // ---------- Modal de posición media ----------
@@ -378,7 +411,8 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
       jugador_nombre: nombre,
       titular: !esCambio,
       posicion_x: fila.dataset.posX || null,
-      posicion_y: fila.dataset.posY || null
+      posicion_y: fila.dataset.posY || null,
+      tarjeta: fila.dataset.tarjeta || null
     });
 
     nombresParaAutocompletar.add(JSON.stringify({
