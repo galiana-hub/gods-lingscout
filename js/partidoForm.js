@@ -271,6 +271,8 @@ async function cargarDatosExistentes(id) {
   document.getElementById('goles-visitante').value = p.goles_visitante;
   document.getElementById('marcador-1p').value = p.marcador_1parte || '';
   document.getElementById('marcador-2p').value = p.marcador_2parte || '';
+  document.getElementById('nota-global-partido').value = p.nota_global || '';
+  document.getElementById('superioridad-balon-parado').value = p.superioridad_balon_parado || '';
 
   if (p.posesion) {
     const valor = p.posesion === p.equipo_local ? 'local' : 'visitante';
@@ -347,6 +349,8 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
     goles_visitante: parseInt(document.getElementById('goles-visitante').value, 10),
     marcador_1parte: document.getElementById('marcador-1p').value.trim() || null,
     marcador_2parte: document.getElementById('marcador-2p').value.trim() || null,
+    nota_global: document.getElementById('nota-global-partido').value ? parseInt(document.getElementById('nota-global-partido').value, 10) : null,
+    superioridad_balon_parado: document.getElementById('superioridad-balon-parado').value || null,
     posesion: posesionSeleccionada ? (posesionSeleccionada.value === 'local' ? equipoLocal : equipoVisitante) : null,
     sistema_local_con_balon: document.getElementById('sistema-local-con').value.trim() || null,
     sistema_local_sin_balon: document.getElementById('sistema-local-sin').value.trim() || null,

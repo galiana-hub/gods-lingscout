@@ -216,6 +216,7 @@ async function cargarDatosExistentes(id) {
   document.getElementById('nota').value = a.nota || '';
   document.getElementById('resistencia').value = a.resistencia || '';
   document.getElementById('pie-dominante').value = a.pie_dominante || '';
+  document.getElementById('pierna-mala-habilidad').value = a.pierna_mala_habilidad || '';
   document.getElementById('potencial').value = a.potencial || '';
   document.getElementById('posicion-ideal').value = a.posicion_ideal || '';
   document.getElementById('punto-debil').value = a.punto_debil || '';
@@ -269,6 +270,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     nota: parseInt(document.getElementById('nota').value, 10),
     resistencia: document.getElementById('resistencia').value || null,
     pie_dominante: document.getElementById('pie-dominante').value || null,
+    pierna_mala_habilidad: document.getElementById('pierna-mala-habilidad').value || null,
     potencial: document.getElementById('potencial').value || null,
     posicion_ideal: document.getElementById('posicion-ideal').value || null,
     punto_debil: document.getElementById('punto-debil').value.trim() || null,

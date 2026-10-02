@@ -192,6 +192,21 @@
         </div>
       </section>
 
+      <!-- Valoración cualitativa -->
+      <section class="form-section">
+        <h3 data-i18n="pf.sectionValoracion">Valoración del partido</h3>
+        <label for="nota-global-partido" data-i18n="pf.notaGlobal">Nota global del partido</label>
+        <input type="number" id="nota-global-partido" min="1" max="10" step="1" placeholder="8">
+        <label for="superioridad-balon-parado" data-i18n="pf.superioridadBalonParado">¿Quién tuvo superioridad en el balón parado?</label>
+        <select id="superioridad-balon-parado">
+          <option value="" data-i18n="jf.resElegir">Seleccionar</option>
+          <option value="local" data-i18n="pf.superioridadLocal">Local</option>
+          <option value="visitante" data-i18n="pf.superioridadVisitante">Visitante</option>
+          <option value="igualado" data-i18n="pf.superioridadIgualado">Igualados</option>
+          <option value="no_observado" data-i18n="pf.superioridadNoObservado">No observado</option>
+        </select>
+      </section>
+
       <!-- Posesión -->
       <section class="form-section">
         <h3 data-i18n="pf.sectionPosesion">Posesión</h3>
