@@ -866,9 +866,9 @@ body {
 #pizarra-canvas {
   width: 100%;
   max-width: 540px;
-  min-height: 270px;
+  min-height: 0;
   height: auto;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: auto;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   touch-action: none;

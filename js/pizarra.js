@@ -392,23 +392,127 @@
 
   // ---------- Drawing ----------
   Board.prototype.drawPitch = function () {
-    const ctx=this.ctx,w=this.canvas.width,h=this.canvas.height;
-    const stripes=this.pitchType==='horizontal'?12:10; ctx.clearRect(0,0,w,h);
-    for(let i=0;i<stripes;i++){ctx.fillStyle=i%2===0?'#3c8d4c':'#438f53'; if(this.pitchType==='horizontal')ctx.fillRect(i*w/stripes,0,w/stripes+1,h);else ctx.fillRect(0,i*h/stripes,w,h/stripes+1);}
-    ctx.strokeStyle='#fff';ctx.fillStyle='#fff';ctx.lineWidth=2;ctx.strokeRect(5,5,w-10,h-10);
-    const bw=this.pitchType==='horizontal'?82:190,bh=this.pitchType==='horizontal'?190:92,sw=this.pitchType==='horizontal'?42:86,sh=this.pitchType==='horizontal'?92:44;
-    const mark=(x,y)=>{ctx.strokeRect(x,y,bw,bh);ctx.strokeRect(x,y,sw,sh);};
-    if(this.pitchType==='vertical'){
-      ctx.beginPath();ctx.moveTo(5,h/2);ctx.lineTo(w-5,h/2);ctx.stroke();ctx.beginPath();ctx.arc(w/2,h/2,58,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(w/2,h/2,3,0,Math.PI*2);ctx.fill();
-      mark((w-bw)/2,5);mark((w-bw)/2,h-5-bh);ctx.beginPath();ctx.arc(w/2,5+bh,42,.18*Math.PI,.82*Math.PI);ctx.stroke();ctx.beginPath();ctx.arc(w/2,h-5-bh,42,1.18*Math.PI,1.82*Math.PI);ctx.stroke();
-    } else if(this.pitchType==='horizontal'){
-      ctx.beginPath();ctx.moveTo(w/2,5);ctx.lineTo(w/2,h-5);ctx.stroke();ctx.beginPath();ctx.arc(w/2,h/2,58,0,Math.PI*2);ctx.stroke();ctx.beginPath();ctx.arc(w/2,h/2,3,0,Math.PI*2);ctx.fill();
-      mark(5,(h-bh)/2);mark(w-5-bw,(h-bh)/2);ctx.beginPath();ctx.arc(5+bw,h/2,42,-.32*Math.PI,.32*Math.PI);ctx.stroke();ctx.beginPath();ctx.arc(w-5-bw,h/2,42,.68*Math.PI,1.32*Math.PI);ctx.stroke();
+    const ctx = this.ctx, w = this.canvas.width, h = this.canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Césped: franjas siempre siguen la orientación real del campo.
+    const stripes = this.pitchType === 'horizontal' ? 12 : 10;
+    for (let i = 0; i < stripes; i++) {
+      ctx.fillStyle = i % 2 === 0 ? '#3c8d4c' : '#438f53';
+      if (this.pitchType === 'horizontal') {
+        const x = i * w / stripes;
+        ctx.fillRect(x, 0, w / stripes + 1, h);
+      } else {
+        const y = i * h / stripes;
+        ctx.fillRect(0, y, w, h / stripes + 1);
+      }
+    }
+
+    const inset = 5;
+    const x0 = inset, y0 = inset, x1 = w - inset, y1 = h - inset;
+    const fieldW = x1 - x0, fieldH = y1 - y0;
+
+    ctx.strokeStyle = '#fff';
+    ctx.fillStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([]);
+    ctx.strokeRect(x0, y0, fieldW, fieldH);
+
+    const drawGoalEnd = (side) => {
+      const penaltyW = Math.min(fieldW * 0.45, 190);
+      const goalW = Math.min(fieldW * 0.20, 86);
+      const penaltyD = Math.min(fieldH * 0.135, 92);
+      const goalD = Math.min(penaltyD * 0.48, 44);
+      const px = (w - penaltyW) / 2;
+      const gx = (w - goalW) / 2;
+      const top = side === 'top';
+      const py = top ? y0 : y1 - penaltyD;
+      const gy = top ? y0 : y1 - goalD;
+
+      ctx.strokeRect(px, py, penaltyW, penaltyD);
+      ctx.strokeRect(gx, gy, goalW, goalD);
+
+      const spotY = top ? y0 + penaltyD : y1 - penaltyD;
+      const arcStart = top ? 0.18 * Math.PI : 1.18 * Math.PI;
+      const arcEnd = top ? 0.82 * Math.PI : 1.82 * Math.PI;
+      ctx.beginPath();
+      ctx.arc(w / 2, spotY, 42, arcStart, arcEnd);
+      ctx.stroke();
+
+      // Punto de penalti.
+      ctx.beginPath();
+      ctx.arc(w / 2, spotY, 2.2, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    if (this.pitchType === 'vertical') {
+      // Campo completo: dos mitades reales.
+      ctx.beginPath();
+      ctx.moveTo(x0, h / 2);
+      ctx.lineTo(x1, h / 2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, 58, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawGoalEnd('top');
+      drawGoalEnd('bottom');
+    } else if (this.pitchType === 'half') {
+      // Medio campo: una mitad completa, sin líneas artificiales.
+      drawGoalEnd('top');
+
+      // Línea de medio campo en el extremo inferior y media circunferencia.
+      ctx.beginPath();
+      ctx.moveTo(x0, y1);
+      ctx.lineTo(x1, y1);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w / 2, y1, 58, Math.PI, 0);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w / 2, y1, 3, 0, Math.PI * 2);
+      ctx.fill();
     } else {
-      // Medio campo limpio: portería arriba y línea de medio campo abajo.
-      mark((w-bw)/2,5);ctx.beginPath();ctx.arc(w/2,5+bh,42,.18*Math.PI,.82*Math.PI);ctx.stroke();
-      ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(5,h-5);ctx.lineTo(w-5,h-5);ctx.stroke();ctx.setLineDash([]);
-      ctx.beginPath();ctx.arc(w/2,h-5,58,Math.PI,0);ctx.stroke();
+      // Campo horizontal: el mismo campo completo girado 90°.
+      const penaltyD = Math.min(fieldW * 0.135, 92);
+      const goalD = Math.min(penaltyD * 0.48, 44);
+      const penaltyH = Math.min(fieldH * 0.45, 190);
+      const goalH = Math.min(fieldH * 0.20, 86);
+      const py = (h - penaltyH) / 2;
+      const gy = (h - goalH) / 2;
+      const drawSide = (side) => {
+        const left = side === 'left';
+        const px = left ? x0 : x1 - penaltyD;
+        const gx = left ? x0 : x1 - goalD;
+        ctx.strokeRect(px, py, penaltyD, penaltyH);
+        ctx.strokeRect(gx, gy, goalD, goalH);
+        const spotX = left ? x0 + penaltyD : x1 - penaltyD;
+        const arcStart = left ? -0.32 * Math.PI : 0.68 * Math.PI;
+        const arcEnd = left ? 0.32 * Math.PI : 1.32 * Math.PI;
+        ctx.beginPath();
+        ctx.arc(spotX, h / 2, 42, arcStart, arcEnd);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(spotX, h / 2, 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      ctx.beginPath();
+      ctx.moveTo(w / 2, y0);
+      ctx.lineTo(w / 2, y1);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, 58, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(w / 2, h / 2, 3, 0, Math.PI * 2);
+      ctx.fill();
+      drawSide('left');
+      drawSide('right');
     }
   };
   Board.prototype._visible = function (el) {
