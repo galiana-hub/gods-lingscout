@@ -849,3 +849,93 @@ body {
   display: flex; align-items: center; gap: 12px; padding: 10px 12px;
   border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-surface);
 }
+
+/* ---------- Pizarra táctica ---------- */
+.pizarra-page h2 { margin-bottom: 12px; }
+.pizarra-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 12px;
+  align-items: flex-start;
+}
+.pizarra-canvas-wrap {
+  flex: 1 1 320px;
+  max-width: 100%;
+}
+#pizarra-canvas {
+  width: 100%;
+  max-width: 540px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  touch-action: none;
+  display: block;
+}
+.pizarra-side {
+  flex: 0 1 240px;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.pizarra-side h3 {
+  font-size: 0.85rem;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  color: var(--color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pz-sequence-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  padding: 8px 10px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+.pz-label { font-size: 0.82rem; color: var(--color-text-soft); font-weight: 500; }
+.pz-legend {
+  list-style: none;
+  font-size: 0.8rem;
+  color: var(--color-text-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pz-legend li { display: flex; align-items: center; gap: 8px; }
+.lg-own, .lg-rival {
+  width: 14px; height: 14px; border-radius: 50%; display: inline-block;
+  border: 2px solid #111;
+}
+.lg-own { background: #111; }
+.lg-rival { background: #fff; }
+.lg-zone {
+  width: 14px; height: 14px; border-radius: 50%; display: inline-block;
+}
+.lg-zone.pressure { background: rgba(211,47,47,0.45); }
+.lg-zone.free { background: rgba(46,125,50,0.45); }
+.lg-zone.danger { background: rgba(245,124,0,0.45); }
+.pz-patrones-list { display: flex; flex-direction: column; gap: 4px; }
+.pz-patron-btn { text-align: start; }
+#pz-nombre {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-family: var(--font);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.pizarra-side .btn-primary,
+.pizarra-side .btn-secondary {
+  width: 100%;
+  margin-top: 4px;
+}
+@media (max-width: 700px) {
+  .pizarra-side { flex: 1 1 100%; }
+}
