@@ -38,11 +38,16 @@
     this.arrowStyle = 'solid';   // solid | dashed | double | numbered | feint
     this.arrowWidth = 2.5;       // thickness
     this.zoneType = 'pressure';
+    this.zoneShape = 'circle';
+    this.textSize = 15;
+    this.passStyle = 'dashed';
+    this.movementStyle = 'solid';
     this.lineType = 'pass';
     this.tokenTeam = 'own';      // own | rival | ball
     this.nextNumber = 1;
     this.elements = [];
     this.history = [];
+    this.redoHistory = [];
     this.stepFilter = null;      // null = show all; number = only up to that step
     this.currentStep = 1;
     this.maxStep = 1;
@@ -90,11 +95,22 @@
 
   Board.prototype.pushHistory = function () {
     this.history.push(JSON.stringify(this.elements));
-    if (this.history.length > 40) this.history.shift();
+    if (this.history.length > 50) this.history.shift();
+    this.redoHistory = [];
+  };
+
+  Board.prototype.redo = function () {
+    if (!this.redoHistory.length) return;
+    this.history.push(JSON.stringify(this.elements));
+    this.elements = JSON.parse(this.redoHistory.pop());
+    this._recalcSteps();
+    this.redraw();
+    this.onChange();
   };
 
   Board.prototype.undo = function () {
     if (!this.history.length) return;
+    this.redoHistory.push(JSON.stringify(this.elements));
     this.elements = JSON.parse(this.history.pop());
     this._recalcSteps();
     this.redraw();
@@ -132,15 +148,79 @@
     };
   };
 
-  Board.prototype.findNear = function (p, r) {
-    r = r || 14;
+  Board.prototype._hitTest = function (p) {
+    const distToSegment = (px, py, x1, y1, x2, y2) => {
+      const dx = x2 - x1, dy = y2 - y1;
+      const len2 = dx * dx + dy * dy || 1;
+      let t = ((px - x1) * dx + (py - y1) * dy) / len2;
+      t = Math.max(0, Math.min(1, t));
+      const x = x1 + t * dx, y = y1 + t * dy;
+      return Math.hypot(px - x, py - y);
+    };
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const el = this.elements[i];
-      if (el.type === 'token' || el.type === 'zone') {
-        if (Math.hypot(el.x - p.x, el.y - p.y) < (el.r || r)) return el;
+      if (!this._visible(el)) continue;
+      if (el.type === 'text') {
+      ctx.fillStyle = '#111111';
+      ctx.font = `600 ${el.size || 15}px Inter, sans-serif`;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+      ctx.fillText(el.text || '', el.x, el.y);
+      if (el.id === this.selectedId) {
+        const width = ctx.measureText(el.text || '').width;
+        ctx.strokeStyle = '#FFD54F'; ctx.lineWidth = 2; ctx.strokeRect(el.x - 5, el.y - (el.size || 15) - 4, width + 10, (el.size || 15) + 9);
+      }
+      return;
+    }
+
+    if (el.type === 'token') {
+        if (Math.hypot(el.x - p.x, el.y - p.y) <= 18) return el;
+      } else if (el.type === 'zone') {
+        if (el.shape === 'rect') {
+          const x = Math.min(el.x1, el.x2), y = Math.min(el.y1, el.y2);
+          const w = Math.abs(el.x2 - el.x1), h = Math.abs(el.y2 - el.y1);
+          if (p.x >= x - 8 && p.x <= x + w + 8 && p.y >= y - 8 && p.y <= y + h + 8) return el;
+        } else if (Math.hypot(el.x - p.x, el.y - p.y) <= (el.r || 14) + 8) return el;
+      } else if (el.type === 'arrow' || el.type === 'line') {
+        if (distToSegment(p.x, p.y, el.x1, el.y1, el.x2, el.y2) <= 10) return el;
+      } else if (el.type === 'text') {
+        const width = el.width || Math.max(40, String(el.text || '').length * 7);
+        if (p.x >= el.x - 6 && p.x <= el.x + width && p.y >= el.y - 18 && p.y <= el.y + 8) return el;
       }
     }
     return null;
+  };
+
+  Board.prototype.findNear = function (p, r) { return this._hitTest(p) || null; };
+
+  Board.prototype._deleteElement = function (id) {
+    const before = this.elements.length;
+    this.pushHistory();
+    this.elements = this.elements.filter(x => x.id !== id);
+    if (this.elements.length === before) return false;
+    if (this.selectedId === id) this.selectedId = null;
+    this._recalcSteps();
+    this.redraw();
+    this.onChange();
+    return true;
+  };
+
+  Board.prototype.deleteSelected = function () {
+    if (this.selectedId) this._deleteElement(this.selectedId);
+  };
+
+  Board.prototype.duplicateSelected = function () {
+    const el = this.elements.find(x => x.id === this.selectedId);
+    if (!el) return;
+    this.pushHistory();
+    const copy = JSON.parse(JSON.stringify(el));
+    copy.id = uid();
+    if (copy.type === 'token' || copy.type === 'zone') { copy.x += 18; copy.y += 18; }
+    if (copy.type === 'arrow' || copy.type === 'line') { copy.x1 += 18; copy.y1 += 18; copy.x2 += 18; copy.y2 += 18; }
+    if (copy.type === 'text') { copy.x += 18; copy.y += 18; }
+    this.elements.push(copy);
+    this.selectedId = copy.id;
+    this.redraw();
+    this.onChange();
   };
 
   Board.prototype._onDown = function (e) {
@@ -149,23 +229,24 @@
     const tool = this.tool;
 
     if (tool === 'select' || tool === 'erase') {
-      const hit = this.findNear(p, 16);
-      if (tool === 'erase' && hit) {
+      const hit = this._hitTest(p);
+      if (tool === 'erase') {
+        if (hit) this._deleteElement(hit.id);
+        return;
+      }
+      this.selectedId = hit ? hit.id : null;
+      if (hit && ['token','text','zone','arrow','line'].includes(hit.type)) {
         this.pushHistory();
-        this.elements = this.elements.filter(x => x.id !== hit.id);
-        this._recalcSteps();
-        this.redraw();
-        this.onChange();
-        return;
-      }
-      if (hit && hit.type === 'token') {
-        this.selectedId = hit.id;
         this.dragId = hit.id;
-        this.dragOff = { x: p.x - hit.x, y: p.y - hit.y };
-        this.redraw();
-        return;
+        this.dragStart = { x: p.x, y: p.y };
+        if (hit.type === 'token' || hit.type === 'text' || (hit.type === 'zone' && hit.shape !== 'rect')) {
+          this.dragOff = { x: p.x - hit.x, y: p.y - hit.y };
+        } else if (hit.type === 'zone') {
+          this.dragOff = { x: p.x - hit.x1, y: p.y - hit.y1 };
+        } else {
+          this.dragOff = { x: p.x - hit.x1, y: p.y - hit.y1 };
+        }
       }
-      this.selectedId = null;
       this.redraw();
       return;
     }
@@ -173,11 +254,7 @@
     if (tool === 'token') {
       this.pushHistory();
       const el = {
-        id: uid(),
-        type: 'token',
-        team: this.tokenTeam,
-        x: p.x,
-        y: p.y,
+        id: uid(), type: 'token', team: this.tokenTeam, x: p.x, y: p.y,
         number: this.tokenTeam === 'ball' ? null : this.nextNumber,
         step: this.currentStep
       };
@@ -186,33 +263,34 @@
       this.selectedId = el.id;
       this.dragId = el.id;
       this.dragOff = { x: 0, y: 0 };
-      this._recalcSteps();
-      this.redraw();
-      this.onChange();
+      this._recalcSteps(); this.redraw(); this.onChange();
       return;
     }
 
-    if (tool === 'arrow' || tool === 'line') {
-      this.draft = {
-        kind: tool,
-        style: tool === 'arrow' ? this.arrowStyle : this.lineType,
-        width: this.arrowWidth,
-        x1: p.x, y1: p.y,
-        x2: p.x, y2: p.y,
-        step: this.currentStep,
-        seq: tool === 'arrow' && this.arrowStyle === 'numbered' ? this._nextSeq() : null
-      };
+    if (tool === 'text') {
+      const value = window.prompt('Texto táctico:');
+      if (!value || !value.trim()) return;
+      this.pushHistory();
+      const el = { id: uid(), type: 'text', text: value.trim(), x: p.x, y: p.y, size: this.textSize || 15, step: this.currentStep };
+      this.elements.push(el); this.selectedId = el.id;
+      this.redraw(); this.onChange();
+      return;
+    }
+
+    if (tool === 'arrow' || tool === 'line' || tool === 'pass' || tool === 'movement') {
+      const kind = tool === 'line' ? 'line' : 'arrow';
+      const style = tool === 'pass' ? (this.passStyle || 'dashed') : (tool === 'movement' ? (this.movementStyle || 'solid') : (tool === 'arrow' ? this.arrowStyle : this.lineType));
+      this.draft = { kind, style, width: this.arrowWidth, x1: p.x, y1: p.y, x2: p.x, y2: p.y, step: this.currentStep,
+        seq: kind === 'arrow' && style === 'numbered' ? this._nextSeq() : null };
       return;
     }
 
     if (tool === 'zone') {
-      this.draft = {
-        kind: 'zone',
-        zoneType: this.zoneType,
-        x: p.x, y: p.y,
-        r: 8,
-        step: this.currentStep
-      };
+      if (this.zoneShape === 'rect') {
+        this.draft = { kind: 'zone', shape: 'rect', zoneType: this.zoneType, x1: p.x, y1: p.y, x2: p.x, y2: p.y, step: this.currentStep };
+      } else {
+        this.draft = { kind: 'zone', shape: 'circle', zoneType: this.zoneType, x: p.x, y: p.y, r: 8, step: this.currentStep };
+      }
     }
   };
 
@@ -230,8 +308,17 @@
       const p = this.pos(e);
       const el = this.elements.find(x => x.id === this.dragId);
       if (el) {
-        el.x = p.x - this.dragOff.x;
-        el.y = p.y - this.dragOff.y;
+        const dx = p.x - this.dragOff.x;
+        const dy = p.y - this.dragOff.y;
+        if (el.type === 'token' || el.type === 'text' || (el.type === 'zone' && el.shape !== 'rect')) {
+          el.x = dx; el.y = dy;
+        } else if (el.type === 'zone') {
+          const shiftX = dx - el.x1, shiftY = dy - el.y1;
+          el.x1 += shiftX; el.x2 += shiftX; el.y1 += shiftY; el.y2 += shiftY;
+        } else {
+          const shiftX = dx - el.x1, shiftY = dy - el.y1;
+          el.x1 += shiftX; el.x2 += shiftX; el.y1 += shiftY; el.y2 += shiftY;
+        }
         this.redraw();
       }
       return;
@@ -243,7 +330,11 @@
       this.draft.x2 = p.x;
       this.draft.y2 = p.y;
     } else if (this.draft.kind === 'zone') {
-      this.draft.r = Math.max(12, Math.hypot(p.x - this.draft.x, p.y - this.draft.y));
+      if (this.draft.shape === 'rect') {
+        this.draft.x2 = p.x; this.draft.y2 = p.y;
+      } else {
+        this.draft.r = Math.max(12, Math.hypot(p.x - this.draft.x, p.y - this.draft.y));
+      }
     }
     this.redraw();
   };
@@ -252,6 +343,7 @@
     if (this.dragId) {
       this.dragId = null;
       this.dragOff = null;
+      this.dragStart = null;
       this.onChange();
       return;
     }
@@ -276,19 +368,16 @@
         seq: d.seq
       });
     } else if (d.kind === 'zone') {
-      if (d.r < 14) {
-        this.redraw();
-        return;
-      }
+      const size = d.shape === 'rect' ? Math.max(Math.abs(d.x2 - d.x1), Math.abs(d.y2 - d.y1)) : d.r;
+      if (size < 14) { this.redraw(); return; }
       this.pushHistory();
-      this.elements.push({
-        id: uid(),
-        type: 'zone',
-        zoneType: d.zoneType,
-        x: d.x, y: d.y,
-        r: d.r,
-        step: d.step
-      });
+      if (d.shape === 'rect') {
+        this.elements.push({ id: uid(), type: 'zone', shape: 'rect', zoneType: d.zoneType,
+          x1: d.x1, y1: d.y1, x2: d.x2, y2: d.y2, step: d.step });
+      } else {
+        this.elements.push({ id: uid(), type: 'zone', shape: 'circle', zoneType: d.zoneType,
+          x: d.x, y: d.y, r: d.r, step: d.step });
+      }
     }
     this._recalcSteps();
     this.redraw();
@@ -367,14 +456,19 @@
   Board.prototype.drawElement = function (el) {
     const ctx = this.ctx;
     if (el.type === 'zone') {
-      ctx.beginPath();
-      ctx.arc(el.x, el.y, el.r, 0, Math.PI * 2);
       ctx.fillStyle = ZONE_COLORS[el.zoneType] || ZONE_COLORS.pressure;
-      ctx.fill();
       ctx.strokeStyle = (ZONE_COLORS[el.zoneType] || '').replace(/[\d.]+\)$/, '0.7)') || 'rgba(0,0,0,0.4)';
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 3]);
-      ctx.stroke();
+      if (el.shape === 'rect') {
+        const x = Math.min(el.x1, el.x2), y = Math.min(el.y1, el.y2);
+        const w = Math.abs(el.x2 - el.x1), h = Math.abs(el.y2 - el.y1);
+        ctx.fillRect(x, y, w, h); ctx.strokeRect(x, y, w, h);
+        if (el.id === this.selectedId) { ctx.setLineDash([]); ctx.strokeStyle = '#FFD54F'; ctx.lineWidth = 2; ctx.strokeRect(x - 3, y - 3, w + 6, h + 6); }
+      } else {
+        ctx.beginPath(); ctx.arc(el.x, el.y, el.r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        if (el.id === this.selectedId) { ctx.setLineDash([]); ctx.strokeStyle = '#FFD54F'; ctx.lineWidth = 2; ctx.stroke(); }
+      }
       ctx.setLineDash([]);
       return;
     }
@@ -506,9 +600,11 @@
     });
     if (this.draft) {
       if (this.draft.kind === 'zone') {
-        this.drawElement({
-          type: 'zone',
-          zoneType: this.draft.zoneType,
+        this.drawElement(this.draft.shape === 'rect' ? {
+          type: 'zone', shape: 'rect', zoneType: this.draft.zoneType,
+          x1: this.draft.x1, y1: this.draft.y1, x2: this.draft.x2, y2: this.draft.y2
+        } : {
+          type: 'zone', shape: 'circle', zoneType: this.draft.zoneType,
           x: this.draft.x, y: this.draft.y, r: this.draft.r
         });
       } else if (this.draft.kind === 'arrow') {
@@ -571,17 +667,22 @@
       elements: this.elements,
       nextNumber: this.nextNumber,
       currentStep: this.currentStep,
-      maxStep: this.maxStep
+      maxStep: this.maxStep,
+      zoneShape: this.zoneShape || 'circle',
+      textSize: this.textSize || 15
     };
   };
 
   Board.prototype.loadJSON = function (data) {
     if (!data) return;
     this.pitchType = data.pitchType || 'vertical';
-    this.elements = data.elements || [];
+    this.elements = (data.elements || []).map(el => el.type === 'zone' && !el.shape ? Object.assign({ shape: 'circle' }, el) : el);
+    this.redoHistory = [];
     this.nextNumber = data.nextNumber || 1;
     this.currentStep = data.currentStep || 1;
     this.maxStep = data.maxStep || 1;
+    this.zoneShape = data.zoneShape || 'circle';
+    this.textSize = data.textSize || 15;
     this._resize();
     this._recalcSteps();
     this.redraw();
@@ -721,12 +822,43 @@
     board.onChange();
   }
 
+
+  function templateBloqueBajo(board) {
+    board.clear(); board.setPitch('vertical');
+    const w = board.canvas.width, h = board.canvas.height;
+    const pts = [[.5,.88],[.2,.72],[.38,.76],[.62,.76],[.8,.72],[.25,.58],[.5,.6],[.75,.58],[.3,.42],[.7,.42],[.5,.28]];
+    pts.forEach((p,i)=>board.elements.push({id:uid(),type:'token',team:'own',x:p[0]*w,y:p[1]*h,number:i+1,step:1}));
+    board.nextNumber=12;
+    board.elements.push({id:uid(),type:'zone',shape:'rect',zoneType:'danger',x1:w*.12,y1:h*.45,x2:w*.88,y2:h*.82,step:1});
+    board._recalcSteps(); board.redraw(); board.onChange();
+  }
+
+  function templatePresionTrasPerdida(board) {
+    template433(board);
+    const w=board.canvas.width,h=board.canvas.height;
+    board.elements.push({id:uid(),type:'zone',shape:'circle',zoneType:'pressure',x:w*.5,y:h*.34,r:w*.25,step:2});
+    [[.3,.45,.18,.35],[.5,.4,.5,.28],[.7,.45,.82,.35]].forEach((a,i)=>board.elements.push({id:uid(),type:'arrow',style:'numbered',width:3,x1:a[0]*w,y1:a[1]*h,x2:a[2]*w,y2:a[3]*h,step:2,seq:i+1}));
+    board.maxStep=2; board.currentStep=1; board.redraw(); board.onChange();
+  }
+
+  function templateAtaqueBanda(board) {
+    template433(board);
+    const w=board.canvas.width,h=board.canvas.height;
+    board.elements.push({id:uid(),type:'zone',shape:'rect',zoneType:'free',x1:w*.06,y1:h*.18,x2:w*.3,y2:h*.72,step:1});
+    board.elements.push({id:uid(),type:'arrow',style:'numbered',width:2.5,x1:w*.2,y1:h*.72,x2:w*.1,y2:h*.28,step:2,seq:1});
+    board.elements.push({id:uid(),type:'arrow',style:'dashed',width:2,x1:w*.5,y1:h*.55,x2:w*.24,y2:h*.36,step:2});
+    board.maxStep=2; board.currentStep=1; board.redraw(); board.onChange();
+  }
+
   const TEMPLATES = {
     '4-3-3': template433,
     '4-4-2': template442,
     '3-5-2': template352,
     'press-alto': templatePressAlto,
-    'salida-balon': templateSalidaBalon
+    'salida-balon': templateSalidaBalon,
+    'bloque-bajo': templateBloqueBajo,
+    'presion-perdida': templatePresionTrasPerdida,
+    'ataque-banda': templateAtaqueBanda
   };
 
   window.PizarraBoard = Board;
@@ -804,6 +936,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
+  document.querySelectorAll('[data-zone-shape]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-zone-shape]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); board.zoneShape = btn.dataset.zoneShape;
+    });
+  });
+  document.querySelectorAll('[data-text-size]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-text-size]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); board.textSize = parseInt(btn.dataset.textSize, 10);
+    });
+  });
+  document.querySelectorAll('[data-pass-style]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-pass-style]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active'); board.passStyle = btn.dataset.passStyle;
+    });
+  });
+
   document.querySelectorAll('[data-zone-type]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-zone-type]').forEach(b => b.classList.remove('active'));
@@ -854,6 +1005,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   document.getElementById('pz-undo')?.addEventListener('click', () => board.undo());
+  document.getElementById('pz-redo')?.addEventListener('click', () => board.redo());
+  document.getElementById('pz-delete-selected')?.addEventListener('click', () => board.deleteSelected());
+  document.getElementById('pz-duplicate-selected')?.addEventListener('click', () => board.duplicateSelected());
   document.getElementById('pz-clear')?.addEventListener('click', () => {
     if (confirm(t('pz.confirmClear') || '¿Borrar toda la pizarra?')) board.clear();
   });

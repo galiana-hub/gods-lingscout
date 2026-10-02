@@ -942,3 +942,57 @@ body {
 @media (max-width: 700px) {
   .pizarra-side { flex: 1 1 100%; }
 }
+
+/* ---------- Pizarra V2: herramientas contextuales ---------- */
+.pz-toolbar-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 8px 0 6px;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+.pz-tool-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pz-group-label {
+  min-width: 62px;
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--color-text-soft);
+}
+.pz-tool-group .toolbar-row { margin: 0; }
+.pz-context-panel {
+  min-height: 42px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  border: 1px dashed var(--color-border);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+}
+.pz-context-panel:empty { display:none; }
+.pz-sub { align-items: center; gap: 6px; flex-wrap: wrap; }
+.pz-sub[hidden] { display: none !important; }
+.pz-help-card {
+  padding: 9px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background: var(--color-bg);
+  color: var(--color-text-soft);
+  font-size: .78rem;
+  line-height: 1.55;
+}
+.pz-help-card strong { color: var(--color-text); }
+#pizarra-canvas { cursor: crosshair; }
+.pizarra-page .tool-btn { min-height: 34px; }
+.pz-sequence-bar { position: sticky; top: 8px; z-index: 3; }
+@media (max-width: 700px) {
+  .pz-toolbar-card { padding: 8px; }
+  .pz-group-label { width: 100%; }
+  .pz-tool-group { gap: 4px; }
+  .pz-sequence-bar { position: static; }
+  .pizarra-canvas-wrap { flex-basis: 100%; }
+  #pizarra-canvas { max-width: 100%; }
+}

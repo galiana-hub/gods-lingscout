@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20261002d">
+<link rel="stylesheet" href="css/style.css?v=20261002e">
 </head>
 <body>
 <div class="layout">
@@ -124,52 +124,88 @@
       <button type="button" class="tool-btn" data-pz-pitch="horizontal" data-i18n="pf.horizontal">Horizontal</button>
     </div>
 
-    <!-- Herramientas principales -->
-    <div class="toolbar-row">
-      <button type="button" class="tool-btn active" data-pz-tool="select" title="Seleccionar / mover">✋</button>
-      <button type="button" class="tool-btn" data-pz-tool="token" data-i18n="pz.jugadores">Jugadores</button>
-      <button type="button" class="tool-btn" data-pz-tool="arrow" data-i18n="pz.flechas">Flechas</button>
-      <button type="button" class="tool-btn" data-pz-tool="zone" data-i18n="pz.zonas">Zonas</button>
-      <button type="button" class="tool-btn" data-pz-tool="line" data-i18n="pz.lineas">Líneas</button>
-      <button type="button" class="tool-btn" data-pz-tool="erase" data-i18n="pf.quitar">🗑️ Quitar</button>
-      <button type="button" class="tool-btn" id="pz-undo" data-i18n="pz.deshacer">↩ Deshacer</button>
-      <button type="button" class="tool-btn" id="pz-clear" data-i18n="pf.borrarTodo">Borrar todo</button>
+    <!-- Herramientas principales: agrupadas para que solo haya que pensar en QUÉ quieres dibujar -->
+    <div class="pz-toolbar-card">
+      <div class="pz-tool-group">
+        <span class="pz-group-label">Editar</span>
+        <div class="toolbar-row">
+          <button type="button" class="tool-btn active" data-pz-tool="select" title="Seleccionar / mover">✋ <span>Seleccionar</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="erase">🗑️ <span>Borrar</span></button>
+          <button type="button" class="tool-btn" id="pz-undo">↩ <span>Deshacer</span></button>
+          <button type="button" class="tool-btn" id="pz-redo">↪ <span>Rehacer</span></button>
+        </div>
+      </div>
+      <div class="pz-tool-group">
+        <span class="pz-group-label">Dibujar</span>
+        <div class="toolbar-row">
+          <button type="button" class="tool-btn" data-pz-tool="token">👤 <span>Jugador</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="pass">↗ <span>Pase</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="movement">➜ <span>Movimiento</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="zone">▣ <span>Zona</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="line">━ <span>Línea</span></button>
+          <button type="button" class="tool-btn" data-pz-tool="text">T <span>Texto</span></button>
+        </div>
+      </div>
     </div>
 
-    <!-- Subopciones según herramienta -->
-    <div id="pz-suboptions">
+    <!-- Subopciones contextuales -->
+    <div id="pz-suboptions" class="pz-context-panel">
       <div class="pz-sub toolbar-row" data-for="token" hidden>
-        <button type="button" class="tool-btn active" data-token-team="own" data-i18n="pf.propio">⬤ Propio</button>
-        <button type="button" class="tool-btn" data-token-team="rival" data-i18n="pf.rival">◯ Rival</button>
-        <button type="button" class="tool-btn" data-token-team="ball" data-i18n="pf.balon">⚽ Balón</button>
+        <span class="pz-label">Equipo:</span>
+        <button type="button" class="tool-btn active" data-token-team="own">⬤ Propio</button>
+        <button type="button" class="tool-btn" data-token-team="rival">◯ Rival</button>
+        <button type="button" class="tool-btn" data-token-team="ball">⚽ Balón</button>
+      </div>
+      <div class="pz-sub toolbar-row" data-for="pass" hidden>
+        <span class="pz-label">Tipo de pase:</span>
+        <button type="button" class="tool-btn active" data-pass-style="dashed">Pase</button>
+        <button type="button" class="tool-btn" data-pass-style="solid">Vertical</button>
+        <button type="button" class="tool-btn" data-pass-style="numbered">Secuencia</button>
+      </div>
+      <div class="pz-sub toolbar-row" data-for="movement" hidden>
+        <span class="pz-label">Movimiento:</span>
+        <button type="button" class="tool-btn active" data-arrow-style="solid">Continuo</button>
+        <button type="button" class="tool-btn" data-arrow-style="dashed">Sin balón</button>
+        <button type="button" class="tool-btn" data-arrow-style="double">Intercambio</button>
+        <button type="button" class="tool-btn" data-arrow-style="feint">Engaño / arrastre</button>
+        <button type="button" class="tool-btn" data-arrow-style="numbered">Numerado</button>
       </div>
       <div class="pz-sub" data-for="arrow" hidden>
         <div class="toolbar-row">
-          <button type="button" class="tool-btn active" data-arrow-style="solid" data-i18n="pz.flechaSolida">Continua</button>
-          <button type="button" class="tool-btn" data-arrow-style="dashed" data-i18n="pz.flechaDiscontinua">Discontinua</button>
-          <button type="button" class="tool-btn" data-arrow-style="double" data-i18n="pz.flechaDoble">Doble punta</button>
-          <button type="button" class="tool-btn" data-arrow-style="numbered" data-i18n="pz.flechaNumerada">Numerada</button>
-          <button type="button" class="tool-btn" data-arrow-style="feint" data-i18n="pz.flechaEngano">Engaño</button>
+          <button type="button" class="tool-btn active" data-arrow-style="solid">Continua</button>
+          <button type="button" class="tool-btn" data-arrow-style="dashed">Discontinua</button>
+          <button type="button" class="tool-btn" data-arrow-style="double">Doble punta</button>
+          <button type="button" class="tool-btn" data-arrow-style="numbered">Numerada</button>
+          <button type="button" class="tool-btn" data-arrow-style="feint">Engaño</button>
+        </div>
+      </div>
+      <div class="pz-sub" data-for="zone" hidden>
+        <div class="toolbar-row">
+          <span class="pz-label">Forma:</span>
+          <button type="button" class="tool-btn active" data-zone-shape="circle">◯ Círculo</button>
+          <button type="button" class="tool-btn" data-zone-shape="rect">▭ Rectángulo</button>
         </div>
         <div class="toolbar-row">
-          <span class="pz-label" data-i18n="pz.grosor">Grosor:</span>
-          <button type="button" class="tool-btn" data-arrow-width="1.5">Fina</button>
-          <button type="button" class="tool-btn active" data-arrow-width="2.5">Media</button>
-          <button type="button" class="tool-btn" data-arrow-width="4">Gruesa</button>
+          <span class="pz-label">Uso:</span>
+          <button type="button" class="tool-btn active" data-zone-type="pressure">Presión</button>
+          <button type="button" class="tool-btn" data-zone-type="influence">Influencia</button>
+          <button type="button" class="tool-btn" data-zone-type="free">Espacio libre</button>
+          <button type="button" class="tool-btn" data-zone-type="danger">Peligro</button>
+          <button type="button" class="tool-btn" data-zone-type="corridor">Pasillo</button>
         </div>
       </div>
-      <div class="pz-sub toolbar-row" data-for="zone" hidden>
-        <button type="button" class="tool-btn active" data-zone-type="pressure" data-i18n="pz.zonaPresion">Presión</button>
-        <button type="button" class="tool-btn" data-zone-type="influence" data-i18n="pz.zonaInfluencia">Influencia</button>
-        <button type="button" class="tool-btn" data-zone-type="free" data-i18n="pz.zonaLibre">Espacio libre</button>
-        <button type="button" class="tool-btn" data-zone-type="danger" data-i18n="pz.zonaPeligro">Peligro</button>
-        <button type="button" class="tool-btn" data-zone-type="corridor" data-i18n="pz.zonaPasillo">Pasillo</button>
-      </div>
       <div class="pz-sub toolbar-row" data-for="line" hidden>
-        <button type="button" class="tool-btn active" data-line-type="pass" data-i18n="pz.lineaPase">Pase posible</button>
-        <button type="button" class="tool-btn" data-line-type="coverage" data-i18n="pz.lineaCobertura">Cobertura</button>
-        <button type="button" class="tool-btn" data-line-type="support" data-i18n="pz.lineaApoyo">Apoyo</button>
-        <button type="button" class="tool-btn" data-line-type="connection" data-i18n="pz.lineaConexion">Conexión</button>
+        <button type="button" class="tool-btn active" data-line-type="pass">Pase posible</button>
+        <button type="button" class="tool-btn" data-line-type="coverage">Cobertura</button>
+        <button type="button" class="tool-btn" data-line-type="support">Apoyo</button>
+        <button type="button" class="tool-btn" data-line-type="connection">Conexión</button>
+      </div>
+      <div class="pz-sub toolbar-row" data-for="text" hidden>
+        <span class="pz-label">Tamaño:</span>
+        <button type="button" class="tool-btn" data-text-size="13">Pequeño</button>
+        <button type="button" class="tool-btn active" data-text-size="15">Medio</button>
+        <button type="button" class="tool-btn" data-text-size="18">Grande</button>
+        <span class="pz-label">Al pulsar el campo podrás escribir la anotación.</span>
       </div>
     </div>
 
@@ -179,7 +215,9 @@
       <button type="button" class="tool-btn" id="pz-step-prev">−</button>
       <strong id="pizarra-step-label">1 / 1</strong>
       <button type="button" class="tool-btn" id="pz-step-next">+</button>
-      <button type="button" class="tool-btn btn-primary" id="pz-play" title="Reproducir secuencia">▶</button>
+      <button type="button" class="tool-btn btn-primary" id="pz-play" title="Reproducir secuencia">▶ Reproducir</button>
+      <button type="button" class="tool-btn" id="pz-duplicate-selected">⧉ Duplicar</button>
+      <button type="button" class="tool-btn" id="pz-delete-selected">⌫ Eliminar selección</button>
     </div>
 
     <div class="pizarra-layout">
@@ -194,6 +232,17 @@
           <button type="button" class="tool-btn" data-template="3-5-2">3-5-2</button>
           <button type="button" class="tool-btn" data-template="press-alto" data-i18n="pz.tplPress">Press alto</button>
           <button type="button" class="tool-btn" data-template="salida-balon" data-i18n="pz.tplSalida">Salida de balón</button>
+          <button type="button" class="tool-btn" data-template="bloque-bajo">Bloque bajo</button>
+          <button type="button" class="tool-btn" data-template="presion-perdida">Presión tras pérdida</button>
+          <button type="button" class="tool-btn" data-template="ataque-banda">Ataque por banda</button>
+        </div>
+
+        <h3>Consejos rápidos</h3>
+        <div class="pz-help-card">
+          <div>1. Elige una herramienta.</div>
+          <div>2. Arrastra sobre el campo para dibujar.</div>
+          <div>3. Usa <strong>Seleccionar</strong> para mover cualquier elemento.</div>
+          <div>4. Selecciona algo y podrás duplicarlo o eliminarlo.</div>
         </div>
 
         <h3 data-i18n="pz.leyenda">Leyenda</h3>
@@ -213,6 +262,7 @@
         <input type="text" id="pz-nombre" placeholder="Nombre del patrón" data-i18n-placeholder="pz.nombrePh">
         <button type="button" class="btn-primary" id="pz-save" data-i18n="pz.guardar">Guardar</button>
         <button type="button" class="btn-secondary" id="pz-export-png" data-i18n="pz.exportPng">Exportar PNG</button>
+        <button type="button" class="btn-secondary" id="pz-clear">Borrar toda la pizarra</button>
         <p class="form-message" id="pizarra-msg"></p>
 
         <h3 data-i18n="pz.misPatrones">Mis patrones</h3>
@@ -226,7 +276,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/supabaseConfig.js?v=20261002d"></script>
 <script src="js/theme.js?v=20261002d"></script>
-<script src="js/pizarra.js?v=20261002d"></script>
+<script src="js/pizarra.js?v=20261002e"></script>
 <script src="js/pwa.js"></script>
 </body>
 </html>
