@@ -52,10 +52,39 @@ function actualizarNombresEquipos() {
   document.getElementById('sistema-local-heading').textContent = local;
   document.getElementById('sistema-visitante-heading').textContent = visitante;
   document.getElementById('clave-local-heading').textContent = local;
+  document.getElementById('juego-local-heading').textContent = local;
+  document.getElementById('juego-visitante-heading').textContent = visitante;
   document.getElementById('clave-visitante-heading').textContent = visitante;
   document.getElementById('alineacion-local-heading').textContent = local;
   document.getElementById('alineacion-visitante-heading').textContent = visitante;
 }
+// ---------- Salida de balón, bandas y laterales ----------
+const salidaSeleccion = { local: new Set(), visitante: new Set() };
+const CAMPOS_JUEGO = [['banda-izq', 'banda_izq'], ['banda-der', 'banda_der'], ['lateral-izq', 'lateral_izq'], ['lateral-der', 'lateral_der']];
+
+function construirSalidas() {
+  ['local', 'visitante'].forEach(lado => construirChipsToggle('salida-' + lado, LINGSCOUT_SALIDAS, 'pf.sal_', salidaSeleccion[lado]));
+}
+construirSalidas();
+
+function cargarJuegoEquipos(p) {
+  ['local', 'visitante'].forEach(lado => {
+    salidaSeleccion[lado] = new Set(p['salida_balon_' + lado] || []);
+    CAMPOS_JUEGO.forEach(([id, db]) => { document.getElementById(`${id}-${lado}`).value = p[`${db}_${lado}`] || ''; });
+  });
+  construirSalidas();
+}
+
+function leerJuegoEquipos() {
+  const datos = {};
+  ['local', 'visitante'].forEach(lado => {
+    const salida = LINGSCOUT_SALIDAS.filter(c => salidaSeleccion[lado].has(c));
+    datos['salida_balon_' + lado] = salida.length ? salida : null;
+    CAMPOS_JUEGO.forEach(([id, db]) => { datos[`${db}_${lado}`] = document.getElementById(`${id}-${lado}`).value || null; });
+  });
+  return datos;
+}
+
 equipoLocalInput.addEventListener('input', actualizarNombresEquipos);
 equipoVisitanteInput.addEventListener('input', actualizarNombresEquipos);
 
@@ -218,6 +247,7 @@ async function cargarDatosExistentes(id) {
 
   document.getElementById('clave-local').value = p.jugador_clave_local || '';
   document.getElementById('clave-visitante').value = p.jugador_clave_visitante || '';
+  cargarJuegoEquipos(p);
 
   document.getElementById('cambio-tactico').value = p.cambio_tactico || '';
   document.getElementById('minuto').value = p.minuto || '';
@@ -289,6 +319,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
     cambio_tactico: document.getElementById('cambio-tactico').value.trim() || null,
     minuto: document.getElementById('minuto').value ? parseInt(document.getElementById('minuto').value, 10) : null,
     etiquetas: etiquetas,
+    ...leerJuegoEquipos(),
     dibujo: dibujo
   };
 

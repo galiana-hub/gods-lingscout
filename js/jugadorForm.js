@@ -95,25 +95,7 @@ document.getElementById('modal-save').addEventListener('click', () => {
 let accionesSeleccionadas = new Set();
 
 function construirAcciones() {
-  const cont = document.getElementById('acciones-clave');
-  cont.innerHTML = '';
-  LINGSCOUT_ACCIONES.forEach(codigo => {
-    const label = document.createElement('label');
-    label.className = 'chip chip-toggle';
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.value = codigo;
-    input.checked = accionesSeleccionadas.has(codigo);
-    label.classList.toggle('on', input.checked);
-    input.addEventListener('change', () => {
-      if (input.checked) accionesSeleccionadas.add(codigo); else accionesSeleccionadas.delete(codigo);
-      label.classList.toggle('on', input.checked);
-    });
-    const texto = document.createElement('span');
-    texto.textContent = t('jf.acc_' + codigo);
-    label.append(input, texto);
-    cont.appendChild(label);
-  });
+  construirChipsToggle('acciones-clave', LINGSCOUT_ACCIONES, 'jf.acc_', accionesSeleccionadas);
 }
 construirAcciones();
 
@@ -235,6 +217,7 @@ async function cargarDatosExistentes(id) {
   document.getElementById('resistencia').value = a.resistencia || '';
   document.getElementById('pie-dominante').value = a.pie_dominante || '';
   document.getElementById('potencial').value = a.potencial || '';
+  document.getElementById('posicion-ideal').value = a.posicion_ideal || '';
   document.getElementById('punto-debil').value = a.punto_debil || '';
   document.getElementById('tendencia').value = a.tendencia || '';
   document.getElementById('importancia').value = a.importancia || '';
@@ -283,6 +266,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     resistencia: document.getElementById('resistencia').value || null,
     pie_dominante: document.getElementById('pie-dominante').value || null,
     potencial: document.getElementById('potencial').value || null,
+    posicion_ideal: document.getElementById('posicion-ideal').value || null,
     punto_debil: document.getElementById('punto-debil').value.trim() || null,
     tendencia: document.getElementById('tendencia').value || null,
     importancia: document.getElementById('importancia').value || null,

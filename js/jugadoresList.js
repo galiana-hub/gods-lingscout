@@ -181,6 +181,9 @@ function construirDetalleJugador(a) {
   if (a.punto_debil) {
     html += `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>`;
   }
+  if (a.posicion_ideal) {
+    html += `<p class="detail-label">${t('jf.posicionIdeal')}</p><p>${etiquetaPosicionIdeal(a.posicion_ideal)}</p>`;
+  }
   if (a.pie_dominante) {
     html += `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>`;
   }

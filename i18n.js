@@ -4733,14 +4733,20 @@ function construirChipsToggle(contenedorId, codigos, prefijoClave, seleccion) {
 }
 
 function aplicarTraducciones() {
+  // Si una clave no existe (por ejemplo, un i18n.js antiguo en caché), se deja el texto por defecto del HTML
+  const existe = (clave) => Object.prototype.hasOwnProperty.call(LINGSCOUT_TRANSLATIONS.es, clave);
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    el.textContent = t(el.getAttribute('data-i18n'));
+    const clave = el.getAttribute('data-i18n');
+    if (existe(clave)) el.textContent = t(clave);
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+    const clave = el.getAttribute('data-i18n-placeholder');
+    if (existe(clave)) el.setAttribute('placeholder', t(clave));
   });
   document.querySelectorAll('[data-i18n-title]').forEach(el => {
-    const txt = t(el.getAttribute('data-i18n-title'));
+    const clave = el.getAttribute('data-i18n-title');
+    if (!existe(clave)) return;
+    const txt = t(clave);
     el.setAttribute('title', txt);
     el.setAttribute('aria-label', txt);
   });

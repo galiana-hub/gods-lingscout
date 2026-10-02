@@ -221,6 +221,16 @@ function construirDetallePartido(p) {
     </div>
   `;
 
+  const juegoLocal = htmlJuegoEquipo(p, 'local');
+  const juegoVisitante = htmlJuegoEquipo(p, 'visitante');
+  if (juegoLocal || juegoVisitante) {
+    html += `
+      <div class="detail-grid">
+        <div><p class="detail-label">${p.equipo_local} — ${t('pf.salidaSection')}</p>${juegoLocal || '<p>—</p>'}</div>
+        <div><p class="detail-label">${p.equipo_visitante} — ${t('pf.salidaSection')}</p>${juegoVisitante || '<p>—</p>'}</div>
+      </div>`;
+  }
+
   if (p.cambio_tactico) {
     html += `<p class="detail-label">${t('ui.cambioTactico')}</p><p>${p.cambio_tactico}</p>`;
   }
@@ -281,4 +291,14 @@ function renderizarMiniPitch(jugadoresConPosicion) {
       ${puntos}
     </svg>
   `;
+}
+
+// Salida de balón (chips) y cómo juegan bandas y laterales de un equipo
+function htmlJuegoEquipo(p, lado) {
+  const salida = p['salida_balon_' + lado] || [];
+  const lineas = [['pf.bandaIzq', 'banda_izq'], ['pf.bandaDer', 'banda_der'], ['pf.lateralIzq', 'lateral_izq'], ['pf.lateralDer', 'lateral_der']]
+    .filter(([, db]) => p[`${db}_${lado}`])
+    .map(([clave, db]) => `<p>${t(clave)}: ${etiquetaJuego(p[`${db}_${lado}`])}</p>`);
+  if (!salida.length && !lineas.length) return '';
+  return (salida.length ? `<p class="detail-label">${t('pf.salidaBalon')}</p>${htmlSalida(salida)}` : '') + lineas.join('');
 }

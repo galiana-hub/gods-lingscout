@@ -270,6 +270,7 @@ function renderizarFicha(data) {
         ${a.tendencia ? `<p class="detail-label">${t('jf.tendencia')}</p><p><span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span></p>` : ''}
         ${a.importancia ? `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>` : ''}
         ${a.punto_debil ? `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>` : ''}
+        ${a.posicion_ideal ? `<p class="detail-label">${t('jf.posicionIdeal')}</p><p>${etiquetaPosicionIdeal(a.posicion_ideal)}</p>` : ''}
         ${a.pie_dominante ? `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>` : ''}
         ${a.potencial ? `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>` : ''}
         ${a.resistencia ? `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>` : ''}
