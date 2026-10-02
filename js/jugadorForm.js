@@ -11,6 +11,7 @@ const editId = params.get('id');
   }
   currentUserId = data.session.user.id;
   await cargarSugerenciasJugadores();
+  await cargarTagsPrevias();
 
   if (editId) {
     document.querySelector('.form-page h2').textContent = t('ui.editarJugador');
@@ -90,6 +91,122 @@ document.getElementById('modal-save').addEventListener('click', () => {
   modal.hidden = true;
 });
 
+// ---------- Acciones clave (casillas opcionales) ----------
+let accionesSeleccionadas = new Set();
+
+function construirAcciones() {
+  const cont = document.getElementById('acciones-clave');
+  cont.innerHTML = '';
+  LINGSCOUT_ACCIONES.forEach(codigo => {
+    const label = document.createElement('label');
+    label.className = 'chip chip-toggle';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.value = codigo;
+    input.checked = accionesSeleccionadas.has(codigo);
+    label.classList.toggle('on', input.checked);
+    input.addEventListener('change', () => {
+      if (input.checked) accionesSeleccionadas.add(codigo); else accionesSeleccionadas.delete(codigo);
+      label.classList.toggle('on', input.checked);
+    });
+    const texto = document.createElement('span');
+    texto.textContent = t('jf.acc_' + codigo);
+    label.append(input, texto);
+    cont.appendChild(label);
+  });
+}
+construirAcciones();
+
+// ---------- Etiquetas personalizables (#regateador, #líder...) ----------
+const MAX_TAGS = 12;
+let tags = [];
+let tagsPrevias = [];   // etiquetas que el usuario ya ha usado en otros análisis
+
+function agregarTag(raw) {
+  const tag = normalizarTag(raw);
+  if (!tag || tags.includes(tag) || tags.length >= MAX_TAGS) return;
+  tags.push(tag);
+  renderTags();
+}
+
+function quitarTag(tag) {
+  tags = tags.filter(x => x !== tag);
+  renderTags();
+}
+
+function commitTagInput() {
+  const input = document.getElementById('tags-input');
+  if (input.value.trim()) agregarTag(input.value);
+  input.value = '';
+}
+
+function renderTags() {
+  const cont = document.getElementById('tags-chips');
+  cont.innerHTML = '';
+  tags.forEach(tag => {
+    const chip = document.createElement('span');
+    chip.className = 'chip chip-tag';
+    chip.append('#' + tag);
+    const quitar = document.createElement('button');
+    quitar.type = 'button';
+    quitar.className = 'chip-remove';
+    quitar.textContent = '×';
+    quitar.setAttribute('aria-label', '#' + tag);
+    quitar.addEventListener('click', () => quitarTag(tag));
+    chip.appendChild(quitar);
+    cont.appendChild(chip);
+  });
+  renderSugeridas();
+}
+
+function renderSugeridas() {
+  const cont = document.getElementById('tags-sugeridas');
+  cont.innerHTML = '';
+  const candidatas = [...tagsPrevias, ...LINGSCOUT_TAGS_SUGERIDAS.map(k => normalizarTag(t('jf.tagSug_' + k)))];
+  const vistas = new Set();
+  candidatas.forEach(tag => {
+    if (!tag || vistas.has(tag) || tags.includes(tag)) return;
+    vistas.add(tag);
+    const boton = document.createElement('button');
+    boton.type = 'button';
+    boton.className = 'chip chip-tag chip-suggest';
+    boton.textContent = '#' + tag;
+    boton.addEventListener('click', () => agregarTag(tag));
+    cont.appendChild(boton);
+  });
+}
+
+async function cargarTagsPrevias() {
+  const { data, error } = await supabaseClient
+    .from('analisis_jugador').select('etiquetas').not('etiquetas', 'is', null).limit(300);
+  if (error || !data) return;
+  const cuenta = {};
+  data.forEach(fila => (fila.etiquetas || []).forEach(x => {
+    const tag = normalizarTag(x);
+    if (tag) cuenta[tag] = (cuenta[tag] || 0) + 1;
+  }));
+  tagsPrevias = Object.keys(cuenta).sort((a, b) => cuenta[b] - cuenta[a]).slice(0, 12);
+  renderSugeridas();
+}
+
+const tagsInput = document.getElementById('tags-input');
+tagsInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    commitTagInput();
+  } else if (e.key === 'Backspace' && !tagsInput.value && tags.length) {
+    quitarTag(tags[tags.length - 1]);
+  }
+});
+tagsInput.addEventListener('input', () => {
+  if (tagsInput.value.includes(',')) {   // teclados móviles que no envían keydown de la coma
+    tagsInput.value.split(',').forEach(parte => agregarTag(parte));
+    tagsInput.value = '';
+  }
+});
+tagsInput.addEventListener('blur', commitTagInput);
+renderTags();
+
 // ---------- Herramienta de dibujo táctico ----------
 const drawingTool = DrawingTool.init('drawing-canvas', '.drawing-toolbar');
 document.getElementById('clear-canvas').addEventListener('click', () => drawingTool.clear());
@@ -123,7 +240,10 @@ async function cargarDatosExistentes(id) {
   document.getElementById('importancia').value = a.importancia || '';
   document.getElementById('impresiones').value = a.impresiones || '';
   document.getElementById('minuto').value = a.minuto || '';
-  document.getElementById('etiquetas').value = (a.etiquetas || []).join(', ');
+  accionesSeleccionadas = new Set(a.acciones_clave || []);
+  construirAcciones();
+  tags = (a.etiquetas || []).map(normalizarTag).filter(Boolean).slice(0, MAX_TAGS);
+  renderTags();
 
   if (a.dibujo) {
     drawingTool.loadImage(a.dibujo);
@@ -145,8 +265,9 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
   const nombre = document.getElementById('jugador-nombre').value.trim();
   const equipo = document.getElementById('equipo').value.trim();
 
-  const etiquetasRaw = document.getElementById('etiquetas').value.trim();
-  const etiquetas = etiquetasRaw ? etiquetasRaw.split(',').map(t => t.trim()).filter(Boolean) : null;
+  commitTagInput();
+  const etiquetas = tags.length ? [...tags] : null;
+  const accionesClave = LINGSCOUT_ACCIONES.filter(c => accionesSeleccionadas.has(c));
 
   const dibujo = drawingTool.getDataURL();
 
@@ -168,6 +289,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     impresiones: document.getElementById('impresiones').value.trim() || null,
     minuto: document.getElementById('minuto').value ? parseInt(document.getElementById('minuto').value, 10) : null,
     etiquetas: etiquetas,
+    acciones_clave: accionesClave.length ? accionesClave : null,
     dibujo: dibujo,
     posicion_x: posGuardada ? posGuardada.x.toFixed(1) : null,
     posicion_y: posGuardada ? posGuardada.y.toFixed(1) : null

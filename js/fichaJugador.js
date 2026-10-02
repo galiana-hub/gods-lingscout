@@ -1,6 +1,81 @@
 let datosCompletos = [];
 let chartNotas = null;
 let chartGolesAsis = null;
+let chartTendencia = null;
+
+const VALOR_TENDENCIA = { bajando: -1, estancado: 0, mejorando: 1 };
+const COLOR_TENDENCIA = { bajando: '#B3261E', estancado: '#8A8A82', mejorando: '#2E7D32' };
+const CLAVE_TENDENCIA = { '-1': 'bajando', '0': 'estancado', '1': 'mejorando' };
+
+// Historial de la tendencia: gráfico escalonado + línea de tiempo con los cambios
+function renderHistorialTendencia(data) {
+  const vacio = document.getElementById('tendencia-empty');
+  const contenido = document.getElementById('tendencia-contenido');
+  if (chartTendencia) { chartTendencia.destroy(); chartTendencia = null; }
+
+  const conTendencia = data.filter(a => VALOR_TENDENCIA[a.tendencia] !== undefined);
+  if (conTendencia.length === 0) {
+    vacio.hidden = false;
+    contenido.hidden = true;
+    return;
+  }
+  vacio.hidden = true;
+  contenido.hidden = false;
+
+  const formato = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  const ultima = conTendencia[conTendencia.length - 1];
+  document.getElementById('tendencia-actual').innerHTML =
+    `<span class="trend-badge ${claseTendencia(ultima.tendencia)}">${etiquetaTendencia(ultima.tendencia)}</span> ` +
+    `<span class="result-subtitle">${new Date(ultima.creado_en).toLocaleDateString(currentLocale(), formato)}</span>`;
+
+  chartTendencia = new Chart(document.getElementById('chart-tendencia'), {
+    type: 'line',
+    data: {
+      labels: conTendencia.map(a => new Date(a.creado_en).toLocaleDateString(currentLocale(), { day: '2-digit', month: '2-digit' })),
+      datasets: [{
+        data: conTendencia.map(a => VALOR_TENDENCIA[a.tendencia]),
+        stepped: true,
+        borderColor: '#8A8A82',
+        backgroundColor: 'transparent',
+        pointRadius: 6,
+        pointBackgroundColor: conTendencia.map(a => COLOR_TENDENCIA[a.tendencia]),
+        pointBorderColor: conTendencia.map(a => COLOR_TENDENCIA[a.tendencia])
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          min: -1.5, max: 1.5,
+          ticks: { stepSize: 1, callback: v => ({ '-1': '↘', '0': '→', '1': '↗' }[String(v)] || '') }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => etiquetaTendencia(CLAVE_TENDENCIA[String(ctx.parsed.y)]) } }
+      }
+    }
+  });
+
+  // Línea de tiempo, de la más reciente a la más antigua; marca cuándo cambió
+  const lista = document.getElementById('tendencia-lista');
+  lista.innerHTML = '';
+  const recientesPrimero = [...conTendencia].reverse();
+  recientesPrimero.forEach((a, i) => {
+    const anterior = recientesPrimero[i + 1];
+    const cambio = anterior && anterior.tendencia !== a.tendencia
+      ? ` · ${t('fi.tendAntes')}: ${etiquetaTendencia(anterior.tendencia)}` : '';
+    const item = document.createElement('div');
+    item.className = 'trend-item';
+    item.innerHTML = `
+      <span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span>
+      <div>
+        <p class="result-title">${new Date(a.creado_en).toLocaleDateString(currentLocale(), formato)}</p>
+        <p class="result-subtitle">${escaparHtml(a.equipo)} · ${escaparHtml(a.competicion)}${cambio}</p>
+      </div>`;
+    lista.appendChild(item);
+  });
+}
 
 (async () => {
   const { data: sesion } = await supabaseClient.auth.getSession();
@@ -148,6 +223,8 @@ function renderizarFicha(data) {
     }
   });
 
+  renderHistorialTendencia(data);
+
   // Mapa de calor de posiciones medias
   const conPosicion = data.filter(a => a.posicion_x !== null && a.posicion_x !== undefined);
   const grupo = document.getElementById('heatmap-points');
@@ -190,13 +267,15 @@ function renderizarFicha(data) {
           <div><p class="detail-label">${t('ui.goles')}</p><p>${a.goles}</p></div>
           <div><p class="detail-label">${t('ui.asistencias')}</p><p>${a.asistencias}</p></div>
         </div>
-        ${a.tendencia ? `<p class="detail-label">${t('jf.tendencia')}</p><p>${etiquetaTendencia(a.tendencia)}</p>` : ''}
+        ${a.tendencia ? `<p class="detail-label">${t('jf.tendencia')}</p><p><span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span></p>` : ''}
         ${a.importancia ? `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>` : ''}
         ${a.punto_debil ? `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>` : ''}
         ${a.pie_dominante ? `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>` : ''}
         ${a.potencial ? `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>` : ''}
         ${a.resistencia ? `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>` : ''}
         ${a.impresiones ? `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>` : ''}
+        ${a.acciones_clave && a.acciones_clave.length ? `<p class="detail-label">${t('jf.acciones')}</p>${htmlAcciones(a.acciones_clave)}` : ''}
+        ${a.etiquetas && a.etiquetas.length ? `<p class="detail-label">${t('ui.etiquetas')}</p>${htmlTags(a.etiquetas)}` : ''}
       </div>
     `;
     historial.appendChild(card);

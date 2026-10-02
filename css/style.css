@@ -747,3 +747,47 @@ body {
 [dir="rtl"] input[type="number"],
 [dir="rtl"] .score-input { direction: ltr; text-align: center; }
 [dir="rtl"] canvas { direction: ltr; }
+
+/* ---------- Acciones clave, etiquetas (#tag) y tendencia ---------- */
+.chip-grid, .chip-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 14px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface); color: var(--color-text);
+  font-family: var(--font); font-size: 0.85rem; font-weight: 500; line-height: 1.2;
+}
+.form-page label.chip { display: inline-flex; margin: 0; font-size: 0.85rem; font-weight: 500; cursor: pointer; position: relative; }
+.chip-toggle input { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+.chip-toggle:focus-within { border-color: var(--color-black); }
+.chip-toggle.on { background: var(--color-black); color: #fff; border-color: var(--color-black); }
+[data-theme="dark"] .chip-toggle.on { background: #F0EDE6; color: #111111; border-color: #F0EDE6; }
+.chip-tag { color: var(--color-text-soft); background: transparent; }
+.chip-suggest { cursor: pointer; border-style: dashed; }
+.chip-suggest:hover { border-color: var(--color-black); color: var(--color-text); }
+.chip-remove { border: none; background: none; color: inherit; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0; }
+.tags-sug-label { font-size: 0.75rem; color: var(--color-text-soft); margin-top: 8px; }
+
+.tags-editor {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 7px 10px; border: 1px solid var(--color-border); border-radius: 10px;
+  background: var(--color-bg);
+}
+.tags-editor:focus-within { border-color: var(--color-black); }
+.tags-chips { display: contents; }
+.form-page .tags-editor input[type="text"] {
+  flex: 1; width: auto; min-width: 140px; padding: 6px 4px;
+  border: none; border-radius: 0; background: transparent; font-size: 1rem;
+}
+
+.trend-badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-weight: 600; font-size: 0.85rem; }
+.trend-up { background: rgba(46,125,50,0.14); color: #2E7D32; }
+.trend-flat { background: rgba(120,120,110,0.16); color: var(--color-text-soft); }
+.trend-down { background: rgba(179,38,30,0.14); color: #B3261E; }
+[data-theme="dark"] .trend-up { color: #7FD08A; }
+[data-theme="dark"] .trend-down { color: #F2877F; }
+.trend-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.trend-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-surface);
+}

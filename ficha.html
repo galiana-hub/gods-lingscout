@@ -149,6 +149,17 @@
     </section>
 
     <section class="form-section">
+      <h3 data-i18n="fi.historialTendencia">Historial de tendencia</h3>
+      <p id="tendencia-empty" class="empty-message" data-i18n="fi.sinTendencia">Todavía no hay tendencias registradas para este jugador.</p>
+      <div id="tendencia-contenido" hidden>
+        <p class="detail-label" data-i18n="fi.tendActual">Tendencia actual</p>
+        <p id="tendencia-actual"></p>
+        <canvas id="chart-tendencia" height="140" style="margin-top:12px;"></canvas>
+        <div id="tendencia-lista" class="trend-list"></div>
+      </div>
+    </section>
+
+    <section class="form-section">
       <h3 data-i18n="fi.golesAsis">Goles y asistencias acumulados</h3>
       <canvas id="chart-goles-asis" height="180"></canvas>
     </section>

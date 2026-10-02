@@ -173,7 +173,7 @@ function construirDetalleJugador(a) {
   `;
 
   if (a.tendencia) {
-    html += `<p class="detail-label">${t('jf.tendencia')}</p><p>${etiquetaTendencia(a.tendencia)}</p>`;
+    html += `<p class="detail-label">${t('jf.tendencia')}</p><p><span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span></p>`;
   }
   if (a.importancia) {
     html += `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>`;
@@ -196,8 +196,11 @@ function construirDetalleJugador(a) {
   if (a.minuto) {
     html += `<p class="detail-label">${t('pf.minuto')}</p><p>${a.minuto}'</p>`;
   }
+  if (a.acciones_clave && a.acciones_clave.length) {
+    html += `<p class="detail-label">${t('jf.acciones')}</p>${htmlAcciones(a.acciones_clave)}`;
+  }
   if (a.etiquetas && a.etiquetas.length) {
-    html += `<p class="detail-label">${t('ui.etiquetas')}</p><p>${a.etiquetas.join(', ')}</p>`;
+    html += `<p class="detail-label">${t('ui.etiquetas')}</p>${htmlTags(a.etiquetas)}`;
   }
   if (a.dibujo) {
     html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${a.dibujo}" class="detail-drawing">`;

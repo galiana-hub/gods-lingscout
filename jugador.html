@@ -209,6 +209,18 @@
       </section>
 
       <section class="form-section">
+        <h3><span data-i18n="jf.acciones">Acciones clave</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></h3>
+        <div class="chip-grid" id="acciones-clave"></div>
+        <label for="tags-input"><span data-i18n="jf.tagsLabel">Etiquetas</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></label>
+        <div class="tags-editor" id="tags-editor">
+          <span class="tags-chips" id="tags-chips"></span>
+          <input type="text" id="tags-input" maxlength="30" autocomplete="off" autocapitalize="none" placeholder="Escribe una etiqueta y pulsa Enter" data-i18n-placeholder="jf.tagsPh">
+        </div>
+        <p class="tags-sug-label" data-i18n="jf.tagsSugeridas">Sugeridas</p>
+        <div class="chip-list" id="tags-sugeridas"></div>
+      </section>
+
+      <section class="form-section">
         <h3><span data-i18n="jf.sectionPosicion">Posición media</span> <span class="opcional-tag" data-i18n="pf.opcional">(opcional)</span></h3>
         <div class="lineup-row">
           <button type="button" class="btn-position" id="btn-posicion-media" data-i18n="jf.marcarPosicion">📍 Marcar posición</button>
@@ -222,10 +234,6 @@
           <div>
             <label data-i18n="pf.minuto">Minuto</label>
             <input type="number" id="minuto" min="0" max="130" placeholder="60">
-          </div>
-          <div>
-            <label data-i18n="pf.etiquetas">Etiquetas (separadas por coma)</label>
-            <input type="text" id="etiquetas" placeholder="lesión, sustitución">
           </div>
         </div>
         <label data-i18n="pf.dibujo">Dibujo de una jugada</label>
