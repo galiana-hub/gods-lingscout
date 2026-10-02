@@ -866,11 +866,14 @@ body {
 #pizarra-canvas {
   width: 100%;
   max-width: 540px;
+  min-height: 270px;
   height: auto;
+  aspect-ratio: 2 / 3;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   touch-action: none;
   display: block;
+  background: #3E8E4F;
 }
 .pizarra-side {
   flex: 0 1 240px;

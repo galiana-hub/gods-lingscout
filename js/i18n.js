@@ -1,5 +1,7 @@
 const LINGSCOUT_TRANSLATIONS = {
   es: {
+    "dash.cardPizarraTitle": "Pizarra táctica",
+    "dash.cardPizarraDesc": "Dibuja jugadas, zonas, flechas y patrones reutilizables",
     "sidebar.pizarra": "Pizarra",
     "pz.title": "Pizarra táctica",
     "pz.jugadores": "Jugadores",

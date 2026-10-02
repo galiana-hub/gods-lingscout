@@ -943,4 +943,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   cargarPatrones();
   board.onChange();
+  // Asegurar que el campo se pinta tras el layout
+  requestAnimationFrame(() => { board._resize(); board.redraw(); });
+  setTimeout(() => { board._resize(); board.redraw(); }, 50);
 });
