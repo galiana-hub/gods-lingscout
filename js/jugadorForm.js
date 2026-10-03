@@ -215,6 +215,8 @@ async function cargarDatosExistentes(id) {
   document.getElementById('asistencias').value = a.asistencias;
   document.getElementById('nota').value = a.nota || '';
   document.getElementById('resistencia').value = a.resistencia || '';
+  document.getElementById('edad').value = a.edad || '';
+  document.getElementById('conocimiento').value = a.conocimiento || '';
   document.getElementById('pie-dominante').value = a.pie_dominante || '';
   document.getElementById('pierna-mala-habilidad').value = a.pierna_mala_habilidad || '';
   document.getElementById('potencial').value = a.potencial || '';
@@ -269,6 +271,8 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
     asistencias: parseInt(document.getElementById('asistencias').value, 10) || 0,
     nota: parseInt(document.getElementById('nota').value, 10),
     resistencia: document.getElementById('resistencia').value || null,
+    edad: parseInt(document.getElementById('edad').value, 10) || null,
+    conocimiento: document.getElementById('conocimiento').value || null,
     pie_dominante: document.getElementById('pie-dominante').value || null,
     pierna_mala_habilidad: document.getElementById('pierna-mala-habilidad').value || null,
     potencial: document.getElementById('potencial').value || null,

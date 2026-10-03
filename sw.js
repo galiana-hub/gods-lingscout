@@ -17,7 +17,7 @@ const SHELL = [
   'js/theme.js', 'js/supabaseConfig.js', 'js/pwa.js', 'js/i18n.js', 'js/auth.js',
   'js/dashboard.js', 'js/jugadoresList.js', 'js/jugadorForm.js', 'js/fichaJugador.js',
   'js/partidosList.js', 'js/partidoForm.js', 'js/pizarra.js', 'js/drawingTool.js',
-  'js/calendario.js', 'js/revision.js',
+  'js/calendario.js', 'js/revision.js', 'js/exportar.js',
   'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
   'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js'

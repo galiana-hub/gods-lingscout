@@ -273,6 +273,7 @@ async function cargarDatosExistentes(id) {
   document.getElementById('marcador-2p').value = p.marcador_2parte || '';
   document.getElementById('nota-global-partido').value = p.nota_global || '';
   document.getElementById('superioridad-balon-parado').value = p.superioridad_balon_parado || '';
+  document.getElementById('conclusion-partido').value = p.conclusion || '';
 
   if (p.posesion) {
     const valor = p.posesion === p.equipo_local ? 'local' : 'visitante';
@@ -351,6 +352,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
     marcador_2parte: document.getElementById('marcador-2p').value.trim() || null,
     nota_global: document.getElementById('nota-global-partido').value ? parseInt(document.getElementById('nota-global-partido').value, 10) : null,
     superioridad_balon_parado: document.getElementById('superioridad-balon-parado').value || null,
+    conclusion: document.getElementById('conclusion-partido').value.trim() || null,
     posesion: posesionSeleccionada ? (posesionSeleccionada.value === 'local' ? equipoLocal : equipoVisitante) : null,
     sistema_local_con_balon: document.getElementById('sistema-local-con').value.trim() || null,
     sistema_local_sin_balon: document.getElementById('sistema-local-sin').value.trim() || null,

@@ -975,7 +975,7 @@
   const TEMPLATES={};
   ['4-3-3','4-4-2','3-5-2','4-2-3-1','4-1-4-1','4-3-1-2','4-5-1','5-3-2','5-4-1','3-4-3','3-4-2-1','4-2-2-2','4-4-1-1','5-2-3','3-2-5'].forEach(k=>TEMPLATES[k]=b=>applyFormation(b,k));
   TEMPLATES['press-alto']=templatePressAlto;TEMPLATES['salida-balon']=templateSalidaBalon;TEMPLATES['bloque-bajo']=templateBloqueBajo;TEMPLATES['presion-perdida']=templatePresionTrasPerdida;TEMPLATES['ataque-banda']=templateAtaqueBanda;
-  function situation(board,key){
+  function situationBasic(board,key){
     const base={ 'salida-balon':'salida-balon','ataque-banda':'ataque-banda','bloque-bajo':'bloque-bajo','press-alto':'press-alto','presion-perdida':'presion-perdida' };
     if(base[key]&&TEMPLATES[base[key]])TEMPLATES[base[key]](board);else applyFormation(board, key==='ataque-bloque-bajo'||key==='ultimo-tercio'?'4-2-3-1':key==='bloque-medio'||key==='defensa-centros'?'4-4-2':key==='defensa-area'||key==='corner-defensivo'?'5-4-1':'4-3-3');
     const w=board.canvas.width,h=board.canvas.height,add=o=>board.elements.push(Object.assign({id:uid(),step:1},o));
@@ -987,6 +987,109 @@
     else if(['corner-ofensivo','corner-defensivo','falta-lateral','falta-frontal','saque-banda'].includes(key)){add({type:'zone',shape:'rect',zoneType:'danger',x1:w*.05,y1:h*.08,x2:w*.42,y2:h*.32});add({type:'arrow',style:'solid',width:2.5,x1:w*.08,y1:h*.15,x2:w*.55,y2:h*.25});}
     board._recalcSteps();board.redraw();board.onChange();
   }
+
+  // ---------- Situaciones con contenido propio (ABP, transiciones, ataque posicional) ----------
+  function scene(board, pitch, formation) {
+    if (formation) applyFormation(board, formation); else { board.clear(); board.setPitch(pitch); }
+    const w = board.canvas.width, h = board.canvas.height;
+    const base = { name: '', position: '' };
+    return {
+      P(team, fx, fy, num) { board.elements.push(Object.assign({ id: uid(), type: 'token', team, x: fx * w, y: fy * h, number: team === 'ball' ? null : (num == null ? null : num), step: 1 }, base)); },
+      A(style, x1, y1, x2, y2, step, seq) { board.elements.push({ id: uid(), type: 'arrow', style, width: 2.5, x1: x1 * w, y1: y1 * h, x2: x2 * w, y2: y2 * h, step: step || 1, seq: seq || null }); },
+      Z(zt, x1, y1, x2, y2) { board.elements.push({ id: uid(), type: 'zone', shape: 'rect', zoneType: zt, x1: x1 * w, y1: y1 * h, x2: x2 * w, y2: y2 * h, step: 1 }); },
+      C(zt, x, y, r) { board.elements.push({ id: uid(), type: 'zone', shape: 'circle', zoneType: zt, x: x * w, y: y * h, r: r * w, step: 1 }); },
+      L(style, x1, y1, x2, y2) { board.elements.push({ id: uid(), type: 'line', style, width: 2.5, x1: x1 * w, y1: y1 * h, x2: x2 * w, y2: y2 * h, step: 1 }); },
+      done() { board.nextNumber = 12; board.currentStep = 1; board._recalcSteps(); board.redraw(); board.onChange(); }
+    };
+  }
+
+  const SCENES = {
+    'ataque-posicional'(b) {
+      const s = scene(b, 'vertical', '4-3-3');
+      s.P('rival', .5, .07, 1);
+      [[.16,.17],[.38,.15],[.62,.15],[.84,.17],[.16,.32],[.38,.33],[.62,.33],[.84,.32],[.4,.44],[.6,.44]].forEach((p, i) => s.P('rival', p[0], p[1], i + 2));
+      s.Z('free', .64, .34, .8, .5);
+      s.A('numbered', .38, .75, .25, .56, 1, 1);
+      s.A('numbered', .25, .53, .5, .56, 1, 2);
+      s.A('numbered', .5, .56, .72, .5, 1, 3);
+      s.done();
+    },
+    'tras-perdida'(b) {
+      const s = scene(b, 'vertical', '4-3-3');
+      s.P('rival', .45, .37, 6); s.P('rival', .3, .42, 8); s.P('rival', .62, .43, 10); s.P('ball', .48, .355);
+      s.C('pressure', .46, .37, .2);
+      s.A('numbered', .5, .22, .47, .31, 1, 1);
+      s.A('numbered', .2, .28, .36, .35, 1, 2);
+      s.A('numbered', .5, .56, .5, .43, 1, 3);
+      s.L('defensive', .1, .67, .9, .67);
+      s.done();
+    },
+    'tras-recuperacion'(b) {
+      const s = scene(b, 'vertical', '4-3-3');
+      s.P('ball', .56, .57);
+      s.P('rival', .4, .45, 8); s.P('rival', .62, .4, 6); s.P('rival', .5, .33, 4);
+      s.Z('corridor', .38, .1, .62, .5);
+      s.A('numbered', .52, .54, .5, .27, 1, 1);
+      s.A('dashed', .2, .28, .13, .1, 2);
+      s.A('dashed', .8, .28, .87, .1, 2);
+      s.done();
+    },
+    'corner-ofensivo'(b) {
+      const s = scene(b, 'half');
+      s.P('ball', .035, .035); s.P('own', .07, .08, 7);
+      s.P('rival', .5, .04, 1); [.36, .46, .56, .66].forEach((x, i) => s.P('rival', x, .1, i + 2));
+      [[.36,.19,9],[.48,.21,5],[.6,.19,4],[.72,.2,6],[.4,.33,8],[.6,.33,10],[.3,.52,2],[.7,.52,3]].forEach(p => s.P('own', p[0], p[1], p[2]));
+      s.Z('danger', .3, .06, .7, .24);
+      s.A('numbered', .05, .05, .5, .15, 1, 1);
+      s.A('dashed', .36, .19, .4, .13, 2); s.A('dashed', .6, .19, .56, .13, 2);
+      s.done();
+    },
+    'corner-defensivo'(b) {
+      const s = scene(b, 'half');
+      s.P('ball', .965, .035); s.P('rival', .935, .08, 7);
+      s.P('own', .5, .04, 1);
+      [[.37,.12,4],[.5,.14,5],[.63,.12,6],[.27,.07,2],[.73,.07,3],[.4,.27,8],[.6,.27,10],[.5,.42,9]].forEach(p => s.P('own', p[0], p[1], p[2]));
+      [[.33,.2],[.47,.2],[.6,.19],[.74,.21],[.4,.34],[.62,.34]].forEach((p, i) => s.P('rival', p[0], p[1], i + 8));
+      s.Z('danger', .3, .05, .7, .18);
+      s.A('dashed', .95, .05, .55, .14, 1);
+      s.done();
+    },
+    'falta-lateral'(b) {
+      const s = scene(b, 'half');
+      s.P('ball', .1, .3); s.P('own', .14, .34, 10);
+      s.P('rival', .5, .04, 1); [.34, .44, .56, .66].forEach((x, i) => s.P('rival', x, .1, i + 2));
+      [[.38,.18,9],[.5,.19,5],[.62,.18,4],[.72,.21,6],[.42,.33,8]].forEach(p => s.P('own', p[0], p[1], p[2]));
+      s.L('offside', .22, .15, .82, .15);
+      s.A('numbered', .11, .3, .56, .14, 1, 1);
+      s.A('dashed', .5, .19, .54, .12, 2);
+      s.done();
+    },
+    'falta-frontal'(b) {
+      const s = scene(b, 'half');
+      s.P('ball', .5, .4); s.P('own', .45, .44, 10); s.P('own', .57, .44, 7);
+      s.P('rival', .5, .04, 1); [.42, .48, .54, .6].forEach((x, i) => s.P('rival', x, .33, i + 2));
+      [[.36,.17,9],[.64,.17,5],[.5,.22,4]].forEach(p => s.P('own', p[0], p[1], p[2]));
+      s.Z('danger', .28, .03, .72, .26);
+      s.A('numbered', .5, .4, .62, .02, 1, 1);
+      s.A('dashed', .57, .44, .72, .26, 2);
+      s.done();
+    },
+    'saque-banda'(b) {
+      const s = scene(b, 'half');
+      s.P('ball', .03, .55); s.P('own', .07, .6, 2);
+      [[.17,.52,8],[.3,.63,6],[.12,.4,7],[.4,.48,10]].forEach(p => s.P('own', p[0], p[1], p[2]));
+      [[.25,.5],[.2,.62],[.34,.54],[.18,.38]].forEach((p, i) => s.P('rival', p[0], p[1], i + 2));
+      s.Z('free', .1, .28, .3, .44);
+      s.A('numbered', .04, .56, .16, .52, 1, 1);
+      s.A('numbered', .17, .52, .29, .62, 1, 2);
+      s.done();
+    }
+  };
+
+  function situation(board, key) {
+    if (SCENES[key]) SCENES[key](board); else situationBasic(board, key);
+  }
+
   window.PizarraSituations=situation;
 
   window.PizarraBoard = Board;
@@ -1024,6 +1127,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
   window._pizarra = board;
+
+  // En el móvil los botones quedan debajo del campo: se sube para que se vea el resultado
+  function mostrarPizarra() {
+    if (window.innerWidth > 900) return;
+    const r = canvas.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight) canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
 
   // Tool buttons
   document.querySelectorAll('[data-pz-tool]').forEach(btn => {
@@ -1144,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('[data-template]').forEach(btn => {
     btn.addEventListener('click', () => {
       const fn = PizarraTemplates[btn.dataset.template];
-      if (fn) fn(board);
+      if (fn) { fn(board); mostrarPizarra(); }
     });
   });
 
@@ -1152,7 +1262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let editingPlayerId=null;
   window.showPizarraPlayerEditor=function(el){editingPlayerId=el.id;if(playerEditor)playerEditor.hidden=false;if(playerName)playerName.value=el.name||'';if(playerNumber)playerNumber.value=el.number??'';if(playerPosition)playerPosition.value=el.position||'';};
   document.getElementById('pz-player-save')?.addEventListener('click',()=>{const el=board.elements.find(x=>x.id===editingPlayerId);if(!el)return;board.pushHistory();el.name=(playerName?.value||'').trim();el.number=Math.max(1,Math.min(99,Number(playerNumber?.value||el.number||1)));el.position=(playerPosition?.value||'').trim();board.redraw();board.onChange();});
-  document.querySelectorAll('[data-situation]').forEach(btn=>btn.addEventListener('click',()=>window.PizarraSituations?.(board,btn.dataset.situation)));
+  document.querySelectorAll('[data-situation]').forEach(btn=>btn.addEventListener('click',()=>{window.PizarraSituations?.(board,btn.dataset.situation);mostrarPizarra();}));
 
   // Export PNG
   document.getElementById('pz-export-png')?.addEventListener('click', () => {

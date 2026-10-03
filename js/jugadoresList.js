@@ -148,6 +148,10 @@ function renderizarLista(analisis) {
       aplicarFiltros();
     });
 
+    detail.querySelector('.btn-export').addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      exportarAnalisis(`${a.jugador_nombre} — ${a.equipo}`, `${a.competicion} · ${a.temporada} · ${t('ui.nota')}: ${a.nota ?? '—'}/10`, construirDetalleJugador(a));
+    });
     detail.querySelector('.detail-actions').addEventListener('click', (ev) => ev.stopPropagation());
   });
 }
@@ -156,6 +160,7 @@ function construirDetalleJugador(a) {
   let html = `
     <div class="detail-actions">
       <a href="jugador.html?id=${a.id}" class="btn-secondary">${t('ui.editar')}</a>
+      <button type="button" class="btn-secondary btn-export">${t('ui.exportar')}</button>
       <button type="button" class="btn-secondary btn-delete" data-id="${a.id}">${t('ui.borrar')}</button>
     </div>
   `;
@@ -172,6 +177,17 @@ function construirDetalleJugador(a) {
     </div>
   `;
 
+  if (a.edad) {
+    html += `<p class="detail-label">${t('jf.edad')}</p><p>${a.edad}</p>`;
+  }
+  if (a.conocimiento) {
+    const cono = { primera_vez: 'jf.conoPrimera', par_de_veces: 'jf.conoPocas', mas_de_10: 'jf.conoMas10', bien: 'jf.conoBien' };
+    html += `<p class="detail-label">${t('jf.conocimiento')}</p><p>${t(cono[a.conocimiento])}</p>`;
+  }
+  if (a.pierna_mala_habilidad) {
+    const pm = { muy_buena: 'jf.piernaMalaMuyBuena', buena: 'jf.piernaMalaBuena', aceptable: 'jf.piernaMalaAceptable', limitada: 'jf.piernaMalaLimitada', muy_limitada: 'jf.piernaMalaMuyLimitada' };
+    html += `<p class="detail-label">${t('jf.piernaMala')}</p><p>${t(pm[a.pierna_mala_habilidad])}</p>`;
+  }
   if (a.tendencia) {
     html += `<p class="detail-label">${t('jf.tendencia')}</p><p><span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span></p>`;
   }

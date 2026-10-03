@@ -172,6 +172,10 @@ function renderizarLista(partidos) {
       aplicarFiltros();
     });
 
+    detail.querySelector('.btn-export').addEventListener('click', (ev) => {
+      ev.stopPropagation();
+      exportarAnalisis(`${p.equipo_local} ${p.goles_local}-${p.goles_visitante} ${p.equipo_visitante}`, `${p.competicion} · ${p.temporada}`, construirDetallePartido(p));
+    });
     detail.querySelector('.detail-actions').addEventListener('click', (ev) => ev.stopPropagation());
   });
 }
@@ -183,9 +187,20 @@ function construirDetallePartido(p) {
   let html = `
     <div class="detail-actions">
       <a href="partido.html?id=${p.id}" class="btn-secondary">${t('ui.editar')}</a>
+      <button type="button" class="btn-secondary btn-export">${t('ui.exportar')}</button>
       <button type="button" class="btn-secondary btn-delete" data-id="${p.id}">${t('ui.borrar')}</button>
     </div>
   `;
+  if (p.nota_global != null) {
+    html += `<p class="detail-label">${t('pf.notaGlobal')}</p><p>${p.nota_global}/10</p>`;
+  }
+  if (p.superioridad_balon_parado) {
+    const sup = { local: p.equipo_local, visitante: p.equipo_visitante, igualado: t('pf.superioridadIgualado'), no_observado: t('pf.superioridadNoObservado') };
+    html += `<p class="detail-label">${t('pf.superioridadBalonParado')}</p><p>${sup[p.superioridad_balon_parado] || ''}</p>`;
+  }
+  if (p.conclusion) {
+    html += `<p class="detail-label">${t('pf.conclusion')}</p><p>${p.conclusion}</p>`;
+  }
   html += `
     <div class="detail-grid">
       <div>
