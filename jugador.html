@@ -158,6 +158,22 @@
         </div>
         <label data-i18n="pf.temporada">Temporada</label>
         <input type="text" id="temporada" required placeholder="2025/2026">
+        <div class="grid-2">
+          <div>
+            <label for="edad" data-i18n="jf.edad">Edad</label>
+            <input type="number" id="edad" min="5" max="60" inputmode="numeric" placeholder="21">
+          </div>
+          <div>
+            <label for="conocimiento" data-i18n="jf.conocimiento">Cuánto lo conozco</label>
+            <select id="conocimiento">
+              <option value="" data-i18n="jf.resElegir">Seleccionar</option>
+              <option value="primera_vez" data-i18n="jf.conoPrimera">Primera vez que lo veo</option>
+              <option value="par_de_veces" data-i18n="jf.conoPocas">Lo he visto un par de veces</option>
+              <option value="mas_de_10" data-i18n="jf.conoMas10">He visto más de 10 partidos suyos</option>
+              <option value="bien" data-i18n="jf.conoBien">Lo conozco bastante bien</option>
+            </select>
+          </div>
+        </div>
       </section>
 
       <section class="form-section">
