@@ -258,8 +258,8 @@ function renderizarFicha(data) {
     card.innerHTML = `
       <div class="result-card-header" style="cursor:default;">
         <div>
-          <p class="result-title">${a.equipo} · ${t('ui.nota')} ${a.nota ?? '—'}/10</p>
-          <p class="result-subtitle">${a.competicion} · ${a.temporada} · ${fecha}</p>
+          <p class="result-title">${escaparHtml(a.equipo)} · ${t('ui.nota')} ${a.nota ?? '—'}/10</p>
+          <p class="result-subtitle">${escaparHtml(a.competicion)} · ${escaparHtml(a.temporada)} · ${fecha}</p>
         </div>
       </div>
       <div class="result-card-detail">
@@ -269,16 +269,16 @@ function renderizarFicha(data) {
         </div>
         ${a.tendencia ? `<p class="detail-label">${t('jf.tendencia')}</p><p><span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span></p>` : ''}
         ${a.importancia ? `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>` : ''}
-        ${a.punto_debil ? `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>` : ''}
+        ${a.punto_debil ? `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${escaparHtml(a.punto_debil)}</p>` : ''}
         ${a.posicion_ideal ? `<p class="detail-label">${t('jf.posicionIdeal')}</p><p>${etiquetaPosicionIdeal(a.posicion_ideal)}</p>` : ''}
         ${a.pie_dominante ? `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>` : ''}
         ${a.potencial ? `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>` : ''}
         ${a.resistencia ? `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>` : ''}
-        ${a.impresiones ? `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>` : ''}
-        ${a.como_recibe_orientacion ? `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${a.como_recibe_orientacion}</p>` : ''}
-        ${a.como_recibe_despues ? `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${a.como_recibe_despues}</p>` : ''}
-        ${a.como_recibe_progresa ? `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${a.como_recibe_progresa}</p>` : ''}
-        ${a.conductas_repetitivas ? `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${a.conductas_repetitivas}</p>` : ''}
+        ${a.impresiones ? `<p class="detail-label">${t('ui.impresiones')}</p><p>${escaparHtml(a.impresiones)}</p>` : ''}
+        ${a.como_recibe_orientacion ? `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${escaparHtml(a.como_recibe_orientacion)}</p>` : ''}
+        ${a.como_recibe_despues ? `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${escaparHtml(a.como_recibe_despues)}</p>` : ''}
+        ${a.como_recibe_progresa ? `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${escaparHtml(a.como_recibe_progresa)}</p>` : ''}
+        ${a.conductas_repetitivas ? `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${escaparHtml(a.conductas_repetitivas)}</p>` : ''}
         ${a.acciones_clave && a.acciones_clave.length ? `<p class="detail-label">${t('jf.acciones')}</p>${htmlAcciones(a.acciones_clave)}` : ''}
         ${a.etiquetas && a.etiquetas.length ? `<p class="detail-label">${t('ui.etiquetas')}</p>${htmlTags(a.etiquetas)}` : ''}
       </div>

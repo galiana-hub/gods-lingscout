@@ -22,7 +22,7 @@ async function cargarAnalisis() {
   const contenedor = document.getElementById('lista-jugadores');
 
   if (error) {
-    contenedor.innerHTML = `<p class="empty-message">${t('ui.errorCargar')} ${error.message}</p>`;
+    contenedor.innerHTML = `<p class="empty-message">${t('ui.errorCargar')} ${escaparHtml(error.message)}</p>`;
     return;
   }
 
@@ -115,8 +115,8 @@ function renderizarLista(analisis) {
     header.className = 'result-card-header';
     header.innerHTML = `
       <div>
-        <p class="result-title"><a href="ficha.html?jugador=${encodeURIComponent(a.jugador_nombre)}" class="player-link" onclick="event.stopPropagation()">${a.jugador_nombre}</a> — ${a.equipo}</p>
-        <p class="result-subtitle">${a.competicion} · ${a.temporada} · ${t('ui.nota')}: ${a.nota ?? '—'}/10</p>
+        <p class="result-title"><a href="ficha.html?jugador=${encodeURIComponent(a.jugador_nombre)}" class="player-link" onclick="event.stopPropagation()">${escaparHtml(a.jugador_nombre)}</a> — ${escaparHtml(a.equipo)}</p>
+        <p class="result-subtitle">${escaparHtml(a.competicion)} · ${escaparHtml(a.temporada)} · ${t('ui.nota')}: ${a.nota ?? '—'}/10</p>
       </div>
       <span class="expand-arrow">▾</span>
     `;
@@ -150,7 +150,7 @@ function renderizarLista(analisis) {
 
     detail.querySelector('.btn-export').addEventListener('click', (ev) => {
       ev.stopPropagation();
-      exportarAnalisis(`${a.jugador_nombre} — ${a.equipo}`, `${a.competicion} · ${a.temporada} · ${t('ui.nota')}: ${a.nota ?? '—'}/10`, construirDetalleJugador(a));
+      exportarAnalisis(`${escaparHtml(a.jugador_nombre)} — ${escaparHtml(a.equipo)}`, `${escaparHtml(a.competicion)} · ${escaparHtml(a.temporada)} · ${t('ui.nota')}: ${a.nota ?? '—'}/10`, construirDetalleJugador(a));
     });
     detail.querySelector('.detail-actions').addEventListener('click', (ev) => ev.stopPropagation());
   });
@@ -195,7 +195,7 @@ function construirDetalleJugador(a) {
     html += `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>`;
   }
   if (a.punto_debil) {
-    html += `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${a.punto_debil}</p>`;
+    html += `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${escaparHtml(a.punto_debil)}</p>`;
   }
   if (a.posicion_ideal) {
     html += `<p class="detail-label">${t('jf.posicionIdeal')}</p><p>${etiquetaPosicionIdeal(a.posicion_ideal)}</p>`;
@@ -210,19 +210,19 @@ function construirDetalleJugador(a) {
     html += `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>`;
   }
   if (a.impresiones) {
-    html += `<p class="detail-label">${t('ui.impresiones')}</p><p>${a.impresiones}</p>`;
+    html += `<p class="detail-label">${t('ui.impresiones')}</p><p>${escaparHtml(a.impresiones)}</p>`;
   }
   if (a.como_recibe_orientacion) {
-    html += `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${a.como_recibe_orientacion}</p>`;
+    html += `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${escaparHtml(a.como_recibe_orientacion)}</p>`;
   }
   if (a.como_recibe_despues) {
-    html += `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${a.como_recibe_despues}</p>`;
+    html += `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${escaparHtml(a.como_recibe_despues)}</p>`;
   }
   if (a.como_recibe_progresa) {
-    html += `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${a.como_recibe_progresa}</p>`;
+    html += `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${escaparHtml(a.como_recibe_progresa)}</p>`;
   }
   if (a.conductas_repetitivas) {
-    html += `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${a.conductas_repetitivas}</p>`;
+    html += `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${escaparHtml(a.conductas_repetitivas)}</p>`;
   }
   if (a.minuto) {
     html += `<p class="detail-label">${t('pf.minuto')}</p><p>${a.minuto}'</p>`;
@@ -234,7 +234,7 @@ function construirDetalleJugador(a) {
     html += `<p class="detail-label">${t('ui.etiquetas')}</p>${htmlTags(a.etiquetas)}`;
   }
   if (a.dibujo) {
-    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${a.dibujo}" class="detail-drawing">`;
+    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${escaparHtml(a.dibujo)}" class="detail-drawing">`;
   }
   if (a.posicion_x !== null && a.posicion_x !== undefined) {
     const cx = (parseFloat(a.posicion_x) / 100) * 300;

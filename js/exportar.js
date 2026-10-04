@@ -6,7 +6,9 @@ function exportarAnalisis(titulo, subtitulo, htmlDetalle) {
   caja.querySelectorAll('.detail-actions').forEach(el => el.remove());
 
   const css = new URL('css/style.css', location.href).href;
-  const doc = `<!DOCTYPE html><html lang="${localStorage.getItem('lingscout-lang') || 'es'}"><head><meta charset="utf-8">
+  const idioma = localStorage.getItem('lingscout-lang') || 'es';
+  const rtl = ['ar', 'ary', 'fa', 'he'].includes(idioma) ? 'rtl' : 'ltr';
+  const doc = `<!DOCTYPE html><html lang="${idioma}" dir="${rtl}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${String(titulo).replace(/</g, '&lt;')}</title>
 <link rel="stylesheet" href="${css}">
@@ -20,7 +22,7 @@ function exportarAnalisis(titulo, subtitulo, htmlDetalle) {
   .exp-btn { position:fixed; top:12px; right:12px; padding:9px 14px; border:1px solid #111; border-radius:10px; background:#fff; font:inherit; cursor:pointer; }
   @media print { .exp-btn { display:none; } body { padding:0; } }
 </style></head><body>
-<button class="exp-btn" onclick="window.print()">PDF / ${localStorage.getItem('lingscout-lang') === 'en' ? 'Print' : 'Imprimir'}</button>
+<button class="exp-btn" onclick="window.print()">PDF</button>
 <h1>${String(titulo).replace(/</g, '&lt;')}</h1>
 <p class="exp-sub">${String(subtitulo || '').replace(/</g, '&lt;')}</p>
 ${caja.innerHTML}

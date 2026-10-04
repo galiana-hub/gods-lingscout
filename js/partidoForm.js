@@ -45,8 +45,8 @@ const equipoLocalInput = document.getElementById('equipo-local');
 const equipoVisitanteInput = document.getElementById('equipo-visitante');
 
 function actualizarNombresEquipos() {
-  const local = equipoLocalInput.value || 'Local';
-  const visitante = equipoVisitanteInput.value || 'Visitante';
+  const local = equipoLocalInput.value || t('pf.superioridadLocal');
+  const visitante = equipoVisitanteInput.value || t('pf.superioridadVisitante');
   document.getElementById('posesion-label-local').textContent = local;
   document.getElementById('posesion-label-visitante').textContent = visitante;
   document.getElementById('sistema-local-heading').textContent = local;
@@ -54,6 +54,8 @@ function actualizarNombresEquipos() {
   document.getElementById('clave-local-heading').textContent = local;
   document.getElementById('juego-local-heading').textContent = local;
   document.getElementById('juego-visitante-heading').textContent = visitante;
+  document.getElementById('dano-local-heading').textContent = local;
+  document.getElementById('dano-visitante-heading').textContent = visitante;
   document.getElementById('defensa-local-heading').textContent = local;
   document.getElementById('defensa-visitante-heading').textContent = visitante;
   document.getElementById('clave-visitante-heading').textContent = visitante;
@@ -62,19 +64,24 @@ function actualizarNombresEquipos() {
 }
 // ---------- Salida de balón, bandas y laterales ----------
 const salidaSeleccion = { local: new Set(), visitante: new Set() };
+const danoSeleccion = { local: new Set(), visitante: new Set() };
 const CAMPOS_JUEGO = [['banda-izq', 'banda_izq'], ['banda-der', 'banda_der'], ['lateral-izq', 'lateral_izq'], ['lateral-der', 'lateral_der'],
   // Fase defensiva (mismo patrón: id "<campo>-<lado>" ↔ columna "<campo>_<lado>")
   ['presion-tipo', 'presion_tipo'], ['presion-intensidad', 'presion_intensidad'], ['presion-coord', 'presion_coordinacion'],
   ['marcaje', 'marcaje'], ['tras-encajar', 'tras_encajar'], ['tras-marcar', 'tras_marcar']];
 
 function construirSalidas() {
-  ['local', 'visitante'].forEach(lado => construirChipsToggle('salida-' + lado, LINGSCOUT_SALIDAS, 'pf.sal_', salidaSeleccion[lado]));
+  ['local', 'visitante'].forEach(lado => {
+    construirChipsToggle('salida-' + lado, LINGSCOUT_SALIDAS, 'pf.sal_', salidaSeleccion[lado]);
+    construirChipsToggle('dano-' + lado, LINGSCOUT_DANOS, 'pf.dano_', danoSeleccion[lado]);
+  });
 }
 construirSalidas();
 
 function cargarJuegoEquipos(p) {
   ['local', 'visitante'].forEach(lado => {
     salidaSeleccion[lado] = new Set(p['salida_balon_' + lado] || []);
+    danoSeleccion[lado] = new Set(p['hace_dano_' + lado] || []);
     CAMPOS_JUEGO.forEach(([id, db]) => { document.getElementById(`${id}-${lado}`).value = p[`${db}_${lado}`] || ''; });
   });
   construirSalidas();
@@ -85,6 +92,8 @@ function leerJuegoEquipos() {
   ['local', 'visitante'].forEach(lado => {
     const salida = LINGSCOUT_SALIDAS.filter(c => salidaSeleccion[lado].has(c));
     datos['salida_balon_' + lado] = salida.length ? salida : null;
+    const dano = LINGSCOUT_DANOS.filter(c => danoSeleccion[lado].has(c));
+    datos['hace_dano_' + lado] = dano.length ? dano : null;
     CAMPOS_JUEGO.forEach(([id, db]) => { datos[`${db}_${lado}`] = document.getElementById(`${id}-${lado}`).value || null; });
   });
   return datos;
@@ -440,7 +449,7 @@ document.getElementById('partido-form').addEventListener('submit', async (e) => 
       .upsert({ usuario_id: currentUserId, nombre, equipo_actual }, { onConflict: 'usuario_id,nombre' });
   }
 
-  msg.textContent = editId ? '¡Cambios guardados correctamente!' : '¡Análisis guardado correctamente!';
+  msg.textContent = editId ? t('ui.cambiosOk') : t('ui.guardadoOk');
   msg.classList.add('success');
 
   setTimeout(() => { window.location.href = 'partidos.html'; }, 1200);

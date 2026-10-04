@@ -309,7 +309,7 @@ document.getElementById('jugador-form').addEventListener('submit', async (e) => 
   await supabaseClient.from('jugadores')
     .upsert({ usuario_id: currentUserId, nombre, equipo_actual: equipo }, { onConflict: 'usuario_id,nombre' });
 
-  msg.textContent = editId ? '¡Cambios guardados correctamente!' : '¡Análisis guardado correctamente!';
+  msg.textContent = editId ? t('ui.cambiosOk') : t('ui.guardadoOk');
   msg.classList.add('success');
 
   setTimeout(() => { window.location.href = 'jugadores.html'; }, 1200);

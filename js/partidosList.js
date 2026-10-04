@@ -22,7 +22,7 @@ async function cargarPartidos() {
   const contenedor = document.getElementById('lista-partidos');
 
   if (error) {
-    contenedor.innerHTML = `<p class="empty-message">${t('ui.errorCargar')} ${error.message}</p>`;
+    contenedor.innerHTML = `<p class="empty-message">${t('ui.errorCargar')} ${escaparHtml(error.message)}</p>`;
     return;
   }
 
@@ -139,8 +139,8 @@ function renderizarLista(partidos) {
     header.className = 'result-card-header';
     header.innerHTML = `
       <div>
-        <p class="result-title">${p.equipo_local} ${p.goles_local}-${p.goles_visitante} ${p.equipo_visitante}</p>
-        <p class="result-subtitle">${p.competicion} · ${p.temporada}${p.tipo_eliminatoria ? ' · ' + (p.tipo_eliminatoria === 'ida' ? t('pf.optTipoIda') : t('pf.optTipoVuelta')) : ''}</p>
+        <p class="result-title">${escaparHtml(p.equipo_local)} ${p.goles_local}-${p.goles_visitante} ${escaparHtml(p.equipo_visitante)}</p>
+        <p class="result-subtitle">${escaparHtml(p.competicion)} · ${escaparHtml(p.temporada)}${p.tipo_eliminatoria ? ' · ' + (p.tipo_eliminatoria === 'ida' ? t('pf.optTipoIda') : t('pf.optTipoVuelta')) : ''}</p>
       </div>
       <span class="expand-arrow">▾</span>
     `;
@@ -174,7 +174,7 @@ function renderizarLista(partidos) {
 
     detail.querySelector('.btn-export').addEventListener('click', (ev) => {
       ev.stopPropagation();
-      exportarAnalisis(`${p.equipo_local} ${p.goles_local}-${p.goles_visitante} ${p.equipo_visitante}`, `${p.competicion} · ${p.temporada}`, construirDetallePartido(p));
+      exportarAnalisis(`${escaparHtml(p.equipo_local)} ${p.goles_local}-${p.goles_visitante} ${escaparHtml(p.equipo_visitante)}`, `${escaparHtml(p.competicion)} · ${escaparHtml(p.temporada)}`, construirDetallePartido(p));
     });
     detail.querySelector('.detail-actions').addEventListener('click', (ev) => ev.stopPropagation());
   });
@@ -196,42 +196,42 @@ function construirDetallePartido(p) {
   }
   if (p.superioridad_balon_parado) {
     const sup = { local: p.equipo_local, visitante: p.equipo_visitante, igualado: t('pf.superioridadIgualado'), no_observado: t('pf.superioridadNoObservado') };
-    html += `<p class="detail-label">${t('pf.superioridadBalonParado')}</p><p>${sup[p.superioridad_balon_parado] || ''}</p>`;
+    html += `<p class="detail-label">${t('pf.superioridadBalonParado')}</p><p>${escaparHtml(sup[p.superioridad_balon_parado] || '')}</p>`;
   }
   if (p.conclusion) {
-    html += `<p class="detail-label">${t('pf.conclusion')}</p><p>${p.conclusion}</p>`;
+    html += `<p class="detail-label">${t('pf.conclusion')}</p><p>${escaparHtml(p.conclusion)}</p>`;
   }
   html += `
     <div class="detail-grid">
       <div>
         <p class="detail-label">${t('ui.marcadorPartes')}</p>
-        <p>${p.marcador_1parte || '—'} / ${p.marcador_2parte || '—'}</p>
+        <p>${escaparHtml(p.marcador_1parte || '—')} / ${escaparHtml(p.marcador_2parte || '—')}</p>
       </div>
       <div>
         <p class="detail-label">${t('pf.sectionPosesion')}</p>
-        <p>${p.posesion || '—'}</p>
+        <p>${escaparHtml(p.posesion || '—')}</p>
       </div>
     </div>
     <div class="detail-grid">
       <div>
-        <p class="detail-label">${p.equipo_local} — ${t('ui.sistema')}</p>
-        <p>${t('pf.conBalon')}: ${p.sistema_local_con_balon || '—'}</p>
-        <p>${t('pf.sinBalon')}: ${p.sistema_local_sin_balon || '—'}</p>
+        <p class="detail-label">${escaparHtml(p.equipo_local)} — ${t('ui.sistema')}</p>
+        <p>${t('pf.conBalon')}: ${escaparHtml(p.sistema_local_con_balon || '—')}</p>
+        <p>${t('pf.sinBalon')}: ${escaparHtml(p.sistema_local_sin_balon || '—')}</p>
       </div>
       <div>
-        <p class="detail-label">${p.equipo_visitante} — ${t('ui.sistema')}</p>
-        <p>${t('pf.conBalon')}: ${p.sistema_visitante_con_balon || '—'}</p>
-        <p>${t('pf.sinBalon')}: ${p.sistema_visitante_sin_balon || '—'}</p>
+        <p class="detail-label">${escaparHtml(p.equipo_visitante)} — ${t('ui.sistema')}</p>
+        <p>${t('pf.conBalon')}: ${escaparHtml(p.sistema_visitante_con_balon || '—')}</p>
+        <p>${t('pf.sinBalon')}: ${escaparHtml(p.sistema_visitante_sin_balon || '—')}</p>
       </div>
     </div>
     <div class="detail-grid">
       <div>
-        <p class="detail-label">${t('pf.sectionClave')} ${p.equipo_local}</p>
-        <p>${p.jugador_clave_local || '—'}</p>
+        <p class="detail-label">${t('pf.sectionClave')} ${escaparHtml(p.equipo_local)}</p>
+        <p>${escaparHtml(p.jugador_clave_local || '—')}</p>
       </div>
       <div>
-        <p class="detail-label">${t('pf.sectionClave')} ${p.equipo_visitante}</p>
-        <p>${p.jugador_clave_visitante || '—'}</p>
+        <p class="detail-label">${t('pf.sectionClave')} ${escaparHtml(p.equipo_visitante)}</p>
+        <p>${escaparHtml(p.jugador_clave_visitante || '—')}</p>
       </div>
     </div>
   `;
@@ -241,8 +241,16 @@ function construirDetallePartido(p) {
   if (juegoLocal || juegoVisitante) {
     html += `
       <div class="detail-grid">
-        <div><p class="detail-label">${p.equipo_local} — ${t('pf.salidaSection')}</p>${juegoLocal || '<p>—</p>'}</div>
-        <div><p class="detail-label">${p.equipo_visitante} — ${t('pf.salidaSection')}</p>${juegoVisitante || '<p>—</p>'}</div>
+        <div><p class="detail-label">${escaparHtml(p.equipo_local)} — ${t('pf.salidaSection')}</p>${juegoLocal || '<p>—</p>'}</div>
+        <div><p class="detail-label">${escaparHtml(p.equipo_visitante)} — ${t('pf.salidaSection')}</p>${juegoVisitante || '<p>—</p>'}</div>
+      </div>`;
+  }
+
+  if ((p.hace_dano_local || []).length || (p.hace_dano_visitante || []).length) {
+    html += `
+      <div class="detail-grid">
+        <div><p class="detail-label">${escaparHtml(p.equipo_local)} — ${t('pf.danoSection')}</p>${htmlDanos(p.hace_dano_local) || '<p>—</p>'}</div>
+        <div><p class="detail-label">${escaparHtml(p.equipo_visitante)} — ${t('pf.danoSection')}</p>${htmlDanos(p.hace_dano_visitante) || '<p>—</p>'}</div>
       </div>`;
   }
 
@@ -251,32 +259,32 @@ function construirDetallePartido(p) {
   if (defensaLocal || defensaVisitante) {
     html += `
       <div class="detail-grid">
-        <div><p class="detail-label">${p.equipo_local} — ${t('pf.defensaSection')}</p>${defensaLocal || '<p>—</p>'}</div>
-        <div><p class="detail-label">${p.equipo_visitante} — ${t('pf.defensaSection')}</p>${defensaVisitante || '<p>—</p>'}</div>
+        <div><p class="detail-label">${escaparHtml(p.equipo_local)} — ${t('pf.defensaSection')}</p>${defensaLocal || '<p>—</p>'}</div>
+        <div><p class="detail-label">${escaparHtml(p.equipo_visitante)} — ${t('pf.defensaSection')}</p>${defensaVisitante || '<p>—</p>'}</div>
       </div>`;
   }
 
   if (p.cambio_tactico) {
-    html += `<p class="detail-label">${t('ui.cambioTactico')}</p><p>${p.cambio_tactico}</p>`;
+    html += `<p class="detail-label">${t('ui.cambioTactico')}</p><p>${escaparHtml(p.cambio_tactico)}</p>`;
   }
   if (p.minuto) {
     html += `<p class="detail-label">${t('pf.minuto')}</p><p>${p.minuto}'</p>`;
   }
   if (p.etiquetas && p.etiquetas.length) {
-    html += `<p class="detail-label">${t('ui.etiquetas')}</p><p>${p.etiquetas.join(', ')}</p>`;
+    html += `<p class="detail-label">${t('ui.etiquetas')}</p><p>${escaparHtml(p.etiquetas.join(', '))}</p>`;
   }
   if (p.dibujo) {
-    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${p.dibujo}" class="detail-drawing">`;
+    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${escaparHtml(p.dibujo)}" class="detail-drawing">`;
   }
 
   html += `
     <div class="detail-grid">
       <div>
-        <p class="detail-label">${t('ui.alineacion')} ${p.equipo_local}</p>
+        <p class="detail-label">${t('ui.alineacion')} ${escaparHtml(p.equipo_local)}</p>
         ${renderizarAlineacion(alineacionLocal)}
       </div>
       <div>
-        <p class="detail-label">${t('ui.alineacion')} ${p.equipo_visitante}</p>
+        <p class="detail-label">${t('ui.alineacion')} ${escaparHtml(p.equipo_visitante)}</p>
         ${renderizarAlineacion(alineacionVisitante)}
       </div>
     </div>
@@ -300,7 +308,7 @@ function emojiTarjeta(tarjeta) {
 function renderizarAlineacion(jugadores) {
   if (!jugadores.length) return '<p class="detail-empty">—</p>';
   return '<ul class="lineup-view">' + jugadores.map(j =>
-    `<li>${j.jugador_nombre}${j.titular ? '' : ' (' + t('ui.suplente') + ')'}${emojiTarjeta(j.tarjeta)}${j.posicion_x !== null && j.posicion_x !== undefined ? ' 📍' : ''}</li>`
+    `<li>${escaparHtml(j.jugador_nombre)}${j.titular ? '' : ' (' + t('ui.suplente') + ')'}${emojiTarjeta(j.tarjeta)}${j.posicion_x !== null && j.posicion_x !== undefined ? ' 📍' : ''}</li>`
   ).join('') + '</ul>';
 }
 
@@ -310,7 +318,7 @@ function renderizarMiniPitch(jugadoresConPosicion) {
     const cy = (parseFloat(j.posicion_y) / 100) * 450;
     const inicial = j.jugador_nombre.split(' ')[0].slice(0, 8);
     return `<circle cx="${cx}" cy="${cy}" r="6" fill="#111111"/>
-            <text x="${cx}" y="${cy - 10}" font-size="10" text-anchor="middle" fill="#111111">${inicial}</text>`;
+            <text x="${cx}" y="${cy - 10}" font-size="10" text-anchor="middle" fill="#111111">${escaparHtml(inicial)}</text>`;
   }).join('');
 
   return `

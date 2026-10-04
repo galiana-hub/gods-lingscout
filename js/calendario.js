@@ -120,7 +120,7 @@ function mostrarDia(fecha, eventos) {
     card.innerHTML = `
       <div class="result-card-header" style="cursor:default;">
         <div>
-          <p class="result-title">${ev.texto}</p>
+          <p class="result-title">${escaparHtml(ev.texto)}</p>
           <p class="result-subtitle">${etiqueta}</p>
         </div>
         <a href="${href}" class="btn-secondary">${t('ui.abrir')}</a>
