@@ -16,7 +16,6 @@ function exportarAnalisis(titulo, subtitulo, htmlDetalle) {
   body { display:block; background:#fff; color:#111; padding:24px; max-width:760px; margin:0 auto; font-family:Inter,system-ui,sans-serif; }
   h1 { font-size:1.4rem; margin:0 0 4px; }
   .exp-sub { color:#666; margin:0 0 18px; font-size:.9rem; }
-  .detail-label { font-weight:700; font-size:.75rem; text-transform:uppercase; letter-spacing:.04em; color:#555; margin:14px 0 3px; }
   .detail-drawing, .mini-pitch { max-width:100%; height:auto; }
   .mini-pitch { width:260px; }
   .exp-btn { position:fixed; top:12px; right:12px; padding:9px 14px; border:1px solid #111; border-radius:10px; background:#fff; font:inherit; cursor:pointer; }

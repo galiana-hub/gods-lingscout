@@ -157,6 +157,13 @@ function renderizarLista(analisis) {
 }
 
 function construirDetalleJugador(a) {
+  const num = (v) => (v === null || v === undefined || v === '' ? 0 : v);
+  const texto = (v) => escaparHtml(v);
+  const tile = (etiqueta, valor) => `<div class="detail-tile"><p class="detail-label">${etiqueta}</p><p class="detail-value">${valor}</p></div>`;
+  const fila = (etiqueta, valor) => `<div class="detail-item"><p class="detail-label">${etiqueta}</p><div class="detail-value">${valor}</div></div>`;
+  const seccion = (titulo, contenido) => contenido ? `<section class="detail-section"><h4 class="detail-section-title">${titulo}</h4>${contenido}</section>` : '';
+  const tiles = (lista) => lista.length ? `<div class="detail-tiles">${lista.join('')}</div>` : '';
+
   let html = `
     <div class="detail-actions">
       <a href="jugador.html?id=${a.id}" class="btn-secondary">${t('ui.editar')}</a>
@@ -164,83 +171,53 @@ function construirDetalleJugador(a) {
       <button type="button" class="btn-secondary btn-delete" data-id="${a.id}">${t('ui.borrar')}</button>
     </div>
   `;
-  html += `
-    <div class="detail-grid">
-      <div>
-        <p class="detail-label">${t('ui.goles')}</p>
-        <p>${a.goles}</p>
-      </div>
-      <div>
-        <p class="detail-label">${t('ui.asistencias')}</p>
-        <p>${a.asistencias}</p>
-      </div>
-    </div>
-  `;
 
-  if (a.edad) {
-    html += `<p class="detail-label">${t('jf.edad')}</p><p>${a.edad}</p>`;
-  }
-  if (a.conocimiento) {
-    const cono = { primera_vez: 'jf.conoPrimera', par_de_veces: 'jf.conoPocas', mas_de_10: 'jf.conoMas10', bien: 'jf.conoBien' };
-    html += `<p class="detail-label">${t('jf.conocimiento')}</p><p>${t(cono[a.conocimiento])}</p>`;
-  }
-  if (a.pierna_mala_habilidad) {
-    const pm = { muy_buena: 'jf.piernaMalaMuyBuena', buena: 'jf.piernaMalaBuena', aceptable: 'jf.piernaMalaAceptable', limitada: 'jf.piernaMalaLimitada', muy_limitada: 'jf.piernaMalaMuyLimitada' };
-    html += `<p class="detail-label">${t('jf.piernaMala')}</p><p>${t(pm[a.pierna_mala_habilidad])}</p>`;
-  }
-  if (a.tendencia) {
-    html += `<p class="detail-label">${t('jf.tendencia')}</p><p><span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span></p>`;
-  }
-  if (a.importancia) {
-    html += `<p class="detail-label">${t('jf.importancia')}</p><p>${etiquetaImportancia(a.importancia)}</p>`;
-  }
-  if (a.punto_debil) {
-    html += `<p class="detail-label">${t('jf.puntoDebil')}</p><p>${escaparHtml(a.punto_debil)}</p>`;
-  }
-  if (a.posicion_ideal) {
-    html += `<p class="detail-label">${t('jf.posicionIdeal')}</p><p>${etiquetaPosicionIdeal(a.posicion_ideal)}</p>`;
-  }
-  if (a.pie_dominante) {
-    html += `<p class="detail-label">${t('jf.pie')}</p><p>${etiquetaPie(a.pie_dominante)}</p>`;
-  }
-  if (a.potencial) {
-    html += `<p class="detail-label">${t('jf.potencial')}</p><p>${etiquetaPotencial(a.potencial)}</p>`;
-  }
-  if (a.resistencia) {
-    html += `<p class="detail-label">${t('jf.resistencia')}</p><p>${etiquetaResistencia(a.resistencia)}</p>`;
-  }
-  if (a.impresiones) {
-    html += `<p class="detail-label">${t('ui.impresiones')}</p><p>${escaparHtml(a.impresiones)}</p>`;
-  }
-  if (a.como_recibe_orientacion) {
-    html += `<p class="detail-label">${t('jf.comoRecibeOrientacion')}</p><p>${escaparHtml(a.como_recibe_orientacion)}</p>`;
-  }
-  if (a.como_recibe_despues) {
-    html += `<p class="detail-label">${t('jf.comoRecibeDespues')}</p><p>${escaparHtml(a.como_recibe_despues)}</p>`;
-  }
-  if (a.como_recibe_progresa) {
-    html += `<p class="detail-label">${t('jf.comoRecibeProgresa')}</p><p>${escaparHtml(a.como_recibe_progresa)}</p>`;
-  }
-  if (a.conductas_repetitivas) {
-    html += `<p class="detail-label">${t('jf.conductasRepetitivas')}</p><p>${escaparHtml(a.conductas_repetitivas)}</p>`;
-  }
-  if (a.minuto) {
-    html += `<p class="detail-label">${t('pf.minuto')}</p><p>${a.minuto}'</p>`;
-  }
-  if (a.acciones_clave && a.acciones_clave.length) {
-    html += `<p class="detail-label">${t('jf.acciones')}</p>${htmlAcciones(a.acciones_clave)}`;
-  }
-  if (a.etiquetas && a.etiquetas.length) {
-    html += `<p class="detail-label">${t('ui.etiquetas')}</p>${htmlTags(a.etiquetas)}`;
-  }
+  // --- Datos generales
+  const cono = { primera_vez: 'jf.conoPrimera', par_de_veces: 'jf.conoPocas', mas_de_10: 'jf.conoMas10', bien: 'jf.conoBien' };
+  const general = [];
+  if (a.edad) general.push(tile(t('jf.edad'), a.edad));
+  if (a.conocimiento && cono[a.conocimiento]) general.push(tile(t('jf.conocimiento'), t(cono[a.conocimiento])));
+  html += seccion(t('pf.sectionGeneral'), tiles(general));
+
+  // --- Rendimiento: datos cortos en casillas y textos más largos en filas
+  const pm = { muy_buena: 'jf.piernaMalaMuyBuena', buena: 'jf.piernaMalaBuena', aceptable: 'jf.piernaMalaAceptable', limitada: 'jf.piernaMalaLimitada', muy_limitada: 'jf.piernaMalaMuyLimitada' };
+  const cortos = [tile(t('ui.goles'), num(a.goles)), tile(t('ui.asistencias'), num(a.asistencias))];
+  if (a.pie_dominante) cortos.push(tile(t('jf.pie'), etiquetaPie(a.pie_dominante)));
+  if (a.resistencia) cortos.push(tile(t('jf.resistencia'), etiquetaResistencia(a.resistencia)));
+  if (a.pierna_mala_habilidad && pm[a.pierna_mala_habilidad]) cortos.push(tile(t('jf.piernaMala'), t(pm[a.pierna_mala_habilidad])));
+  if (a.posicion_ideal) cortos.push(tile(t('jf.posicionIdeal'), etiquetaPosicionIdeal(a.posicion_ideal)));
+  let rendimiento = tiles(cortos);
+  if (a.tendencia) rendimiento += fila(t('jf.tendencia'), `<span class="trend-badge ${claseTendencia(a.tendencia)}">${etiquetaTendencia(a.tendencia)}</span>`);
+  if (a.potencial) rendimiento += fila(t('jf.potencial'), etiquetaPotencial(a.potencial));
+  if (a.importancia) rendimiento += fila(t('jf.importancia'), etiquetaImportancia(a.importancia));
+  if (a.punto_debil) rendimiento += fila(t('jf.puntoDebil'), texto(a.punto_debil));
+  if (a.impresiones) rendimiento += fila(t('ui.impresiones'), texto(a.impresiones));
+  html += seccion(t('jf.sectionRendimiento'), rendimiento);
+
+  // --- Cómo recibe
+  let recibe = '';
+  if (a.como_recibe_orientacion) recibe += fila(t('jf.comoRecibeOrientacion'), texto(a.como_recibe_orientacion));
+  if (a.como_recibe_despues) recibe += fila(t('jf.comoRecibeDespues'), texto(a.como_recibe_despues));
+  if (a.como_recibe_progresa) recibe += fila(t('jf.comoRecibeProgresa'), texto(a.como_recibe_progresa));
+  html += seccion(t('jf.comoRecibe'), recibe);
+
+  // --- Conductas repetitivas (el título de la sección ya es la etiqueta)
+  html += seccion(t('jf.conductasRepetitivas'), a.conductas_repetitivas ? `<div class="detail-value">${texto(a.conductas_repetitivas)}</div>` : '');
+
+  // --- Acciones clave y etiquetas
+  let acciones = '';
+  if (a.acciones_clave && a.acciones_clave.length) acciones += htmlAcciones(a.acciones_clave);
+  if (a.etiquetas && a.etiquetas.length) acciones += fila(t('ui.etiquetas'), htmlTags(a.etiquetas));
+  html += seccion(t('jf.acciones'), acciones);
+
+  // --- Dibujo y posición media
   if (a.dibujo) {
-    html += `<p class="detail-label">${t('ui.dibujo')}</p><img src="${escaparHtml(a.dibujo)}" class="detail-drawing">`;
+    html += seccion(t('ui.dibujo'), `<img src="${escaparHtml(a.dibujo)}" class="detail-drawing">`);
   }
   if (a.posicion_x !== null && a.posicion_x !== undefined) {
     const cx = (parseFloat(a.posicion_x) / 100) * 300;
     const cy = (parseFloat(a.posicion_y) / 100) * 450;
-    html += `
-      <p class="detail-label">${t('pf.posicionMedia')}</p>
+    html += seccion(t('pf.posicionMedia'), `
       <svg viewBox="0 0 300 450" class="mini-pitch">
         <rect x="2" y="2" width="296" height="446" fill="#F5F1EB" stroke="#111111" stroke-width="2"/>
         <line x1="2" y1="225" x2="298" y2="225" stroke="#111111" stroke-width="2"/>
@@ -248,9 +225,11 @@ function construirDetalleJugador(a) {
         <rect x="70" y="2" width="160" height="60" fill="none" stroke="#111111" stroke-width="2"/>
         <rect x="70" y="388" width="160" height="60" fill="none" stroke="#111111" stroke-width="2"/>
         <circle cx="${cx}" cy="${cy}" r="7" fill="#111111"/>
-      </svg>
-    `;
+      </svg>`);
   }
+
+  // --- Otros
+  if (a.minuto) html += seccion(t('pf.sectionOtros'), fila(t('pf.minuto'), `${a.minuto}'`));
 
   return html;
 }
