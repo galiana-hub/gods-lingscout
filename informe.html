@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script>try{if(localStorage.getItem("lingscout-theme")==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}</script>
+<script src="js/i18n.js?v=20261002b"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe — LingScout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=20261002b">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="theme-color" content="#111111">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="LingScout">
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <p class="sidebar-logo">LingScout</p>
+    <select id="lang-selector" class="lang-selector">
+      <option value="es">Español</option>
+      <option value="ca">Català</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="it">Italiano</option>
+      <option value="de">Deutsch</option>
+      <option value="pt">Português</option>
+      <option value="nl">Nederlands</option>
+      <option value="sv">Svenska</option>
+      <option value="no">Norsk</option>
+      <option value="da">Dansk</option>
+      <option value="pl">Polski</option>
+      <option value="ru">Русский</option>
+      <option value="af">Afrikaans</option>
+      <option value="ja">日本語</option>
+      <option value="zh">中文（简体）</option>
+      <option value="ko">한국어</option>
+      <option value="uk">Українська</option>
+      <option value="ary">الدارجة المغربية</option>
+      <option value="ar">العربية</option>
+      <option value="tr">Türkçe</option>
+      <option value="fa">فارسی</option>
+      <option value="he">עברית</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="hi">हिन्दी</option>
+    </select>
+    <a href="app.html" class="sidebar-link">
+      <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h5v-5h2v5h5v-9"/></svg></span>
+      <span data-i18n="sidebar.inicio">Inicio</span>
+    </a>
+    <a href="partido.html" class="sidebar-link">
+      <span class="sidebar-icon accent-partido-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="12" y2="16"/></svg></span>
+      <span data-i18n="sidebar.nuevoPartido">Nuevo Partido</span>
+    </a>
+    <a href="jugador.html" class="sidebar-link">
+      <span class="sidebar-icon accent-jugador-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.5-4 4-6 7-6s5.5 2 7 6"/></svg></span>
+      <span data-i18n="sidebar.nuevoJugador">Nuevo Jugador</span>
+    </a>
+    <a href="partidos.html" class="sidebar-link">
+      <span class="sidebar-icon accent-partidos-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="7" x2="19" y2="7"/><line x1="5" y1="12" x2="19" y2="12"/><line x1="5" y1="17" x2="19" y2="17"/></svg></span>
+      <span data-i18n="sidebar.misPartidos">Mis Partidos</span>
+    </a>
+    <a href="jugadores.html" class="sidebar-link">
+      <span class="sidebar-icon accent-jugadores-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="16" cy="9" r="2.5"/><path d="M3.5 19c1-3.2 3-5 5.5-5s4.5 1.8 5.5 5"/><path d="M14 14.3c2 .2 3.6 1.8 4.5 4.7"/></svg></span>
+      <span data-i18n="sidebar.misJugadores">Mis Jugadores</span>
+    </a>
+        <a href="pizarra.html" class="sidebar-link">
+      <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="9" r="2"/><path d="M10 12h4"/><path d="M16 11l2 4"/></svg></span>
+      <span data-i18n="sidebar.pizarra">Pizarra</span>
+    </a>
+    <a href="informes.html" class="sidebar-link">
+      <span class="sidebar-icon accent-informe-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-7 7"/><path d="M10 19l3-3"/></svg></span>
+      <span data-i18n="sidebar.informes">Mis informes</span>
+    </a>
+<a href="calendario.html" class="sidebar-link">
+      <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg></span>
+      <span data-i18n="sidebar.calendario">Calendario</span>
+    </a>
+    <a href="revision.html" class="sidebar-link">
+      <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h16"/><rect x="6" y="11" width="3" height="8"/><rect x="11" y="7" width="3" height="12"/><rect x="16" y="13" width="3" height="6"/></svg></span>
+      <span data-i18n="sidebar.revision">Revisión anual</span>
+    </a>
+    <button type="button" class="sidebar-link theme-toggle-btn">
+      <span class="sidebar-icon"><span class="theme-toggle-icon">🌙</span></span>
+      <span data-i18n="sidebar.modoOscuro">Modo oscuro</span>
+    </button>
+    <button type="button" class="sidebar-link logout-trigger sidebar-logout">
+      <span class="sidebar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4H6a2 2 0 00-2 2v12a2 2 0 002 2h3"/><path d="M15 8l4 4-4 4"/><line x1="19" y1="12" x2="9" y2="12"/></svg></span>
+      <span data-i18n="sidebar.cerrarSesion">Cerrar sesión</span>
+    </button>
+  </nav>
+
+  <div class="app-shell">
+  <div class="topbar">
+    <h1 class="logo">LingScout</h1>
+    <div class="topbar-actions">
+      <select class="lang-selector topbar-lang-selector" data-i18n-title="sidebar.idioma" title="Idioma" aria-label="Idioma">
+        <option value="es">Español</option>
+        <option value="ca">Català</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="it">Italiano</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+        <option value="nl">Nederlands</option>
+        <option value="sv">Svenska</option>
+        <option value="no">Norsk</option>
+        <option value="da">Dansk</option>
+        <option value="pl">Polski</option>
+        <option value="ru">Русский</option>
+        <option value="af">Afrikaans</option>
+        <option value="ja">日本語</option>
+        <option value="zh">中文（简体）</option>
+        <option value="ko">한국어</option>
+        <option value="uk">Українська</option>
+        <option value="ary">الدارجة المغربية</option>
+        <option value="ar">العربية</option>
+      <option value="tr">Türkçe</option>
+      <option value="fa">فارسی</option>
+      <option value="he">עברית</option>
+      <option value="id">Bahasa Indonesia</option>
+      <option value="hi">हिन्दी</option>
+      </select>
+      <button type="button" class="btn-secondary theme-toggle-btn topbar-theme-btn" data-i18n-title="sidebar.modoOscuro" title="Modo oscuro" aria-label="Modo oscuro"><span class="theme-toggle-icon">🌙</span></button>
+      <a href="app.html" class="btn-secondary" data-i18n="topbar.volver">← Volver</a>
+      <button class="btn-secondary logout-trigger" id="logout-btn" data-i18n="sidebar.cerrarSesion">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <main class="form-page informe-page">
+    <div class="accent-bar accent-bar-informe"></div>
+    <h2 id="informe-h2" data-i18n="inf.titleCaptura">Nuevo informe de captura</h2>
+    <form id="informe-form" novalidate>
+
+      <section class="form-section">
+        <h3 data-i18n="pf.sectionGeneral">Datos generales</h3>
+        <label for="inf-titulo" data-i18n="inf.titulo">Título del informe</label>
+        <input type="text" id="inf-titulo" maxlength="120" required placeholder="Ej.: Salida de balón del Granada" data-i18n-placeholder="inf.tituloPh">
+        <div class="grid-2">
+          <div>
+            <label for="inf-fecha" data-i18n="inf.fecha">Fecha</label>
+            <input type="date" id="inf-fecha">
+          </div>
+          <div>
+            <label for="inf-equipo" data-i18n="jf.equipo">Equipo</label>
+            <input type="text" id="inf-equipo" maxlength="80">
+          </div>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label for="inf-jugador" data-i18n="jf.jugador">Jugador</label>
+            <input type="text" id="inf-jugador" maxlength="80" list="jugadores-list">
+          </div>
+          <div>
+            <label for="inf-competicion" data-i18n="pf.competicion">Competición</label>
+            <input type="text" id="inf-competicion" maxlength="80">
+          </div>
+        </div>
+        <label for="inf-temporada" data-i18n="pf.temporada">Temporada</label>
+        <input type="text" id="inf-temporada" maxlength="20" placeholder="2026/2027">
+        <datalist id="jugadores-list"></datalist>
+      </section>
+
+      <!-- Captura -->
+      <section class="form-section" id="bloque-captura" hidden>
+        <h3 data-i18n="inf.sectionCaptura">Captura</h3>
+        <label class="btn-secondary file-btn">
+          <span data-i18n="inf.elegirImagen">Elegir imagen</span>
+          <input type="file" id="inf-imagen" accept="image/*" hidden>
+        </label>
+        <p class="tags-sug-label" data-i18n="inf.pegarAyuda">También puedes pegar una captura con Ctrl+V.</p>
+        <div class="anot-toolbar" id="anot-toolbar" hidden></div>
+        <div class="anot-wrap"><canvas id="anot-canvas"></canvas></div>
+      </section>
+
+      <!-- Vídeo -->
+      <section class="form-section seccion-video" id="bloque-video" hidden>
+        <h3 data-i18n="inf.sectionVideo">Vídeo</h3>
+        <label data-i18n="inf.subtipo">¿Qué es?</label>
+        <div class="radio-row">
+          <label class="radio-option"><input type="radio" name="subtipo" value="partido" checked><span data-i18n="inf.subPartido">Partido entero</span></label>
+          <label class="radio-option"><input type="radio" name="subtipo" value="jugada"><span data-i18n="inf.subJugada">Jugada</span></label>
+        </div>
+        <label data-i18n="inf.origen">¿Cómo lo añades?</label>
+        <div class="radio-row radio-col">
+          <label class="radio-option"><input type="radio" name="origen" value="subido" checked><span data-i18n="inf.origenSubido">Subir el vídeo</span></label>
+          <label class="radio-option"><input type="radio" name="origen" value="local"><span data-i18n="inf.origenLocal">Solo en este dispositivo (sin subir)</span></label>
+          <label class="radio-option"><input type="radio" name="origen" value="enlace"><span data-i18n="inf.origenEnlace">Enlace (YouTube, Drive...)</span></label>
+        </div>
+        <div id="origen-archivo">
+          <label class="btn-secondary file-btn">
+            <span data-i18n="inf.elegirVideo">Elegir vídeo</span>
+            <input type="file" id="inf-video-archivo" accept="video/*" hidden>
+          </label>
+          <p class="archivo-nombre" id="archivo-nombre"></p>
+          <p class="tags-sug-label" id="ayuda-local" data-i18n="inf.ayudaLocal" hidden>El vídeo no se sube: solo se guardan tus marcas. Para verlo otra vez, vuelve a elegir el mismo archivo.</p>
+          <p class="form-message aviso" id="aviso-peso"></p>
+        </div>
+        <div id="origen-enlace" hidden>
+          <input type="url" id="inf-enlace" placeholder="https://..." maxlength="500">
+        </div>
+        <p class="tags-sug-label" data-i18n="inf.ayudaVideo">Pulsa «Etiquetar este minuto» mientras ves el vídeo. Al tocar una etiqueta de la izquierda, el vídeo salta a ese minuto.</p>
+        <div id="visor"></div>
+      </section>
+
+      <!-- Contenido personalizable -->
+      <section class="form-section">
+        <h3 data-i18n="inf.sectionBloques">Contenido del informe</h3>
+        <p class="tags-sug-label" data-i18n="inf.ayudaBloques">Añade las secciones que quieras, cámbiales el nombre y ordénalas.</p>
+        <div class="chip-list presets" id="presets"></div>
+        <div id="bloques-lista"></div>
+        <button type="button" class="btn-link" id="anadir-bloque" data-i18n="inf.anadirSeccion">+ Sección vacía</button>
+
+        <div class="plantillas-box">
+          <p class="subheading" data-i18n="inf.plantillas">Plantillas</p>
+          <div class="plantilla-fila">
+            <select id="plantilla-select"><option value="" data-i18n="inf.plantillaElegir">Usar una plantilla...</option></select>
+            <button type="button" class="btn-secondary" id="plantilla-borrar" data-i18n="ui.borrar" hidden>Borrar</button>
+          </div>
+          <div class="plantilla-fila">
+            <input type="text" id="plantilla-nombre" maxlength="60" placeholder="Nombre de la plantilla" data-i18n-placeholder="inf.plantillaNombre">
+            <button type="button" class="btn-secondary" id="plantilla-guardar" data-i18n="inf.plantillaGuardar">Guardar como plantilla</button>
+          </div>
+          <p class="form-message" id="plantilla-msg"></p>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <label for="inf-etiquetas" data-i18n="pf.etiquetas">Etiquetas (separadas por coma)</label>
+        <input type="text" id="inf-etiquetas" maxlength="300">
+      </section>
+
+      <button type="submit" class="btn-primary btn-submit btn-accent-informe" id="inf-guardar" data-i18n="inf.guardar">Guardar informe</button>
+      <p class="form-message" id="form-message"></p>
+    </form>
+  </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabaseConfig.js?v=20261002b"></script>
+<script src="js/anotador.js"></script>
+<script src="js/videoVisor.js"></script>
+<script src="js/informesComun.js"></script>
+<script src="js/informeForm.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/pwa.js?v=20261002b"></script>
+</body>
+</html>

@@ -26,15 +26,19 @@ async function exportarDatos() {
   btn.disabled = true;
 
   try {
-    const [partidos, jugadoresAnalisis, jugadores, patrones] = await Promise.all([
+    const [partidos, jugadoresAnalisis, jugadores, patrones, informes, plantillasInforme] = await Promise.all([
       supabaseClient.from('analisis_partido').select('*, alineacion_partido(*)'),
       supabaseClient.from('analisis_jugador').select('*'),
       supabaseClient.from('jugadores').select('*'),
-      supabaseClient.from('patrones_tacticos').select('*')
+      supabaseClient.from('patrones_tacticos').select('*'),
+      supabaseClient.from('informes').select('*'),
+      supabaseClient.from('plantillas_informe').select('*')
     ]);
 
-    // Si alguna consulta falla se avisa, en vez de exportar un archivo vacío sin decir nada
-    const fallo = [partidos, jugadoresAnalisis, jugadores, patrones].find(r => r.error);
+    // Si alguna consulta falla se avisa, en vez de exportar un archivo vacío sin decir nada.
+    // Las tablas de informes se saltan si todavía no se ha ejecutado su SQL.
+    const fallo = [partidos, jugadoresAnalisis, jugadores, patrones].find(r => r.error)
+      || [informes, plantillasInforme].find(r => r.error && !tablaNoExiste(r.error));
     if (fallo) throw new Error(fallo.error.message);
 
     const exportacion = {
@@ -42,7 +46,9 @@ async function exportarDatos() {
       analisis_partido: partidos.data || [],
       analisis_jugador: jugadoresAnalisis.data || [],
       jugadores: jugadores.data || [],
-      patrones_tacticos: patrones.data || []
+      patrones_tacticos: patrones.data || [],
+      informes: informes.data || [],
+      plantillas_informe: plantillasInforme.data || []
     };
 
     const blob = new Blob([JSON.stringify(exportacion, null, 2)], { type: 'application/json' });
@@ -60,6 +66,10 @@ async function exportarDatos() {
     btn.textContent = textoOriginal;
     btn.disabled = false;
   }
+}
+
+function tablaNoExiste(error) {
+  return !!error && (error.code === '42P01' || error.code === 'PGRST205' || /does not exist|Could not find the table/i.test(error.message || ''));
 }
 
 // ---------- Importar copia de seguridad ----------
@@ -111,7 +121,7 @@ async function importarCopia(archivo) {
     try { copia = JSON.parse(await archivo.text()); }
     catch { throw new Error(t('bk.archivoInvalido')); }
 
-    const claves = ['analisis_partido', 'analisis_jugador', 'jugadores', 'patrones_tacticos'];
+    const claves = ['analisis_partido', 'analisis_jugador', 'jugadores', 'patrones_tacticos', 'informes', 'plantillas_informe'];
     const valido = copia && typeof copia === 'object' && !Array.isArray(copia)
       && claves.some(k => Array.isArray(copia[k]))
       && claves.every(k => copia[k] === undefined || Array.isArray(copia[k]))
@@ -122,10 +132,13 @@ async function importarCopia(archivo) {
     const analisisJ = copia.analisis_jugador || [];
     const jugadores = copia.jugadores || [];
     const patrones = copia.patrones_tacticos || [];
+    const informes = copia.informes || [];
+    const plantillasInf = copia.plantillas_informe || [];
 
     const resumen = t('bk.confirmar')
       .replace('{a}', partidos.length).replace('{b}', analisisJ.length)
-      .replace('{c}', jugadores.length).replace('{d}', patrones.length);
+      .replace('{c}', jugadores.length).replace('{d}', patrones.length)
+      + (informes.length ? '\n' + t('bk.informes').replace('{e}', informes.length) : '');
     if (!window.confirm(resumen)) return;
 
     importBtn.textContent = t('bk.importando');
@@ -149,8 +162,18 @@ async function importarCopia(archivo) {
     // 4) Patrones tácticos
     const nPatrones = (await insertarFaltantes('patrones_tacticos', patrones.map(limpiarPorNombre), 'usuario_id,nombre', 20)).length;
 
+    // 5) Informes y plantillas de informe (los archivos siguen en tu almacén de Supabase)
+    let nInformes = 0;
+    if (informes.length) {
+      nInformes = (await insertarFaltantes('informes', informes.map(i => ({ ...i, usuario_id: uid })), 'id', 20)).length;
+    }
+    if (plantillasInf.length) {
+      await insertarFaltantes('plantillas_informe', plantillasInf.map(limpiarPorNombre), 'usuario_id,tipo,nombre', 50);
+    }
+
     mensajeImport(
-      t('bk.ok').replace('{a}', idsPartidoNuevos.size).replace('{b}', nAnalisisJ).replace('{c}', nJug).replace('{d}', nPatrones),
+      t('bk.ok').replace('{a}', idsPartidoNuevos.size).replace('{b}', nAnalisisJ).replace('{c}', nJug).replace('{d}', nPatrones)
+        + (informes.length ? ' ' + t('bk.informes').replace('{e}', nInformes) : ''),
       false
     );
   } catch (err) {

@@ -18,6 +18,7 @@ const SHELL = [
   'js/dashboard.js', 'js/jugadoresList.js', 'js/jugadorForm.js', 'js/fichaJugador.js',
   'js/partidosList.js', 'js/partidoForm.js', 'js/pizarra.js', 'js/drawingTool.js',
   'js/calendario.js', 'js/revision.js', 'js/exportar.js',
+  'informes.html', 'informe.html', 'js/anotador.js', 'js/videoVisor.js', 'js/informesComun.js', 'js/informesList.js', 'js/informeForm.js',
   'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png',
   'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2',
   'https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.js'

@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
     crecer(el);
   }
 
+  // Para cuadros de texto que se crean después de cargar la página
+  window.autoCrecer = preparar;
+
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('textarea').forEach(preparar);
     document.addEventListener('reset', () => {
