@@ -51,25 +51,39 @@
     let activa = null, dibujando = false, mostrada = null;
     let player = null, intervalo = null, fuente = { tipo: 'ninguno' }, ytPlayer = null;
 
+    const RAPIDAS = ['gol', 'tiro', 'ocasion', 'falta', 'corner', 'perdida', 'recuperacion', 'presion', 'contraataque', 'abp'];
     cont.innerHTML = `
-      <div class="vv">
+      <div class="vv${editable ? ' vv-editable' : ''}">
+          <div class="vv-fijo">
+            <div class="vv-stage">
+              <div class="vv-media"></div>
+              <canvas class="vv-overlay"></canvas>
+            </div>
+            <div class="vv-controles">
+              <button type="button" class="vv-ctl" data-salto="-5">−5 s</button>
+              <button type="button" class="vv-ctl vv-play" aria-label="${esc(t('inf.reproducir'))}" data-i18n-title="inf.reproducir" title="${esc(t('inf.reproducir'))}">▶</button>
+              <button type="button" class="vv-ctl" data-salto="5">+5 s</button>
+              <span class="vv-vel">${[0.5, 1, 1.5, 2].map(v => `<button type="button" class="vv-ctl vv-v${v === 1 ? ' active' : ''}" data-vel="${v}">${v}×</button>`).join('')}</span>
+            </div>
+          </div>
+        <div class="vv-escenario">
+          ${editable ? `
+          <div class="vv-actions">
+            <button type="button" class="vv-big vv-add" data-i18n="inf.etiquetarMinuto">${esc(t('inf.etiquetarMinuto'))}</button>
+            <button type="button" class="vv-big vv-draw" data-i18n="inf.dibujarVideo">${esc(t('inf.dibujarVideo'))}</button>
+          </div>
+          <div class="vv-rapidas">
+            <p class="vv-rapidas-t" data-i18n="inf.rapidas">${esc(t('inf.rapidas'))}</p>
+            <div class="vv-rapidas-b">${RAPIDAS.map(k => `<button type="button" class="vv-rapida" data-tipo="${k}">${ICONO[k]} <span data-i18n="inf.tag_${k}">${esc(t('inf.tag_' + k))}</span></button>`).join('')}</div>
+          </div>` : ''}
+          <p class="form-message vv-msg"></p>
+        </div>
         <aside class="vv-tags">
           <p class="vv-tags-title" data-i18n="inf.etiquetas">${esc(t('inf.etiquetas'))}</p>
           <div class="vv-list"></div>
         </aside>
-        <div class="vv-main">
-          <div class="vv-stage">
-            <div class="vv-media"></div>
-            <canvas class="vv-overlay"></canvas>
-          </div>
-          <p class="form-message vv-msg"></p>
-        </div>
         ${editable ? `
         <div class="vv-bajo">
-          <div class="vv-actions">
-            <button type="button" class="tool-btn vv-add" data-i18n="inf.etiquetarMinuto">${esc(t('inf.etiquetarMinuto'))}</button>
-            <button type="button" class="tool-btn vv-draw" data-i18n="inf.dibujarVideo">${esc(t('inf.dibujarVideo'))}</button>
-          </div>
           <div class="anot-toolbar vv-toolbar" hidden></div>
           <div class="vv-editor" hidden></div>
         </div>` : ''}
@@ -126,8 +140,13 @@
       mostrada = clave;
       anot.setFormas(m ? m.formas : []);
     }
+    function iconoPlay() {
+      const b = $('.vv-play');
+      if (b) b.textContent = player && !player.pausado() ? '❚❚' : '▶';
+    }
     function actualizar() {
       if (!player) return;
+      iconoPlay();
       if (!dibujando) {
         const ahora = player.ahora();
         const act = marcaActiva();
@@ -180,9 +199,12 @@
           ir: (s) => { try { v.currentTime = s; } catch (e) { /* aún sin cargar */ } },
           pausar: () => v.pause(),
           reproducir: () => v.play().catch(() => {}),
+          pausado: () => v.paused,
+          velocidad: (r) => { v.playbackRate = r; },
           listo: () => v.readyState >= 1
         };
         ['timeupdate', 'seeked', 'pause', 'play'].forEach(ev => v.addEventListener(ev, actualizar));
+        ['pause', 'play'].forEach(ev => v.addEventListener(ev, iconoPlay));
         v.addEventListener('loadedmetadata', () => { ajustarCapa(); actualizar(); });
         v.addEventListener('error', () => aviso(t('inf.archivoNoDisponible'), true));
       } else if (fuente.tipo === 'youtube') {
@@ -201,6 +223,8 @@
             ir: (s) => { if (ytPlayer && ytPlayer.seekTo) ytPlayer.seekTo(s, true); },
             pausar: () => { if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo(); },
             reproducir: () => { if (ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo(); },
+            pausado: () => !(ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === 1),
+            velocidad: (r) => { if (ytPlayer && ytPlayer.setPlaybackRate) ytPlayer.setPlaybackRate(r); },
             listo: () => !!(ytPlayer && ytPlayer.getCurrentTime)
           };
           intervalo = setInterval(actualizar, 250);
@@ -340,13 +364,50 @@
       $('.vv-add').addEventListener('click', () => {
         if (necesitaVideo()) return;
         player.pausar();
-        const m = nuevaMarca(Math.floor(player.ahora()), 'gol');
+        const m = nuevaMarca(Math.floor(player.ahora()), 'jugada');
         if (dibujando) { anot.setFormas(m.formas); }
         pintarLista();
         abrirEditor(m);
         const sel = cont.querySelector('.vv-tipo'); if (sel) sel.focus();
       });
       $('.vv-draw').addEventListener('click', () => { if (dibujando) salirDibujo(); else entrarDibujo(); });
+    }
+
+    // ---------- Controles ----------
+    cont.querySelectorAll('[data-salto]').forEach(b => b.addEventListener('click', () => {
+      if (!player) return;
+      player.ir(Math.max(0, player.ahora() + Number(b.dataset.salto)));
+    }));
+    $('.vv-play').addEventListener('click', () => {
+      if (!player) return;
+      if (player.pausado()) player.reproducir(); else player.pausar();
+      setTimeout(iconoPlay, 150);
+    });
+    cont.querySelectorAll('[data-vel]').forEach(b => b.addEventListener('click', () => {
+      if (!player) return;
+      player.velocidad(Number(b.dataset.vel));
+      cont.querySelectorAll('[data-vel]').forEach(x => x.classList.toggle('active', x === b));
+    }));
+
+    if (editable) {
+      // Etiqueta rápida: un toque, en el minuto actual, sin parar el vídeo
+      cont.querySelectorAll('.vv-rapida').forEach(b => b.addEventListener('click', () => {
+        if (necesitaVideo()) return;
+        const m = nuevaMarca(Math.floor(player.ahora()), b.dataset.tipo);
+        pintarLista();
+        abrirEditor(m);
+        aviso(`✓ ${iconoMarca(m)} ${etiquetaMarca(m)} · ${infFormatoTiempo(m.t)}`, false);
+        b.classList.add('ok'); setTimeout(() => b.classList.remove('ok'), 500);
+      }));
+      // Atajos en el ordenador: espacio = reproducir/pausar, flechas = ±5 s
+      document.addEventListener('keydown', (e) => {
+        if (!player || !cont.isConnected || cont.offsetParent === null) return;
+        const tag = (e.target.tagName || '').toLowerCase();
+        if (['input', 'textarea', 'select'].includes(tag) || e.target.isContentEditable) return;
+        if (e.code === 'Space') { e.preventDefault(); if (player.pausado()) player.reproducir(); else player.pausar(); setTimeout(iconoPlay, 150); }
+        else if (e.code === 'ArrowLeft') { e.preventDefault(); player.ir(Math.max(0, player.ahora() - 5)); }
+        else if (e.code === 'ArrowRight') { e.preventDefault(); player.ir(player.ahora() + 5); }
+      });
     }
 
     pintarLista();

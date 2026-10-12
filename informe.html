@@ -136,6 +136,40 @@
     <h2 id="informe-h2" data-i18n="inf.titleCaptura">Nuevo informe de captura</h2>
     <form id="informe-form" novalidate>
 
+      <!-- Vídeo -->
+      <section class="form-section seccion-video" id="bloque-video" hidden>
+        <details class="vv-fuente" id="vv-fuente" open>
+          <summary><span id="fuente-resumen" data-i18n="inf.elegirVideo">Elegir vídeo</span></summary>
+          <div class="vv-fuente-cuerpo">
+        <label data-i18n="inf.subtipo">¿Qué es?</label>
+        <div class="radio-row">
+          <label class="radio-option"><input type="radio" name="subtipo" value="partido" checked><span data-i18n="inf.subPartido">Partido entero</span></label>
+          <label class="radio-option"><input type="radio" name="subtipo" value="jugada"><span data-i18n="inf.subJugada">Jugada</span></label>
+        </div>
+        <label data-i18n="inf.origen">¿Cómo lo añades?</label>
+        <div class="radio-row radio-col">
+          <label class="radio-option"><input type="radio" name="origen" value="subido" checked><span data-i18n="inf.origenSubido">Subir el vídeo</span></label>
+          <label class="radio-option"><input type="radio" name="origen" value="local"><span data-i18n="inf.origenLocal">Solo en este dispositivo (sin subir)</span></label>
+          <label class="radio-option"><input type="radio" name="origen" value="enlace"><span data-i18n="inf.origenEnlace">Enlace (YouTube, Drive...)</span></label>
+        </div>
+        <div id="origen-archivo">
+          <label class="btn-secondary file-btn">
+            <span data-i18n="inf.elegirVideo">Elegir vídeo</span>
+            <input type="file" id="inf-video-archivo" accept="video/*" hidden>
+          </label>
+          <p class="archivo-nombre" id="archivo-nombre"></p>
+          <p class="tags-sug-label" id="ayuda-local" data-i18n="inf.ayudaLocal" hidden>El vídeo no se sube: solo se guardan tus marcas. Para verlo otra vez, vuelve a elegir el mismo archivo.</p>
+          <p class="form-message aviso" id="aviso-peso"></p>
+        </div>
+        <div id="origen-enlace" hidden>
+          <input type="url" id="inf-enlace" placeholder="https://..." maxlength="500">
+        </div>
+          </div>
+        </details>
+        <p class="tags-sug-label" data-i18n="inf.ayudaVideo">Pulsa «Etiquetar este minuto» mientras ves el vídeo. Al tocar una etiqueta de la izquierda, el vídeo salta a ese minuto.</p>
+        <div id="visor"></div>
+      </section>
+
       <section class="form-section">
         <h3 data-i18n="pf.sectionGeneral">Datos generales</h3>
         <label for="inf-titulo" data-i18n="inf.titulo">Título del informe</label>
@@ -175,36 +209,6 @@
         <p class="tags-sug-label" data-i18n="inf.pegarAyuda">También puedes pegar una captura con Ctrl+V.</p>
         <div class="anot-toolbar" id="anot-toolbar" hidden></div>
         <div class="anot-wrap"><canvas id="anot-canvas"></canvas></div>
-      </section>
-
-      <!-- Vídeo -->
-      <section class="form-section seccion-video" id="bloque-video" hidden>
-        <h3 data-i18n="inf.sectionVideo">Vídeo</h3>
-        <label data-i18n="inf.subtipo">¿Qué es?</label>
-        <div class="radio-row">
-          <label class="radio-option"><input type="radio" name="subtipo" value="partido" checked><span data-i18n="inf.subPartido">Partido entero</span></label>
-          <label class="radio-option"><input type="radio" name="subtipo" value="jugada"><span data-i18n="inf.subJugada">Jugada</span></label>
-        </div>
-        <label data-i18n="inf.origen">¿Cómo lo añades?</label>
-        <div class="radio-row radio-col">
-          <label class="radio-option"><input type="radio" name="origen" value="subido" checked><span data-i18n="inf.origenSubido">Subir el vídeo</span></label>
-          <label class="radio-option"><input type="radio" name="origen" value="local"><span data-i18n="inf.origenLocal">Solo en este dispositivo (sin subir)</span></label>
-          <label class="radio-option"><input type="radio" name="origen" value="enlace"><span data-i18n="inf.origenEnlace">Enlace (YouTube, Drive...)</span></label>
-        </div>
-        <div id="origen-archivo">
-          <label class="btn-secondary file-btn">
-            <span data-i18n="inf.elegirVideo">Elegir vídeo</span>
-            <input type="file" id="inf-video-archivo" accept="video/*" hidden>
-          </label>
-          <p class="archivo-nombre" id="archivo-nombre"></p>
-          <p class="tags-sug-label" id="ayuda-local" data-i18n="inf.ayudaLocal" hidden>El vídeo no se sube: solo se guardan tus marcas. Para verlo otra vez, vuelve a elegir el mismo archivo.</p>
-          <p class="form-message aviso" id="aviso-peso"></p>
-        </div>
-        <div id="origen-enlace" hidden>
-          <input type="url" id="inf-enlace" placeholder="https://..." maxlength="500">
-        </div>
-        <p class="tags-sug-label" data-i18n="inf.ayudaVideo">Pulsa «Etiquetar este minuto» mientras ves el vídeo. Al tocar una etiqueta de la izquierda, el vídeo salta a ese minuto.</p>
-        <div id="visor"></div>
       </section>
 
       <!-- Contenido personalizable -->

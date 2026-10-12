@@ -145,6 +145,7 @@ function construirDetalleInforme(inf, paraExportar) {
       <button type="button" class="btn-secondary btn-delete">${t('ui.borrar')}</button>
     </div>`;
 
+  if (!paraExportar && inf.tipo === 'video') html += '<div class="inf-media inf-media-video" data-media></div>';
   const tiles = [];
   if (inf.fecha) tiles.push(tile(t('inf.fecha'), fechaCorta(inf.fecha)));
   if (inf.equipo) tiles.push(tile(t('jf.equipo'), inf.equipo));
@@ -153,9 +154,8 @@ function construirDetalleInforme(inf, paraExportar) {
   if (inf.temporada) tiles.push(tile(t('pf.temporada'), inf.temporada));
   html += seccion(t('pf.sectionGeneral'), tiles.length ? `<div class="detail-tiles">${tiles.join('')}</div>` : '');
 
-  html += paraExportar
-    ? '<!--inf-media-->'
-    : seccion(t(inf.tipo === 'captura' ? 'inf.sectionCaptura' : 'inf.sectionVideo'), '<div class="inf-media" data-media></div>');
+  if (paraExportar) html += '<!--inf-media-->';
+  else if (inf.tipo === 'captura') html += seccion(t('inf.sectionCaptura'), '<div class="inf-media" data-media></div>');
 
   if (paraExportar && inf.tipo === 'video' && (inf.marcas || []).length) {
     const yt = inf.origen === 'enlace' ? infIdYoutube(inf.enlace) : null;

@@ -71,6 +71,7 @@ document.querySelectorAll('.logout-trigger').forEach(btn => btn.addEventListener
 function prepararTipo() {
   $('bloque-captura').hidden = infTipo !== 'captura';
   $('bloque-video').hidden = infTipo !== 'video';
+  document.querySelector('main.form-page').classList.toggle('informe-video', infTipo === 'video');
   const clave = infTipo === 'captura' ? 'inf.titleCaptura' : 'inf.titleVideo';
   $('informe-h2').setAttribute('data-i18n', clave);
   $('informe-h2').textContent = t(clave);
@@ -143,6 +144,20 @@ function origenActual() {
   return r ? r.value : 'subido';
 }
 
+// Cuando ya hay vídeo, la elección del archivo se pliega y queda una línea para cambiarlo
+function resumenFuente(texto) {
+  const det = $('vv-fuente'), res = $('fuente-resumen');
+  if (texto) {
+    res.removeAttribute('data-i18n');
+    res.textContent = `🎬 ${texto} · ${t('inf.cambiarVideo')}`;
+    det.open = false;
+  } else {
+    res.setAttribute('data-i18n', 'inf.elegirVideo');
+    res.textContent = t('inf.elegirVideo');
+    det.open = true;
+  }
+}
+
 function actualizarOrigen() {
   const o = origenActual();
   $('origen-archivo').hidden = o === 'enlace';
@@ -153,13 +168,16 @@ function actualizarOrigen() {
     const id = infIdYoutube($('inf-enlace').value);
     const url = infEnlaceValido($('inf-enlace').value);
     visor.setFuente(id ? { tipo: 'youtube', id } : (url ? { tipo: 'enlace', url } : { tipo: 'ninguno' }));
+    if (url) { try { resumenFuente(id ? 'YouTube' : new URL(url).hostname); } catch (e) { resumenFuente(''); } }
   } else if (infArchivoNuevo) {
     if (!infUrlLocal) infUrlLocal = URL.createObjectURL(infArchivoNuevo);
     visor.setFuente({ tipo: 'video', url: infUrlLocal });
+    resumenFuente(infArchivoNuevo.name);
   } else if (o === 'subido' && infOriginal && infOriginal.origen === 'subido' && infOriginal.archivo_path) {
     infUrlFirmada(infOriginal.archivo_path).then(url => {
       if (origenActual() !== 'subido' || infArchivoNuevo) return;
       visor.setFuente(url ? { tipo: 'video', url } : { tipo: 'ninguno' });
+      if (url) resumenFuente(infOriginal.archivo_nombre || t('inf.sectionVideo'));
       if (!url) mensaje($('form-message'), t('inf.archivoNoDisponible'), true);
     });
   } else {

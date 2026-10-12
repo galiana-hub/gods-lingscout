@@ -1242,3 +1242,84 @@ body {
   .vv-tag { font-size: 0.7rem; padding: 5px 5px 5px 6px; }
   .vv-tags-title { font-size: 0.72rem; }
 }
+
+/* ---------- Informe de partido: el vídeo es lo principal ---------- */
+.form-page.informe-video { max-width: 1180px; }
+.list-page.informes-lista { max-width: 1180px; }
+.form-page.informe-video .seccion-video { padding: 14px; }
+
+.vv-fuente { margin-bottom: 12px; border: 1px solid var(--color-border); border-radius: 10px; background: var(--color-bg); }
+.vv-fuente > summary { cursor: pointer; padding: 10px 12px; font-weight: 700; font-size: 0.9rem; overflow-wrap: anywhere; }
+.vv-fuente[open] > summary { border-bottom: 1px solid var(--color-border); }
+.vv-fuente-cuerpo { padding: 4px 12px 12px; }
+
+/* Ordenador: etiquetas a la izquierda, vídeo grande a la derecha */
+.vv {
+  display: grid; gap: 14px; align-items: start; margin-top: 4px;
+  grid-template-columns: 230px minmax(0, 1fr);
+  grid-template-areas: "tags escenario" "tags bajo";
+}
+.vv:not(.vv-editable) { grid-template-areas: "tags escenario"; }
+.vv-escenario { grid-area: escenario; min-width: 0; }
+.vv-tags { grid-area: tags; }
+.vv-bajo { grid-area: bajo; grid-column: auto; min-width: 0; }
+.vv-stage { border-radius: 12px; }
+
+.vv-controles { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.vv-ctl {
+  min-width: 46px; height: 42px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--color-border);
+  background: var(--color-surface); color: var(--color-text); font: inherit; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+}
+.vv-ctl:hover { border-color: var(--color-black); }
+.vv-play { min-width: 64px; background: var(--color-black); color: #fff; border-color: var(--color-black); font-size: 1rem; }
+[data-theme="dark"] .vv-play { background: #F0EDE6; color: #111; }
+.vv-vel { display: inline-flex; gap: 4px; margin-inline-start: auto; }
+.vv-vel .vv-ctl { min-width: 0; padding: 0 9px; font-size: 0.8rem; height: 36px; }
+.vv-ctl.active { background: var(--accent-informe); color: #fff; border-color: var(--accent-informe); }
+
+.vv-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.vv-big {
+  min-height: 48px; border-radius: 12px; font: inherit; font-weight: 800; font-size: 0.95rem; cursor: pointer;
+  border: 1px solid var(--accent-informe); background: var(--accent-informe); color: #fff; padding: 8px 12px;
+}
+.vv-big.vv-draw { background: var(--color-surface); color: var(--color-text); border-color: var(--color-border); }
+.vv-big.vv-draw.active { background: #FDD835; color: #111; border-color: #FDD835; }
+.vv-rapidas { margin-top: 10px; }
+.vv-rapidas-t { font-size: 0.75rem; font-weight: 800; color: var(--color-text-soft); margin-bottom: 6px; }
+.vv-rapidas-b { display: flex; flex-wrap: wrap; gap: 6px; }
+.vv-rapida {
+  min-height: 38px; padding: 6px 11px; border-radius: 999px; border: 1px solid var(--color-border);
+  background: var(--color-surface); color: var(--color-text); font: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+  transition: transform .1s, background .2s;
+}
+.vv-rapida:hover { border-color: var(--color-black); }
+.vv-rapida.ok { background: var(--accent-informe); color: #fff; transform: scale(1.05); }
+
+.inf-media-video { margin: 4px 0 18px; }
+
+/* Móvil: vídeo a todo el ancho y fijo arriba; debajo, etiquetas a la izquierda */
+@media (max-width: 900px) {
+  .vv { grid-template-columns: 104px minmax(0, 1fr); grid-template-areas: "escenario escenario" "tags bajo"; gap: 10px; }
+  .vv:not(.vv-editable) { grid-template-columns: 1fr; grid-template-areas: "escenario" "tags"; }
+  .vv-editable .vv-fijo { position: sticky; top: 0; z-index: 20; background: var(--color-surface); padding-bottom: 6px; }
+  .vv-tags { position: static; max-height: none; }
+  .vv-bajo .vv-toolbar { margin-top: 0; }
+}
+@media (max-width: 600px) {
+  .form-page.informe-video { padding-left: 8px; padding-right: 8px; }
+  .form-page.informe-video .seccion-video { margin-left: 0; margin-right: 0; padding: 10px 8px; }
+  .vv { grid-template-columns: 96px minmax(0, 1fr); }
+  .vv-stage { border-radius: 8px; }
+  .vv-ctl { height: 40px; padding: 0 10px; }
+  .vv-vel { margin-inline-start: 0; }
+}
+/* El vídeo y sus controles son una pieza propia: así se puede quedar fijo arriba en el móvil */
+.vv { grid-template-areas: "tags fijo" "tags escenario" "tags bajo"; }
+.vv:not(.vv-editable) { grid-template-areas: "tags fijo" "tags escenario"; }
+.vv-fijo { grid-area: fijo; min-width: 0; }
+.vv-escenario:empty { display: none; }
+@media (max-width: 900px) {
+  .vv { grid-template-areas: "fijo fijo" "escenario escenario" "tags bajo"; }
+  .vv:not(.vv-editable) { grid-template-areas: "fijo" "escenario" "tags"; }
+  .vv-editable .vv-fijo { position: sticky; top: 0; z-index: 20; align-self: start; background: var(--color-surface); padding: 4px 0 6px; }
+}
